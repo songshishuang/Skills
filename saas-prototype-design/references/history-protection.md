@@ -1,0 +1,192 @@
+# 历史版本保护机制
+
+## 问题背景
+
+JMaaS 项目中已发生 3 次「Agent 大改时覆盖丢失之前迭代功能」：
+
+1. **Agent C 复制 v1 → v0.1** 时直接覆盖 `eval-sets.html`，丢失了之前 3 轮迭代的启用 toggle / 描述字段 / 版本历史 / 模型基线 3 sub-tab
+2. **Agent 简化菜单**时把 v0.1/admission.html 的高级筛选区删了
+3. **Agent 改 wizard 4→2 步**时把 Step 1 的元信息表单（标签 / 类别 / 描述）也删了
+
+每次都靠手动重写恢复，浪费 1-2 小时。
+
+## 解决方案（3 道防线）
+
+### 防线 1 · 大改前自动备份（snapshot）
+
+每次大改原型文件前，执行：
+
+```bash
+# 单文件备份
+cp prototypes/v0.1/eval-sets.html prototypes/v0.1/.history/eval-sets.$(date +%Y%m%d-%H%M).html
+
+# 或用 helper 脚本（推荐）
+bash skills/saas-prototype-design/scripts/snapshot.sh prototypes/v0.1/eval-sets.html
+```
+
+备份目录：`prototypes/.history/`（与原型同层，方便 grep 历史内容）
+
+**注意**：
+- `.history/` **要纳入 git track**（不要 .gitignore），否则 git 中也丢
+- 备份用日期 + 时分作为后缀，避免覆盖
+- 大改前 + 每次重要里程碑后 都备份
+
+### 防线 2 · HTML 头部 prototype-meta 注释
+
+在每个原型文件 `<head>` 内加：
+
+```html
+<head>
+  <meta charset="UTF-8">
+  <title>...</title>
+  <!-- prototype-meta
+    version: 1.4.2
+    last-modified: 2026-05-14 09:30
+    last-modified-by: claude-agent-c
+    key-features:
+      - 启用/停用 toggle
+      - 详情面板 3 sub-tab（基本信息 / 版本历史 / 模型基线）
+      - 模型基线 4 档 reasoning_mode（no-think / min / high / max）
+      - L2 卡片 col-span 均宽
+      - 上传自定义评测集入口
+    changelog:
+      - 2026-05-14 v1.4.2: 单 L2 示例 · 去性能集 / 去 L3-L5
+      - 2026-05-13 v1.3.0: 基线 3 档 → 4 档
+      - 2026-05-12 v1.2.0: 加 toggle + 版本历史 sub-tab
+      - 2026-05-10 v1.0.0: 初版（v1 风格迁移）
+  -->
+```
+
+**作用**：
+- Agent 大改前必须读此注释，确认要保留的关键功能
+- 改完后必须更新 `version` + `last-modified` + 加 `changelog` 条目
+- 跨 Agent / 跨人协作时不丢迭代上下文
+
+### 防线 3 · Agent 改原型的标准 prompt 协议
+
+不要派 Agent「重写文件」，要派 Agent「**在现有基础上扩展/修改**」。
+
+#### 标准 prompt 模板
+
+```
+必读：
+1. {file-path}（当前文件）
+2. {file-path} 头部的 prototype-meta 注释（必须保留 key-features 中列出的功能）
+3. skills/saas-prototype-design/_BUILD_SPEC.md（设计规范）
+
+任务：
+在 {file-path} 现有 HTML 基础上做以下修改（不重写整页）：
+
+【保留】
+- sidebar / topbar / brand
+- 所有 prototype-meta 中列出的 key-features
+- 现有交互（Modal / Drawer / Toast / Wizard）
+
+【修改】
+- {section X}：{改成什么样}
+
+【删除】
+- {section Y}：{为什么删}
+
+【新增】
+- {新功能}：{放在哪里}
+
+完成后必做：
+1. 更新 prototype-meta：version 升级 / last-modified 时间 / 加 changelog 条目
+2. 报告：原行数 → 新行数 + 改动清单
+3. 用 grep 自检：「Step N」「v0.x」「v1 / v2」「TODO」等过时引用 = 0
+
+禁止：
+- 删除 prototype-meta key-features 中列出的功能
+- 重写整页
+- 引入新外部依赖（Tailwind CDN 等）
+- 用占位文字「TBD」「待补充」
+```
+
+#### 关键点
+
+1. **必读 prototype-meta** — 强制 Agent 先看历史功能再改
+2. **保留 / 修改 / 删除 / 新增 4 字段** — 改动必须分类声明，避免误删
+3. **更新 prototype-meta + changelog** — 留痕 Agent 改了什么
+4. **完成后 grep 自检** — 抓文案残留
+
+## Helper 脚本
+
+### `scripts/snapshot.sh`
+
+```bash
+#!/bin/bash
+# 用法：bash snapshot.sh prototypes/v0.1/eval-sets.html
+
+set -euo pipefail
+FILE="$1"
+if [ ! -f "$FILE" ]; then
+  echo "❌ 文件不存在：$FILE" >&2
+  exit 1
+fi
+
+DIR=$(dirname "$FILE")
+BASE=$(basename "$FILE" .html)
+HIST_DIR="$DIR/.history"
+mkdir -p "$HIST_DIR"
+
+STAMP=$(date +%Y%m%d-%H%M)
+SNAP="$HIST_DIR/${BASE}.${STAMP}.html"
+
+cp "$FILE" "$SNAP"
+echo "✓ 已备份 → $SNAP"
+echo "  ($(wc -l < "$SNAP") 行 · $(du -h "$SNAP" | cut -f1))"
+```
+
+### `scripts/check-residual.sh`
+
+```bash
+#!/bin/bash
+# 用法：bash check-residual.sh prototypes/v0.1/eval-sets.html
+# 检查文案残留 / 死链 / 占位
+
+FILE="$1"
+echo "=== $FILE 残留检查 ==="
+
+echo "[1] PM 规划性术语："
+grep -nE "主战场|v0\.x 启用|本期|远期|TODO|待补充|TBD|MVP" "$FILE" || echo "  ✓ 无"
+
+echo "[2] 过时 Step 引用："
+grep -nE "Step [0-9]+ [^·]|N/8" "$FILE" || echo "  ✓ 无"
+
+echo "[3] 死链 href=\"#\"："
+grep -cE 'href="#"' "$FILE"
+
+echo "[4] 占位按钮（无 action 且无 href）："
+grep -E '<button[^>]*>' "$FILE" | grep -vE 'data-action|onclick|type="submit"' | head -5
+
+echo "[5] data-action 处理器是否完整："
+grep -oE 'data-action="[a-z-]+"' "$FILE" | sort -u
+```
+
+## 团队规范
+
+**所有人 + 所有 Agent 改原型时都必须**：
+
+1. 改前 `bash snapshot.sh <file>` 备份
+2. 改前 Read `<file>` 头部 prototype-meta
+3. 用「保留 / 修改 / 删除 / 新增」prompt 模板派 Agent
+4. 改完更新 prototype-meta + changelog
+5. 改完 `bash check-residual.sh <file>` 自检
+
+## 灾难恢复
+
+如果某文件被覆盖丢失了关键功能：
+
+```bash
+# 列出该文件所有历史快照
+ls -lt prototypes/v0.1/.history/eval-sets.*
+
+# 比较丢失功能在哪个版本还在
+for f in prototypes/v0.1/.history/eval-sets.*.html; do
+  echo "$f: $(grep -c "启用/停用 toggle" "$f")"
+done
+
+# 恢复最近含该功能的版本（或部分摘取）
+diff prototypes/v0.1/eval-sets.html prototypes/v0.1/.history/eval-sets.20260513-1450.html
+```

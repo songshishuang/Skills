@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>功能架构图 · 模板</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- 把同目录 styles.css 内的全部 CSS 粘贴到此处的 <style> 中 -->
+<style>
+  /* 见 templates/styles.css */
+</style>
+</head>
+<body class="bg-slate-50 antialiased min-h-screen">
+
+<!-- Topbar -->
+<header class="bg-white border-b border-slate-200">
+  <div class="max-w-[1480px] mx-auto px-8 py-3 flex items-center justify-between">
+    <div>
+      <div class="font-semibold text-slate-900">{产品名} · 功能架构图</div>
+      <div class="text-xs text-slate-500 mt-0.5">4 层结构 · 能力域 × 子能力 3 级嵌套 · 全局功能视图</div>
+    </div>
+    <div class="flex items-center gap-2 text-xs">
+      <a href="./product-arch.html" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50">产品架构图</a>
+    </div>
+  </div>
+</header>
+
+<!-- 图例 -->
+<section class="max-w-[1480px] mx-auto px-8 pt-4">
+  <div class="bg-white border border-slate-200 rounded-lg px-4 py-2 flex items-center justify-between flex-wrap gap-3">
+    <div class="flex items-center gap-3 text-xs flex-wrap">
+      <div class="text-slate-700 font-medium">能力域：</div>
+      <span class="dc-chip dc-A">A {域 A 名称}</span>
+      <span class="dc-chip dc-B">B {域 B 名称}</span>
+      <span class="dc-chip dc-C">C {域 C 名称}</span>
+      <span class="dc-chip dc-D">D {域 D 名称}</span>
+      <span class="dc-chip dc-X">X 平台共用</span>
+      <span class="text-slate-400 mx-1">|</span>
+      <div class="flex items-center gap-1.5"><div class="w-5 h-3.5 rounded m-out border"></div><span class="text-slate-700">不在本平台范围</span></div>
+    </div>
+    <div class="text-[11px] text-slate-500">
+      <span class="font-medium text-slate-700">读图：</span>
+      4 层（端 → 服务 → 数据 → 底座）· 每层内按能力域 → 子能力 3 级嵌套
+    </div>
+  </div>
+</section>
+
+<!-- 主体：4 层 -->
+<section class="max-w-[1480px] mx-auto px-8 pt-3 pb-5 space-y-3">
+
+  <!-- ========================================== -->
+  <!-- L1 端层 ============================================== -->
+  <!-- ========================================== -->
+  <div class="lyr lyr-1">
+    <div class="lyr-header">
+      <span class="lyr-tag lyr-tag-1">L1</span>
+      <h2 class="text-sm font-bold text-slate-900">端层 · User Endpoints</h2>
+      <span class="text-xs text-slate-500">Where users interact</span>
+      <span class="text-[11px] text-slate-500 ml-auto">{N} 端 · 能力域 · 子能力</span>
+    </div>
+    <div class="space-y-2.5">
+
+      <!-- 端 1：内部端 (运营端) -->
+      <div class="subgroup-box sg-operator">
+        <div class="subgroup-header">
+          <span class="subgroup-icon">🛠</span>
+          <span class="subgroup-name">运营端 · admin 内部</span>
+          <span class="subgroup-desc">多角色共用</span>
+          <span class="subgroup-count">{N} 个页面</span>
+        </div>
+        <div class="space-y-2">
+
+          <!-- 域 A 子组（sub2-box 虚线框） -->
+          <div class="sub2-box">
+            <div class="sub2-header"><span class="dc-chip dc-A">A</span><span>{能力域 A 名称}</span></div>
+            <div class="grid grid-cols-12 gap-2">
+              <!-- sub3 子能力：col-span 按卡片数分配，所有 col-span 加起来 = 12 -->
+              <div class="sub3-block col-span-4">
+                <div class="sub3-header">A1 {子能力} · 2</div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <div class="module-card dom-A">
+                    <div class="ct-row"><div class="ct">{页面 1}</div><span class="dc-chip dc-A">A</span></div>
+                    <div class="cd">{一句话描述功能}</div>
+                  </div>
+                  <div class="module-card dom-A">
+                    <div class="ct-row"><div class="ct">{页面 2}</div><span class="dc-chip dc-A">A</span></div>
+                    <div class="cd">{一句话描述功能}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="sub3-block col-span-4">
+                <div class="sub3-header">A2 {子能力} · 2</div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <div class="module-card dom-A">
+                    <div class="ct-row"><div class="ct">{页面 3}</div><span class="dc-chip dc-A">A</span></div>
+                    <div class="cd">{一句话描述功能}</div>
+                  </div>
+                  <div class="module-card dom-A">
+                    <div class="ct-row"><div class="ct">{页面 4}</div><span class="dc-chip dc-A">A</span></div>
+                    <div class="cd">{一句话描述功能}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="sub3-block col-span-4">
+                <div class="sub3-header">A3 {子能力} · 1</div>
+                <div class="grid grid-cols-1 gap-1.5">
+                  <div class="module-card dom-A">
+                    <div class="ct-row"><div class="ct">{页面 5}</div><span class="dc-chip dc-A">A</span></div>
+                    <div class="cd">{一句话描述功能}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 域 B 子组 -->
+          <div class="sub2-box">
+            <div class="sub2-header"><span class="dc-chip dc-B">B</span><span>{能力域 B 名称}</span></div>
+            <div class="grid grid-cols-12 gap-2">
+              <div class="sub3-block col-span-12">
+                <div class="sub3-header">B1 {子能力} · 4</div>
+                <div class="grid grid-cols-4 gap-1.5">
+                  <!-- 4 卡 1 行 -->
+                  <div class="module-card dom-B">...</div>
+                  <div class="module-card dom-B">...</div>
+                  <div class="module-card dom-B">...</div>
+                  <div class="module-card dom-B">...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 端 2：外部端 (供应商 portal / 客户 portal) -->
+      <div class="subgroup-box sg-vendor">
+        <div class="subgroup-header">
+          <span class="subgroup-icon">🏢</span>
+          <span class="subgroup-name">{外部端名称} · {portal 类型}</span>
+          <span class="subgroup-desc">外部用户自助门户</span>
+          <span class="subgroup-count">{N} 个页面</span>
+        </div>
+        <div class="space-y-2">
+          <!-- 同上结构，按域 → 子能力嵌套 -->
+        </div>
+      </div>
+
+      <!-- 端 3：第三方平台（如有 · 置灰） -->
+      <div class="subgroup-box sg-maas">
+        <div class="subgroup-header">
+          <span class="subgroup-icon">🔀</span>
+          <span class="subgroup-name">{第三方平台名} · 下游消费方</span>
+          <span class="subgroup-desc">不在本平台范围</span>
+          <span class="subgroup-count">{N} 个职责</span>
+        </div>
+        <div class="space-y-2">
+          <div class="sub2-box">
+            <div class="sub2-header"><span class="dc-chip dc-C">C</span><span>{域 C}</span></div>
+            <div class="grid grid-cols-12 gap-2">
+              <div class="sub3-block col-span-12">
+                <div class="sub3-header">C4 {子能力 · MaaS 平台} · 2</div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <div class="module-card m-out">
+                    <div class="ct-row"><div class="ct">{置灰功能 1}</div></div>
+                    <div class="cd">{由下游平台职责，不在本平台范围}</div>
+                  </div>
+                  <div class="module-card m-out">
+                    <div class="ct-row"><div class="ct">{置灰功能 2}</div></div>
+                    <div class="cd">{说明}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- L2 业务服务层 ====================================== -->
+  <!-- ========================================== -->
+  <div class="lyr lyr-2">
+    <div class="lyr-header">
+      <span class="lyr-tag lyr-tag-2">L2</span>
+      <h2 class="text-sm font-bold text-slate-900">业务服务层 · Business Services</h2>
+      <span class="text-xs text-slate-500">Domain capabilities</span>
+      <span class="text-[11px] text-slate-500 ml-auto">4 能力域 · 子能力 · 服务</span>
+    </div>
+    <div class="space-y-2.5">
+
+      <!-- 能力域 A 服务（subgroup-box · 实色） -->
+      <div class="subgroup-box">
+        <div class="subgroup-header">
+          <span class="dc-chip dc-A">A</span>
+          <span class="subgroup-name">{能力域 A 服务名}</span>
+          <span class="subgroup-count">{N} 服务 · {M} 子能力</span>
+        </div>
+        <div class="grid grid-cols-12 gap-2">
+          <!-- A1/A2/A3 sub2-box（虚线框）-->
+          <div class="sub2-box col-span-4">
+            <div class="sub2-header"><span>A1 {子能力}</span></div>
+            <!-- 服务卡片 -->
+          </div>
+          <div class="sub2-box col-span-4">...</div>
+          <div class="sub2-box col-span-4">...</div>
+        </div>
+      </div>
+
+      <!-- 域 B / C / D 服务（同结构） -->
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- L3 数据资产层 ====================================== -->
+  <!-- ========================================== -->
+  <div class="lyr lyr-3">
+    <div class="lyr-header">
+      <span class="lyr-tag lyr-tag-3">L3</span>
+      <h2 class="text-sm font-bold text-slate-900">数据资产层 · Data Assets</h2>
+      <span class="text-xs text-slate-500">Shared data foundations</span>
+      <span class="text-[11px] text-slate-500 ml-auto">4 能力域 · 数据分类</span>
+    </div>
+    <div class="space-y-2.5">
+      <!-- 主体数据 / 业务数据 / 监控审计等子组 -->
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- L4 平台底座 ======================================== -->
+  <!-- ========================================== -->
+  <div class="lyr lyr-4">
+    <div class="lyr-header">
+      <span class="lyr-tag lyr-tag-4">L4</span>
+      <h2 class="text-sm font-bold text-slate-900">平台底座 · Platform Foundation</h2>
+      <span class="text-xs text-slate-500">Cross-cutting infrastructure</span>
+      <span class="text-[11px] text-slate-500 ml-auto">全平台共用的基础设施</span>
+    </div>
+    <div class="grid grid-cols-4 gap-2.5">
+      <div class="subgroup-box">
+        <div class="subgroup-header">
+          <span class="dc-chip dc-X">X</span>
+          <span class="subgroup-name">执行引擎</span>
+        </div>
+        <!-- 卡片 -->
+      </div>
+      <div class="subgroup-box">...观测计量...</div>
+      <div class="subgroup-box">...通信触达...</div>
+      <div class="subgroup-box">...数据治理...</div>
+    </div>
+  </div>
+
+</section>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{PROJECT_NAME}} · 原型导航</title>
+<style>
+  body { font-family: "PingFang SC", "Hiragino Sans GB", sans-serif;
+         max-width: 900px; margin: 60px auto; padding: 0 24px;
+         color: #1f2937; line-height: 1.7; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  .tagline { color: #6b7280; margin-bottom: 40px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 16px; }
+  .card { display: block; padding: 24px; border: 1px solid #e5e7eb;
+          border-radius: 12px; text-decoration: none; color: inherit;
+          transition: all 0.15s; }
+  .card:hover { border-color: #2557b8; box-shadow: 0 4px 12px rgba(37,87,184,0.08); }
+  .card .role { font-size: 12px; color: #2557b8; letter-spacing: 1px;
+                text-transform: uppercase; margin-bottom: 8px; }
+  .card .name { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .card .desc { font-size: 13px; color: #6b7280; }
+  footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #e5e7eb;
+           font-size: 12px; color: #9ca3af; }
+</style>
+</head>
+<body>
+  <h1>{{PROJECT_NAME}}</h1>
+  <p class="tagline">{{PROJECT_TAGLINE}}</p>
+
+  <div class="grid">
+    <!-- ⚠️ TODO：按实际角色补充入口卡片 -->
+    <!--
+    <a class="card" href="role-name/workbench.html">
+      <div class="role">ROLE NAME</div>
+      <div class="name">中文工作台名</div>
+      <div class="desc">一句话描述这个角色用什么</div>
+    </a>
+    -->
+  </div>
+
+  <footer>
+    {{PROJECT_NAME}} · {{DATE}} 初始化生成 · 由 pm-project-scaffolding 创建
+  </footer>
+</body>
+</html>

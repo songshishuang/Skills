@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>产品架构图 · 模板</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; color: #0f172a; }
+
+  /* Hero 区域：写一句话定位 */
+  .hero {
+    background: linear-gradient(180deg, rgba(99,102,241,.10) 0%, rgba(99,102,241,.02) 100%);
+    border: 1px solid rgba(99,102,241,.20);
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+
+  /* 4 层结构 */
+  .layer { border-radius: 10px; padding: 12px 14px; }
+  .layer-L1 { background: linear-gradient(180deg, rgba(99,102,241,.07) 0%, rgba(99,102,241,.01) 100%); border: 1px solid rgba(99,102,241,.16); }
+  .layer-L2 { background: linear-gradient(180deg, rgba(14,165,233,.07) 0%, rgba(14,165,233,.01) 100%); border: 1px solid rgba(14,165,233,.16); }
+  .layer-L3 { background: linear-gradient(180deg, rgba(245,158,11,.08) 0%, rgba(245,158,11,.02) 100%); border: 1px solid rgba(245,158,11,.18); }
+  .layer-L4 { background: linear-gradient(180deg, rgba(100,116,139,.07) 0%, rgba(100,116,139,.01) 100%); border: 1px solid rgba(100,116,139,.16); }
+
+  .layer-tag { color: white; font-size: 10px; padding: 2px 9px; border-radius: 999px; font-weight: 700; }
+  .tag-L1 { background: #4f46e5; }
+  .tag-L2 { background: #0284c7; }
+  .tag-L3 { background: #d97706; }
+  .tag-L4 { background: #475569; }
+
+  /* 能力域卡片 */
+  .domain-card {
+    background: #fff;
+    border: 1px solid rgba(15,23,42,.08);
+    border-left: 3px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .dom-A { border-left-color: #a855f7 !important; }
+  .dom-B { border-left-color: #f59e0b !important; }
+  .dom-C { border-left-color: #0ea5e9 !important; }
+  .dom-D { border-left-color: #f43f5e !important; }
+
+  /* 横切关注点纵向条带 */
+  .cross-cutting {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: 12px 8px;
+    font-weight: 700;
+    color: #475569;
+    font-size: 11px;
+  }
+
+  /* 不在本平台范围 */
+  .m-out {
+    background: #f5f5f4;
+    border: 1px dotted #d6d3d1;
+    opacity: .7;
+    color: #78716c;
+  }
+  .m-out .ct { text-decoration: line-through; }
+</style>
+</head>
+<body class="bg-slate-50 antialiased min-h-screen">
+
+<!-- Topbar：与功能架构图、原型互链 -->
+<header class="bg-white border-b border-slate-200">
+  <div class="max-w-[1480px] mx-auto px-8 py-3 flex items-center justify-between">
+    <div class="font-semibold text-slate-900">{产品名} · 产品架构图</div>
+    <div class="flex items-center gap-2 text-xs">
+      <a href="./functional-arch.html" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50">功能架构图</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero：一句话定位 -->
+<section class="max-w-[1480px] mx-auto px-8 pt-5">
+  <div class="hero">
+    <div class="text-xs text-indigo-700 font-medium mb-1">产品定位</div>
+    <h1 class="text-xl font-bold text-slate-900">
+      作为 <span class="text-indigo-700">{父系统名}</span> 的 <span class="text-amber-700">{子系统能力}</span> 子系统
+    </h1>
+    <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+      {一句话讲清楚做什么、面向谁、与父系统的边界}
+    </p>
+  </div>
+</section>
+
+<!-- 主体：4 层 + 横切关注点 -->
+<section class="max-w-[1480px] mx-auto px-8 pt-5 pb-6">
+  <div class="grid grid-cols-12 gap-3">
+
+    <!-- 主区 col-span-11 -->
+    <div class="col-span-11 space-y-3">
+
+      <!-- L1 用户与场景 -->
+      <div class="layer layer-L1">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="layer-tag tag-L1">L1</span>
+          <h2 class="text-sm font-bold text-slate-900">用户与场景</h2>
+          <span class="text-xs text-slate-500 ml-auto">谁在用 / 在什么场景下用</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-xs text-slate-700">
+          <div class="bg-white border border-slate-200 rounded-lg p-3">
+            <div class="font-semibold mb-1.5">内部端（多角色）</div>
+            <div class="space-y-1">
+              <div>· {角色 1}：{使用场景}</div>
+              <div>· {角色 2}：{使用场景}</div>
+            </div>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-3">
+            <div class="font-semibold mb-1.5">外部端</div>
+            <div class="space-y-1">
+              <div>· {供应商 / 客户}：{使用场景}</div>
+              <div>· {合作伙伴}：{使用场景}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- L2 应用层端 -->
+      <div class="layer layer-L2">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="layer-tag tag-L2">L2</span>
+          <h2 class="text-sm font-bold text-slate-900">应用层端</h2>
+          <span class="text-xs text-slate-500 ml-auto">用户访问的 UI 入口</span>
+        </div>
+        <div class="grid grid-cols-3 gap-3 text-xs text-slate-700">
+          <div class="bg-white border border-slate-200 rounded-lg p-3">
+            <div class="font-semibold mb-1">运营端 · admin</div>
+            <div class="text-slate-500">内部管理控制台</div>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-3">
+            <div class="font-semibold mb-1">{外部端 portal}</div>
+            <div class="text-slate-500">外部用户自助门户</div>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-3">
+            <div class="font-semibold mb-1">{开放 API · 远端}</div>
+            <div class="text-slate-500">{对外集成的入口}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- L3 能力域（核心 · 4-5 个并列 capability domain） -->
+      <div class="layer layer-L3">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="layer-tag tag-L3">L3</span>
+          <h2 class="text-sm font-bold text-slate-900">能力域</h2>
+          <span class="text-xs text-slate-500 ml-auto">4-5 个 capability domain · 各域独立又协同</span>
+        </div>
+        <div class="grid grid-cols-4 gap-2.5">
+          <div class="domain-card dom-A">
+            <div class="font-bold text-purple-700 text-xs mb-1">A · {能力域 A 名称}</div>
+            <div class="text-[11px] text-slate-600 leading-relaxed">{一句话讲做什么}</div>
+            <div class="mt-1.5 text-[10px] text-slate-500">A1 子能力 / A2 子能力 / A3 子能力</div>
+          </div>
+          <div class="domain-card dom-B">
+            <div class="font-bold text-amber-700 text-xs mb-1">B · {能力域 B 名称}</div>
+            <div class="text-[11px] text-slate-600 leading-relaxed">{一句话讲做什么}</div>
+            <div class="mt-1.5 text-[10px] text-slate-500">B1 / B2 / B3 / B4</div>
+          </div>
+          <div class="domain-card dom-C">
+            <div class="font-bold text-sky-700 text-xs mb-1">C · {能力域 C 名称}</div>
+            <div class="text-[11px] text-slate-600 leading-relaxed">{一句话讲做什么}</div>
+            <div class="mt-1.5 text-[10px] text-slate-500">C1 / C2 / C3</div>
+          </div>
+          <div class="domain-card dom-D">
+            <div class="font-bold text-rose-700 text-xs mb-1">D · {能力域 D 名称}</div>
+            <div class="text-[11px] text-slate-600 leading-relaxed">{一句话讲做什么}</div>
+            <div class="mt-1.5 text-[10px] text-slate-500">D1 / D2 / D3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- L4 平台底座 -->
+      <div class="layer layer-L4">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="layer-tag tag-L4">L4</span>
+          <h2 class="text-sm font-bold text-slate-900">平台底座</h2>
+          <span class="text-xs text-slate-500 ml-auto">4 能力域共用的基础设施</span>
+        </div>
+        <div class="grid grid-cols-4 gap-2.5 text-xs text-slate-700">
+          <div class="bg-white border border-slate-200 rounded-lg p-2.5">
+            <div class="font-semibold">执行引擎</div>
+            <div class="text-[10px] text-slate-500 mt-1">异步调度 · 沙箱 · Judge</div>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-2.5">
+            <div class="font-semibold">观测计量</div>
+            <div class="text-[10px] text-slate-500 mt-1">监控 · tokenizer · 对账</div>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-2.5">
+            <div class="font-semibold">通信触达</div>
+            <div class="text-[10px] text-slate-500 mt-1">通知 · 规则引擎 · 事件总线</div>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-2.5">
+            <div class="font-semibold">数据治理</div>
+            <div class="text-[10px] text-slate-500 mt-1">DLP · 加密 · 权限 · 审计</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 外部依赖 -->
+      <div class="bg-white border border-slate-200 rounded-lg p-3">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-600 text-white">下游</span>
+          <h2 class="text-sm font-semibold text-slate-700">外部依赖 / 下游消费方（不在本平台范围）</h2>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="m-out rounded-lg p-2.5">
+            <div class="ct font-semibold">{下游平台名}</div>
+            <div class="text-[10px] mt-1">{下游消费哪些能力 / 输出什么数据}</div>
+          </div>
+          <div class="m-out rounded-lg p-2.5">
+            <div class="ct font-semibold">{外部 API / 服务}</div>
+            <div class="text-[10px] mt-1">{依赖什么外部能力}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 横切关注点（vertical sidebar · col-span-1） -->
+    <div class="col-span-1">
+      <div class="cross-cutting h-full flex items-center justify-center">
+        治理与合规 · 安全 · 可观测
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>
