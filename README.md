@@ -28,39 +28,20 @@
 
 详细安装指南：[**INSTALL-MULTI-PLATFORM.md**](./INSTALL-MULTI-PLATFORM.md)
 
-### ⚡ 一键 curl 安装（推荐）
-
-无需先 clone 仓库，直接 curl + bash：
+一键安装脚本（需先克隆本仓库）：
 
 ```bash
-# 🟢 推荐：先看脚本内容再执行（安全做法）
-curl -fsSL https://raw.githubusercontent.com/songshishuang/Skills/main/scripts/install-platform.sh -o /tmp/install-skills.sh
-less /tmp/install-skills.sh           # 检查脚本内容
-chmod +x /tmp/install-skills.sh
-/tmp/install-skills.sh                # 交互式选平台
+git clone https://github.com/songshishuang/Skills.git
+cd Skills
 
-# 🟡 极速版：直接 pipe（仅自用，不建议从不熟悉的源 pipe 到 bash）
-curl -fsSL https://raw.githubusercontent.com/songshishuang/Skills/main/scripts/install-platform.sh | bash -s -- claude-code
-
-# 装到 Cursor 项目
-curl -fsSL https://raw.githubusercontent.com/songshishuang/Skills/main/scripts/install-platform.sh | bash -s -- cursor --project /path/to/your/project
-
-# 装到 Codex
-curl -fsSL https://raw.githubusercontent.com/songshishuang/Skills/main/scripts/install-platform.sh | bash -s -- codex
-
-# 装到 Gemini / Antigravity
-curl -fsSL https://raw.githubusercontent.com/songshishuang/Skills/main/scripts/install-platform.sh | bash -s -- gemini
-```
-
-### 已克隆仓库后的本地安装
-
-```bash
 ./scripts/install-platform.sh                 # 交互式选平台
 ./scripts/install-platform.sh claude-code     # 装到 Claude Code
 ./scripts/install-platform.sh cursor --project /path/to/your/project
 ./scripts/install-platform.sh codex
 ./scripts/install-platform.sh gemini          # 含 Antigravity
 ```
+
+> 仓库当前为 **private**——若未来转 public，可补 `curl | bash` 形式的零克隆一键安装。
 
 ---
 
