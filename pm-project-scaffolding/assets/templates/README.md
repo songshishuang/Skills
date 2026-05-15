@@ -72,4 +72,4 @@
 
 ---
 
-*本项目使用 `pm-project-scaffolding` skill 在 {{DATE}} 初始化生成。详见 [`docs/项目目录结构说明.html`](https://github.com/songshishuang/wdyclaw) 了解目录设计哲学。*
+*本项目使用 `pm-project-scaffolding` skill 在 {{DATE}} 初始化生成。详见项目内的 `docs/` 目录了解设计哲学。*

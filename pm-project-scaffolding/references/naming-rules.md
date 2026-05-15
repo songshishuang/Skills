@@ -153,5 +153,5 @@ skills/{skill-name-slug}/
 
 1. 看本项目里现有的同类文件怎么命名 → 沿用风格
 2. 看本 references 文件有没有约定 → 按约定
-3. 看 Claw 原项目（https://github.com/songshishuang/wdyclaw）的同类文件 → 借鉴
+3. 看其它已成熟项目的同类文件 → 借鉴
 4. 都没有 → **问用户**，不要自己拍板

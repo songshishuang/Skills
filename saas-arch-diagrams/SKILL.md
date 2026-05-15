@@ -1,6 +1,6 @@
 ---
 name: saas-arch-diagrams
-description: 设计企业 SaaS 类产品的两类核心架构图：「产品架构图」（产品在更大生态中的定位 · 4 层视图）和「功能架构图」（4 层纵向 × 能力域横向 chip · 3 级嵌套）。当用户提到「画产品架构图」「功能架构图」「product architecture diagram」「functional architecture」「画一张架构图」「按 4 层结构梳理功能」「区分多端功能」时使用。蒸馏自 JMaaS（京东 MaaS 供应链管理平台）项目的迭代实战，覆盖 SaaS 多端产品的常见结构问题（端 / 服务混用、能力域平铺、版本视角混淆、空白区过多、合并模块违反逻辑等）。
+description: 设计企业 SaaS 类产品的两类核心架构图：「产品架构图」（产品在更大生态中的定位 · 4 层视图）和「功能架构图」（4 层纵向 × 能力域横向 chip · 3 级嵌套）。当用户提到「画产品架构图」「功能架构图」「product architecture diagram」「functional architecture」「画一张架构图」「按 4 层结构梳理功能」「区分多端功能」时使用。蒸馏自 某 SaaS 平台（某 MaaS 模型供应链管理平台）项目的迭代实战，覆盖 SaaS 多端产品的常见结构问题（端 / 服务混用、能力域平铺、版本视角混淆、空白区过多、合并模块违反逻辑等）。
 ---
 
 # SaaS 架构图设计
@@ -232,7 +232,7 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 
 - ❌ **不要默默更新 skill**——必须告诉用户「本轮新增 N 条 X」让用户有否决权
 - ❌ **不要等到 10+ 张图后再一次性蒸馏**——错过太多上下文，记不清当时为什么改
-- ❌ **不要把项目特定的层数 / 域数当通用规则**——只有跨 ≥2 个项目（如 JMaaS + wdyclaw）验证过的才进 references
+- ❌ **不要把项目特定的层数 / 域数当通用规则**——只有跨 ≥2 个项目（如 项目 A + 项目 B）验证过的才进 references
 - ✅ 更新时**必须**在 SKILL.md 末尾 `## Changelog` 加一行（日期 + 改动摘要 + 来源项目）
 
 ### 评估清单（画完一张架构图后 30 秒自检）
@@ -249,7 +249,7 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 
 ## 来源
 
-蒸馏自 [JMaaS 项目](https://github.com/songshishuang/JMaas)（京东 MaaS 模型供应链管理平台）的 6 轮迭代实战：
+蒸馏自 [某 SaaS 平台 项目](https://github.com/songshishuang/某 SaaS 平台)（某 MaaS 模型供应链管理平台）的 6 轮迭代实战：
 
 - 第 1 轮：单层平铺 → 用户反馈"配色全是灰色，没有层次"
 - 第 2 轮：加 v0.1 角标 → 用户反馈"全局视图不分版本"
@@ -281,7 +281,7 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 
 ## Changelog
 
-- **2026-05-14** 初始版本（蒸馏自 JMaaS 6 轮迭代，含 anti-patterns / col-span-cookbook / review-checklist）
+- **2026-05-14** 初始版本（蒸馏自 某 SaaS 平台 6 轮迭代，含 anti-patterns / col-span-cookbook / review-checklist）
 - **2026-05-15** 新增 Self-Evolving Protocol（触发评估时机表 + 防御性约束 + 30 秒自检清单）
 - **2026-05-15** 新增跨平台支持段（codex / cursor / antigravity / gemini / copilot 路径与 Self-Evolving 触发方式）
 
