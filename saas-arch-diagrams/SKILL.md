@@ -258,9 +258,31 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 - 第 5 轮：用"后端"作为端 → 用户反馈"端和使用对象混用"
 - 第 6 轮：col 等宽留空白 → 用户反馈"大量空白，紧凑并有层次"
 
+## 🌐 跨平台支持（codex / cursor / antigravity / gemini / copilot）
+
+本 skill 的核心知识（4 层架构、col-span-cookbook、anti-patterns、review-checklist）**跨平台通用**。Self-Evolving Protocol 的执行能力因宿主而异：
+
+| 平台 | 安装路径 | Self-Evolving 触发方式 |
+|---|---|---|
+| Claude Code / Desktop | `~/.claude/skills/saas-arch-diagrams/` | 🟢 **全自动**（AI 主动执行） |
+| Cursor | `<project>/.cursor-plugin/skills-songshishuang/saas-arch-diagrams/` | 🟡 **半自动**（用户提示自检） |
+| Codex CLI / App | `~/.codex/plugins/songshishuang-skills/skills/saas-arch-diagrams/` | 🟡 半自动 |
+| Gemini CLI / Antigravity | `gemini extensions install github.com/songshishuang/Skills` | 🟡 半自动 |
+| GitHub Copilot CLI | `gh copilot marketplace add songshishuang/Skills` | 🟡 半自动 |
+| ChatGPT Web / 本地小模型 | 复制 SKILL.md 到 instructions | 🔴 仅建议 |
+
+**半自动平台的触发咒语**（画完架构图后手动发给 AI）：
+```
+请按本 skill 的 Self-Evolving Protocol 自检本轮架构图，
+评估有没有新 col-span 组合 / 新反模式 / 新 checklist 项要进 references/。
+```
+
+一键安装脚本与详细说明见仓库根 [INSTALL-MULTI-PLATFORM.md](https://github.com/songshishuang/Skills/blob/main/INSTALL-MULTI-PLATFORM.md)。
+
 ## Changelog
 
 - **2026-05-14** 初始版本（蒸馏自 JMaaS 6 轮迭代，含 anti-patterns / col-span-cookbook / review-checklist）
 - **2026-05-15** 新增 Self-Evolving Protocol（触发评估时机表 + 防御性约束 + 30 秒自检清单）
+- **2026-05-15** 新增跨平台支持段（codex / cursor / antigravity / gemini / copilot 路径与 Self-Evolving 触发方式）
 
 每条都对应一个原则，固化在本 skill 中以避免后人走同样弯路。

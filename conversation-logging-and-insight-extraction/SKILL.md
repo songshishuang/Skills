@@ -71,3 +71,23 @@ description: "捕获用户对话过程，强制进行业务价值总结与提炼
 > **🧠 思考链**: 单纯保存流水账毫无意义，应当建立结构化的高阶提炼体系。
 > **执行结果**: 已生成标准存档文档体系。
 ```
+
+## 🌐 跨平台支持
+
+本 skill 是纯流程规范，**跨平台完全通用**。需要宿主能让 AI 调用 `Write` 工具创建 .md 文件。
+
+| 平台 | 安装路径 | 能否创建归档文件 |
+|---|---|---|
+| Claude Code / Desktop | `~/.claude/skills/conversation-logging-and-insight-extraction/` | ✅ |
+| Cursor | `<project>/.cursor-plugin/skills-songshishuang/conversation-logging-and-insight-extraction/` | ✅ |
+| Codex CLI / App | `~/.codex/plugins/songshishuang-skills/skills/conversation-logging-and-insight-extraction/` | ✅ |
+| Gemini CLI / Antigravity | `gemini extensions install github.com/songshishuang/Skills` | ✅ |
+| GitHub Copilot CLI | `gh copilot marketplace add songshishuang/Skills` | ✅ |
+| ChatGPT Web | 复制 SKILL.md 到 instructions | ❌（只能输出文本，需用户手动落盘） |
+
+一键安装脚本与详细说明见仓库根 [INSTALL-MULTI-PLATFORM.md](https://github.com/songshishuang/Skills/blob/main/INSTALL-MULTI-PLATFORM.md)。
+
+## Changelog
+
+- **2026-05-08** 初始版本（从 Claude Desktop 内置版本复制并修复编号 bug）
+- **2026-05-15** 新增跨平台支持段

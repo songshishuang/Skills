@@ -12,7 +12,34 @@
 | **`saas-prototype-design`** | 企业 SaaS 高保真原型完整方法论：v1 设计语言（Joyagent 红 + tokens.css + chrome 框架）+ 组件模式 + 3 级嵌套结构 + 状态机徽章 + 历史版本保护机制 | JMaaS 项目 30+ 轮迭代 + 33+ 页原型实战 |
 | **`conversation-logging-and-insight-extraction`** | 捕获用户对话过程，强制业务价值总结与提炼，以高规范 Markdown 格式沉淀到日志库 | Claude Desktop / Claude Code 长会话归档实践 |
 
-## 🛠️ 安装方式
+## 🌐 跨平台支持
+
+本仓库的 skill 设计**与模型无关**，可在 8+ 个 AI 代码助手平台使用：
+
+| 平台 | 自动化级别 | 触发方式 |
+|---|---|---|
+| **Claude Code / Desktop**（推荐） | 🟢 全自动 | 原生 |
+| **Cursor** | 🟡 半自动 | marketplace 或本地 plugin |
+| **Codex CLI / App** | 🟡 半自动 | OpenAI plugin marketplace |
+| **Gemini CLI / Antigravity** | 🟡 半自动 | `gemini extensions install` |
+| **GitHub Copilot CLI** | 🟡 半自动 | `gh copilot marketplace` |
+| **OpenCode** | 🟡 半自动 | `.opencode/plugins/` |
+| **ChatGPT / 本地模型** | 🔴 仅建议 | 复制 SKILL.md 到 instructions |
+
+详细安装指南：[**INSTALL-MULTI-PLATFORM.md**](./INSTALL-MULTI-PLATFORM.md)
+
+一键安装脚本：
+```bash
+./scripts/install-platform.sh                 # 交互式选平台
+./scripts/install-platform.sh claude-code     # 装到 Claude Code
+./scripts/install-platform.sh cursor --project /path/to/your/project
+./scripts/install-platform.sh codex
+./scripts/install-platform.sh gemini          # 含 Antigravity
+```
+
+---
+
+## 🛠️ 安装方式（Claude Code / Desktop）
 
 ### 方式 A：克隆全部 skill 到全局
 ```bash
