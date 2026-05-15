@@ -1,1 +1,75 @@
 # Skills
+
+宋世双自创的 Claude Skills 仓库。**面向 AI 产品经理的工作流加速器**，蒸馏自微电云 Claw、JMaaS、SCRM 等实战项目。
+
+## 📦 Skills 清单
+
+| Skill | 用途 | 蒸馏自 |
+|---|---|---|
+| **`prd-writer`** | 基于 V0.5 PRD 简洁结构生成 AI 产品需求文档；含业务目标 / 用户故事 / 数据埋点 / 评测指标 / 灰度策略 / 验收清单 / 风险依赖 | SCRM / 微电云 Claw PRD 实战 |
+| **`pm-project-scaffolding`** | 初始化标准 PM 项目目录脚手架；覆盖 PM 完整生命周期 8 阶段（研究 / 规划 / 设计 / 开发 / 发布 / 培训 / 运营 / 归档）；支持 ai-saas / generic-saas / mobile-app / internal-tool 四种产品类型 | 微电云 Claw 项目实战目录治理 |
+| **`saas-arch-diagrams`** | 设计企业 SaaS 类产品的两类核心架构图：「产品架构图」（产品在生态中的定位 · 4 层视图）+「功能架构图」（4 层纵向 × 能力域横向 chip · 3 级嵌套） | JMaaS（京东 MaaS 供应链管理平台）迭代实战 |
+| **`saas-prototype-design`** | 企业 SaaS 高保真原型完整方法论：v1 设计语言（Joyagent 红 + tokens.css + chrome 框架）+ 组件模式 + 3 级嵌套结构 + 状态机徽章 + 历史版本保护机制 | JMaaS 项目 30+ 轮迭代 + 33+ 页原型实战 |
+| **`conversation-logging-and-insight-extraction`** | 捕获用户对话过程，强制业务价值总结与提炼，以高规范 Markdown 格式沉淀到日志库 | Claude Desktop / Claude Code 长会话归档实践 |
+
+## 🛠️ 安装方式
+
+### 方式 A：克隆全部 skill 到全局
+```bash
+cd ~/.claude/skills
+git clone https://github.com/songshishuang/Skills.git temp-skills
+mv temp-skills/{prd-writer,pm-project-scaffolding,saas-arch-diagrams,saas-prototype-design,conversation-logging-and-insight-extraction} .
+rm -rf temp-skills
+```
+
+### 方式 B：单独使用某个 skill
+```bash
+cd ~/.claude/skills
+git clone --depth=1 --filter=blob:none --sparse https://github.com/songshishuang/Skills.git tmp
+cd tmp && git sparse-checkout set prd-writer && mv prd-writer ../ && cd .. && rm -rf tmp
+```
+
+### 方式 C：在项目内引用（保持项目自包含）
+```bash
+cd <你的项目>/skills/
+git clone --depth=1 https://github.com/songshishuang/Skills.git -b main temp
+cp -r temp/saas-arch-diagrams ./
+rm -rf temp
+```
+
+## 📐 Skill 标准目录结构
+
+每个 skill 遵循 [Anthropic Skill 规范](https://docs.claude.com)：
+
+```
+skill-name/
+├── SKILL.md          (必需) — YAML frontmatter + Markdown 正文
+├── scripts/          (可选) — 可执行脚本，处理确定性 / 重复性任务
+├── references/       (可选) — 按需加载的参考文档
+├── templates/        (可选) — 输出模板（HTML / Markdown / 表格等）
+└── assets/           (可选) — 资源文件（图标、字体、示例图等）
+```
+
+## 🔄 同步策略
+
+本仓库是 `~/.claude/skills/` 下对应 skill 目录的**镜像**：
+- 主开发位置：`~/.claude/skills/<skill-name>/`
+- 此仓库：可对外分发的纯净版
+
+更新流程（开发者本机）：
+```bash
+cd ~/Documents/claude/Skills
+rsync -a --delete --exclude='.DS_Store' --exclude='__pycache__' \
+  ~/.claude/skills/<skill-name>/ ./<skill-name>/
+git add . && git commit -m "sync: update <skill-name>" && git push
+```
+
+## 📅 维护
+
+- **作者**：宋世双 ([@songshishuang](https://github.com/songshishuang))
+- **首次发布**：2026-05-15
+- **更新频率**：随各实战项目迭代不定期更新
+
+## 📄 许可
+
+MIT（除非各 skill 目录内单独标注其他许可）

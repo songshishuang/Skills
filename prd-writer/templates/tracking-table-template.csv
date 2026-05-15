@@ -1,0 +1,20 @@
+事件名称,事件描述,上报时机,事件ID,扩展字段,页面路径,页面名称,告警阈值,备注
+知识库保存,运营保存 KB 配置,点击「保存」按钮,kb_config_save,kb_id / chunk_count / changed_fields,面客端-智能客服-知识库,知识库管理,—,
+KB 单条新增,单条 chunk 新增成功,保存成功后,kb_chunk_add,kb_id / chunk_id / source,面客端-智能客服-知识库,知识库管理,—,
+技能开关,运营切换技能开关,切换开关至开或关,skill_toggle,skill_id / from / to,面客端-智能客服-技能配置,技能配置,—,
+技能配置保存,运营保存技能配置,点击「保存」按钮,skill_config_save,skill_id / version / enabled_tools,面客端-智能客服-技能配置,技能配置,—,
+AI 推荐展示,客服在工作台收到 AI 推荐回复,模型输出完成 UI 渲染,ai_reply_show,trace_id / model / skill_id / skill_version / latency_ms / token_in / token_out / confidence / kb_hits,客服工作台-私聊窗口,工作台-Copilot,P99 > 3s 告警 / 错误率 > 2% 告警,
+AI 推荐采纳,客服直接发送 AI 推荐（未编辑）,点击「发送」按钮（无编辑动作）,ai_reply_send,trace_id / no_edit=true,客服工作台-私聊窗口,工作台-Copilot,采纳率 < 30% 周告警,
+AI 推荐编辑后发送,客服编辑文本后发送（部分采纳）,点击「发送」（有编辑）,ai_reply_edit_send,trace_id / edit_distance / final_text_length,客服工作台-私聊窗口,工作台-Copilot,重写率 > 30% 周告警,
+AI 推荐拒纳,客服不采纳 AI 推荐直接重写,关闭推荐 + 输入框开始输入,ai_reply_reject,trace_id / reject_reason / final_text,客服工作台-私聊窗口,工作台-Copilot,拒纳率 > 20% 周告警,自动入 BadCase 池
+AI 依据查看,客服点击查看 AI 推荐依据,点击「查看推荐依据」按钮,ai_evidence_view,trace_id / evidence_count / clicked_evidence_id,客服工作台-私聊窗口,工作台-Copilot,—,信任度信号
+AI 托管开启,开启 AI 托管（单用户/全局）,切换开关至开,ai_takeover_enable,scope (single/all) / time_segment_id,客服工作台-顶部 / 面客端-AI 托管配置,工作台 / AI 托管配置,—,
+AI 托管关闭,关闭 AI 托管,切换开关至关,ai_takeover_disable,scope / reason,客服工作台-顶部,工作台,—,
+AI 兜底触发,LLM 失败/低置信/无 KB 触发兜底,兜底分支命中时服务端上报,ai_fallback_trigger,trace_id / reason (timeout/low_conf/no_kb/safety/tool_error),服务端,—,兜底率 > 10% 即时告警 / 单 reason > 5% 告警,必采样存储
+非工作时间自动回复,AI 在配置时段内自动回应用户,AI 完成回复并发送时,non_business_hour_reply,time_strategy_id / response_time,服务端,—,响应时长 > 5s 告警,
+用户点踩,用户在企微会话中对 AI 回复点踩,点踩按钮触发,user_downvote,trace_id / message_id,企微-会话,用户端,日点踩量 > 历史均值 1.5x 告警,自动入 BadCase 池
+转人工,AI/用户/兜底触发转人工,转人工动作执行时,transfer_to_agent,trace_id / reason (user_request/ai_decision/fallback) / pending_seconds,客服工作台 / 服务端,工作台,转人工率 > 15% 告警 / 排队时长 P95 > 60s 告警,
+商品卡片展示,解析用户消息为商品后展示卡片,UI 渲染卡片时,goods_card_show,sku_id / source (link/image/text),客服工作台-私聊窗口,工作台-Copilot,—,
+转链授权失败,商品授权校验未通过,商品授权校验返回失败时,goods_link_invalid,sku_id / fail_reason,客服工作台,商品池,失败率 > 5% 告警,
+页签排序,客服调整工作台页签顺序,点击「应用设置」,workbench_tabs_reorder,tabs_order,客服工作台-自定义工作台,自定义工作台,—,本地保存（localStorage）
+LLM 调用成本,记录每次 LLM 调用的 token 与估算成本,LLM 调用完成,llm_call_cost,trace_id / model / token_in / token_out / cost_estimate,服务端,—,日 token 用量 > 预算 1.5x 即时告警,**新增（成本预算章节配套）**
