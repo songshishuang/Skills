@@ -194,8 +194,46 @@ prd-writer/
     └── tracking-events-spec.md         # 埋点字段规范 + 看板 SQL
 ```
 
+## Self-Evolving Protocol（每次写完 PRD 主动评估，不要等用户提醒）
+
+本 skill 是 **living document**——AI 产品的需求形态、埋点字段、评测指标、灰度策略都在快速演进，每次写一份新 PRD 都可能产生**可复用的新经验**，必须显式回流。
+
+### 触发评估时机
+
+| 完成动作 | 评估问题 | 归档路径 |
+|---|---|---|
+| 完成一份 PRD（任何 V0.X） | 这次有没有遇到现有模板未覆盖的章节 / 字段 / 评测维度？ | 新章节模板 → `templates/`；新评测维度 → `references/ai-product-checklist.md` |
+| 用户拒绝某段写法（"不要这样写 / 删掉"） | 这条否定是不是普适规则？要不要进反模式表？ | 反模式表（SKILL.md 内）或拆 `references/anti-patterns.md` |
+| 业务方提出新的埋点字段 / 新事件类型 | 是项目特例还是通用模式？ | `references/tracking-events-spec.md` |
+| 发现新的 rationalization（agent 自欺借口） | 这条借口是不是高频？要不要进自查表？ | SKILL.md 末段「常见 rationalization」 |
+| 遇到新的 AI 产品形态（agent / RAG / fine-tune / 多模态） | 现有 V0.5 13 节够覆盖吗？ | 主文档新增节号 or `references/ai-product-checklist.md` 加维度 |
+
+### 更新约束（防御性规则）
+
+- ❌ **不要默默更新 skill**——必须告诉用户「本轮新增 N 条 X」让用户有否决权
+- ❌ **不要等到 10+ 个 PRD 后再一次性蒸馏**——错过太多上下文，记不清当时为什么这么改
+- ❌ **不要把项目特定字段当通用规则**——只有跨 ≥2 个项目验证过的才进 references
+- ✅ 更新时**必须**在 SKILL.md 末尾 `## Changelog` 加一行（日期 + 改动摘要 + 来源项目）
+
+### 评估清单（写完一份 PRD 后 30 秒自检）
+
+```
+- [ ] 本次 PRD 有没有新 AI 模块类型？(RAG / agent / tool-use / 多模态)
+- [ ] 本次 PRD 的埋点表里有没有 templates/tracking-table-template.csv 没覆盖的字段？
+- [ ] 业务方有没有提"现有 PRD 模板少了 X 章节"？
+- [ ] 评测集设计有没有新维度（如 jailbreak / hallucination / bias / latency）？
+- [ ] 灰度策略有没有新切流维度？（用户分群 / 项目 / 渠道 / 设备）
+```
+
+任一勾选 → 显式回头更新 skill + 告知用户。
+
 ## Bottom Line
 
 **好 PRD = 业务方一眼能看懂目标 + 开发能直接拿走干活 + QA 知道怎么验收 + BI 知道埋什么点 + SRE 知道怎么灰度回滚。**
 
 如果你的 PRD 让任何一个角色还要问"我该做什么？"，回 Stage 1。
+
+## Changelog
+
+- **2026-05-15** 初始版本（V0.5 → 模板 + 反模式 + rationalization 自查）
+- **2026-05-15** 新增 Self-Evolving Protocol（触发评估时机表 + 防御性约束 + 30 秒自检清单）

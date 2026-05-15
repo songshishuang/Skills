@@ -214,6 +214,39 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 - Python 脚本生成 HTML（卡片多、布局规整，手写易错）
 - Firebase Hosting / GitHub Pages（直接 deploy）
 
+## Self-Evolving Protocol（每张架构图画完主动评估）
+
+本 skill 是 **living document**——架构图的反模式来自真实返工，不主动回流就会丢失。每次画完一张架构图（产品架构 / 功能架构），**主动**评估是否更新本 skill，不要等用户提醒。
+
+### 触发评估时机
+
+| 完成动作 | 评估问题 | 归档路径 |
+|---|---|---|
+| 画完一张架构图（产品 / 功能） | 这轮有没有新的卡片排布模式（col-span 组合）？ | [`references/col-span-cookbook.md`](references/col-span-cookbook.md) |
+| 用户给出明确否定（"不要 X" / "去掉 Y"） | 这条否定是不是普适规则？要不要进反模式？ | [`references/anti-patterns.md`](references/anti-patterns.md) + SKILL.md「常见陷阱」段 |
+| 评审 checklist 漏检（事后才发现问题） | 是不是 12 条 checklist 该新增一条？ | [`references/review-checklist.md`](references/review-checklist.md) |
+| 遇到现有 4 层架构不够用（如 L0 / L5） | 是项目特例还是通用扩展？ | SKILL.md 主文档「层定义」段（仅当跨 ≥2 项目验证过） |
+| 发现新的能力域 chip 命名冲突 | 是不是 A-E 域不够分？ | SKILL.md 主文档「能力域 chip」段 |
+
+### 更新约束（防御性规则）
+
+- ❌ **不要默默更新 skill**——必须告诉用户「本轮新增 N 条 X」让用户有否决权
+- ❌ **不要等到 10+ 张图后再一次性蒸馏**——错过太多上下文，记不清当时为什么改
+- ❌ **不要把项目特定的层数 / 域数当通用规则**——只有跨 ≥2 个项目（如 JMaaS + wdyclaw）验证过的才进 references
+- ✅ 更新时**必须**在 SKILL.md 末尾 `## Changelog` 加一行（日期 + 改动摘要 + 来源项目）
+
+### 评估清单（画完一张架构图后 30 秒自检）
+
+```
+- [ ] 用户在评审过程中说过"不要 X"吗？X 是不是普适反模式？
+- [ ] 有没有新 col-span 组合（如 col-span-5 + col-span-7）？要不要进 cookbook？
+- [ ] 12 条 review-checklist 有没有漏掉本次踩坑的项？
+- [ ] 这张图涉及的端 / 服务 / 数据资产，有没有现有 4 层覆盖不到的？
+- [ ] 配色 / 状态色 / dotted 用法有没有新约定？
+```
+
+任一勾选 → 显式回头更新 skill + 告知用户。
+
 ## 来源
 
 蒸馏自 [JMaaS 项目](https://github.com/songshishuang/JMaas)（京东 MaaS 模型供应链管理平台）的 6 轮迭代实战：
@@ -224,5 +257,10 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 - 第 4 轮：层 6a/6b → 用户反馈"a/b 区分混乱"
 - 第 5 轮：用"后端"作为端 → 用户反馈"端和使用对象混用"
 - 第 6 轮：col 等宽留空白 → 用户反馈"大量空白，紧凑并有层次"
+
+## Changelog
+
+- **2026-05-14** 初始版本（蒸馏自 JMaaS 6 轮迭代，含 anti-patterns / col-span-cookbook / review-checklist）
+- **2026-05-15** 新增 Self-Evolving Protocol（触发评估时机表 + 防御性约束 + 30 秒自检清单）
 
 每条都对应一个原则，固化在本 skill 中以避免后人走同样弯路。
