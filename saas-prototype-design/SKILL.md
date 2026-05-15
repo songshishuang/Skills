@@ -187,3 +187,25 @@ prototypes/
   - 组件模式：sidebar / topbar / filter-form / list-toolbar / wizard / drawer / modal
   - 历史版本保护机制（snapshot + meta + agent-protocol）
   - 反模式案例 20+ 条
+
+## 🌐 跨平台支持（codex / cursor / antigravity / gemini / copilot）
+
+本 skill 原生含 Self-Evolving Protocol（每次返工/新组件主动更新 references/）。各平台执行差异：
+
+| 平台 | 安装路径 | Self-Evolving 触发方式 |
+|---|---|---|
+| Claude Code / Desktop | `~/.claude/skills/saas-prototype-design/` | 🟢 **全自动**（AI 主动更新 anti-patterns / component-patterns / design-tokens） |
+| Cursor | `<project>/.cursor-plugin/skills-songshishuang/saas-prototype-design/` | 🟡 **半自动**（用户提示自检） |
+| Codex CLI / App | `~/.codex/plugins/songshishuang-skills/skills/saas-prototype-design/` | 🟡 半自动 |
+| Gemini CLI / Antigravity | `gemini extensions install github.com/songshishuang/Skills` | 🟡 半自动 |
+| GitHub Copilot CLI | `gh copilot marketplace add songshishuang/Skills` | 🟡 半自动 |
+
+**半自动平台的触发咒语**（完成一个页面 / 一轮原型改动后手动发给 AI）：
+```
+请按本 skill 的「演进与维护」段自检本轮工作，
+评估有没有新组件 / 新数值 / 新反模式 / 新 token 要进 references/。
+```
+
+一键安装脚本与详细说明见仓库根 [INSTALL-MULTI-PLATFORM.md](https://github.com/songshishuang/Skills/blob/main/INSTALL-MULTI-PLATFORM.md)。
+
+- **2026-05-15 · v1.2** — 新增跨平台支持段（codex / cursor / antigravity / gemini / copilot 路径与 Self-Evolving 触发方式）

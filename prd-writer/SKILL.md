@@ -233,7 +233,29 @@ prd-writer/
 
 如果你的 PRD 让任何一个角色还要问"我该做什么？"，回 Stage 1。
 
+## 🌐 跨平台支持（codex / cursor / antigravity / gemini / copilot）
+
+本 skill 的核心知识（PRD 章节、反模式、rationalization 表）**跨平台通用**。Self-Evolving Protocol 的执行能力因宿主而异：
+
+| 平台 | 安装路径 | Self-Evolving 触发方式 |
+|---|---|---|
+| Claude Code / Desktop | `~/.claude/skills/prd-writer/` | 🟢 **全自动**（AI 主动执行） |
+| Cursor | `<project>/.cursor-plugin/skills-songshishuang/prd-writer/` | 🟡 **半自动**（用户提示自检） |
+| Codex CLI / App | `~/.codex/plugins/songshishuang-skills/skills/prd-writer/` | 🟡 半自动 |
+| Gemini CLI / Antigravity | `gemini extensions install github.com/songshishuang/Skills` | 🟡 半自动 |
+| GitHub Copilot CLI | `gh copilot marketplace add songshishuang/Skills` | 🟡 半自动 |
+| ChatGPT Web / 本地小模型 | 复制 SKILL.md 到 instructions | 🔴 仅建议 |
+
+**半自动平台的触发咒语**（写完 PRD 后手动发给 AI）：
+```
+请按本 skill 的 Self-Evolving Protocol 自检本轮 PRD，
+评估有没有新反模式 / 新 AI 章节 / 新埋点字段要进 references/。
+```
+
+一键安装脚本与详细说明见仓库根 [INSTALL-MULTI-PLATFORM.md](https://github.com/songshishuang/Skills/blob/main/INSTALL-MULTI-PLATFORM.md)。
+
 ## Changelog
 
 - **2026-05-15** 初始版本（V0.5 → 模板 + 反模式 + rationalization 自查）
 - **2026-05-15** 新增 Self-Evolving Protocol（触发评估时机表 + 防御性约束 + 30 秒自检清单）
+- **2026-05-15** 新增跨平台支持段（codex / cursor / antigravity / gemini / copilot 路径与 Self-Evolving 触发方式）

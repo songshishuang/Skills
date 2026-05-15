@@ -125,3 +125,22 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 ## 来源
 
 蒸馏自 2026-Q2 「微电云 Claw」AI 运营平台项目的目录治理实战——91 文件 git mv 大重构 + PM 视角 9 维度结构 + 三轮迭代（轻量版 / 中量版 / 上线 + 培训补充）。完整原始材料见 Claw 项目的 [`docs/项目目录结构说明.html`](https://github.com/songshishuang/wdyclaw/blob/main/docs/%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E.html)。
+
+## 🌐 跨平台支持
+
+本 skill 是纯目录脚手架知识，**跨平台完全通用**。各平台安装路径：
+
+| 平台 | 安装路径 |
+|---|---|
+| Claude Code / Desktop | `~/.claude/skills/pm-project-scaffolding/` |
+| Cursor | `<project>/.cursor-plugin/skills-songshishuang/pm-project-scaffolding/` |
+| Codex CLI / App | `~/.codex/plugins/songshishuang-skills/skills/pm-project-scaffolding/` |
+| Gemini CLI / Antigravity | `gemini extensions install github.com/songshishuang/Skills` |
+| GitHub Copilot CLI | `gh copilot marketplace add songshishuang/Skills` |
+
+一键安装脚本与详细说明见仓库根 [INSTALL-MULTI-PLATFORM.md](https://github.com/songshishuang/Skills/blob/main/INSTALL-MULTI-PLATFORM.md)。
+
+## Changelog
+
+- **2026-05-09** 初始版本（蒸馏自微电云 Claw 91 文件 git mv 大重构）
+- **2026-05-15** 新增跨平台支持段
