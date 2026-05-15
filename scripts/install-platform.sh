@@ -98,7 +98,7 @@ case "$PLATFORM" in
             /bin/cat > "$PLUGIN_JSON" <<EOF
 {
   "name": "songshishuang-skills",
-  "displayName": "宋世双 Skills",
+  "displayName": "songshishuang Skills",
   "description": "PRD 写作 / 项目脚手架 / SaaS 架构图 / 高保真原型 / 对话归档",
   "version": "1.0.0",
   "skills": "./skills-songshishuang/",

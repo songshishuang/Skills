@@ -1,11 +1,11 @@
 /* ===================================================================
-   JMaaS v1 · 设计 Token
+   某 SaaS 平台 v1 · 设计 Token
    基于 docs/market-research/competitors-ui.md §7
    =================================================================== */
 
 :root {
   /* ---------- 色彩 ---------- */
-  --color-primary: #E1251B;          /* 京东红主品牌色 */
+  --color-primary: #E1251B;          /* 品牌红主品牌色 */
   --color-primary-hover: #C31B12;
   --color-primary-bg: #FEF2F1;       /* 弱底（chip / selected） */
   --color-accent: #3B82F6;           /* 蓝色链接 / 次要 CTA */

@@ -2,14 +2,14 @@
 
 ## 来源
 
-蒸馏自竞品调研（OpenRouter / Together AI / Replicate / Artificial Analysis）+ JMaaS 项目 30+ 轮迭代。完整 CSS 变量见 [`../templates/tokens.css`](../templates/tokens.css)。
+蒸馏自竞品调研（OpenRouter / Together AI / Replicate / Artificial Analysis）+ 某 SaaS 平台 项目 30+ 轮迭代。完整 CSS 变量见 [`../templates/tokens.css`](../templates/tokens.css)。
 
 ## 色彩
 
 ### 主品牌色
 
 ```css
---color-primary: #E1251B;          /* 京东红 · 主 CTA */
+--color-primary: #E1251B;          /* 品牌红 · 主 CTA */
 --color-primary-hover: #C31B12;
 --color-primary-bg: #FEF2F1;       /* 弱底（chip / selected） */
 ```

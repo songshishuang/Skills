@@ -2,7 +2,7 @@
 
 ## 问题背景
 
-JMaaS 项目中已发生 3 次「Agent 大改时覆盖丢失之前迭代功能」：
+某 SaaS 平台 项目中已发生 3 次「Agent 大改时覆盖丢失之前迭代功能」：
 
 1. **Agent C 复制 v1 → v0.1** 时直接覆盖 `eval-sets.html`，丢失了之前 3 轮迭代的启用 toggle / 描述字段 / 版本历史 / 模型基线 3 sub-tab
 2. **Agent 简化菜单**时把 v0.1/admission.html 的高级筛选区删了

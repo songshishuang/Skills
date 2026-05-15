@@ -1,15 +1,15 @@
 # Skills
 
-宋世双自创的 Claude Skills 仓库。**面向 AI 产品经理的工作流加速器**，蒸馏自微电云 Claw、JMaaS、SCRM 等实战项目。
+作者自创的 Claude Skills 仓库。**面向 AI 产品经理的工作流加速器**，蒸馏自某 AI 运营平台、某 SaaS 平台、SCRM 等实战项目。
 
 ## 📦 Skills 清单
 
 | Skill | 用途 | 蒸馏自 |
 |---|---|---|
-| **`prd-writer`** | 基于 V0.5 PRD 简洁结构生成 AI 产品需求文档；含业务目标 / 用户故事 / 数据埋点 / 评测指标 / 灰度策略 / 验收清单 / 风险依赖 | SCRM / 微电云 Claw PRD 实战 |
-| **`pm-project-scaffolding`** | 初始化标准 PM 项目目录脚手架；覆盖 PM 完整生命周期 8 阶段（研究 / 规划 / 设计 / 开发 / 发布 / 培训 / 运营 / 归档）；支持 ai-saas / generic-saas / mobile-app / internal-tool 四种产品类型 | 微电云 Claw 项目实战目录治理 |
-| **`saas-arch-diagrams`** | 设计企业 SaaS 类产品的两类核心架构图：「产品架构图」（产品在生态中的定位 · 4 层视图）+「功能架构图」（4 层纵向 × 能力域横向 chip · 3 级嵌套） | JMaaS（京东 MaaS 供应链管理平台）迭代实战 |
-| **`saas-prototype-design`** | 企业 SaaS 高保真原型完整方法论：v1 设计语言（Joyagent 红 + tokens.css + chrome 框架）+ 组件模式 + 3 级嵌套结构 + 状态机徽章 + 历史版本保护机制 | JMaaS 项目 30+ 轮迭代 + 33+ 页原型实战 |
+| **`prd-writer`** | 基于 V0.5 PRD 简洁结构生成 AI 产品需求文档；含业务目标 / 用户故事 / 数据埋点 / 评测指标 / 灰度策略 / 验收清单 / 风险依赖 | SCRM / 某 AI 运营平台 PRD 实战 |
+| **`pm-project-scaffolding`** | 初始化标准 PM 项目目录脚手架；覆盖 PM 完整生命周期 8 阶段（研究 / 规划 / 设计 / 开发 / 发布 / 培训 / 运营 / 归档）；支持 ai-saas / generic-saas / mobile-app / internal-tool 四种产品类型 | 某 AI 运营平台 项目实战目录治理 |
+| **`saas-arch-diagrams`** | 设计企业 SaaS 类产品的两类核心架构图：「产品架构图」（产品在生态中的定位 · 4 层视图）+「功能架构图」（4 层纵向 × 能力域横向 chip · 3 级嵌套） | 某 SaaS 平台（某 MaaS 模型供应链管理平台）迭代实战 |
+| **`saas-prototype-design`** | 企业 SaaS 高保真原型完整方法论：v1 设计语言（品牌红 + tokens.css + chrome 框架）+ 组件模式 + 3 级嵌套结构 + 状态机徽章 + 历史版本保护机制 | 某 SaaS 平台 项目 30+ 轮迭代 + 33+ 页原型实战 |
 | **`conversation-logging-and-insight-extraction`** | 捕获用户对话过程，强制业务价值总结与提炼，以高规范 Markdown 格式沉淀到日志库 | Claude Desktop / Claude Code 长会话归档实践 |
 
 ## 🌐 跨平台支持
@@ -99,7 +99,7 @@ git add . && git commit -m "sync: update <skill-name>" && git push
 
 ## 📅 维护
 
-- **作者**：宋世双 ([@songshishuang](https://github.com/songshishuang))
+- **作者**：作者 ([@songshishuang](https://github.com/songshishuang))
 - **首次发布**：2026-05-15
 - **更新频率**：随各实战项目迭代不定期更新
 

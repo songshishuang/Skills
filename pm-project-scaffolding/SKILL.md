@@ -1,6 +1,6 @@
 ---
 name: pm-project-scaffolding
-description: 初始化标准 PM 项目目录脚手架。当用户提到「初始化新 PM 项目」「pm 脚手架」「pm-init」「新建产品项目」「create PM scaffold」「产品项目模板」「项目目录骨架」时使用。生成包含 docs / prototypes / skills / training / app / archive / Logs 等覆盖 PM 完整生命周期 8 阶段（研究 / 规划 / 设计 / 开发 / 发布 / 培训 / 运营 / 归档）的标准目录结构。支持 ai-saas / generic-saas / mobile-app / internal-tool 四种产品类型，可选启用 prototypes / skills 模块。基于微电云 Claw 项目的实战目录治理沉淀。
+description: 初始化标准 PM 项目目录脚手架。当用户提到「初始化新 PM 项目」「pm 脚手架」「pm-init」「新建产品项目」「create PM scaffold」「产品项目模板」「项目目录骨架」时使用。生成包含 docs / prototypes / skills / training / app / archive / Logs 等覆盖 PM 完整生命周期 8 阶段（研究 / 规划 / 设计 / 开发 / 发布 / 培训 / 运营 / 归档）的标准目录结构。支持 ai-saas / generic-saas / mobile-app / internal-tool 四种产品类型，可选启用 prototypes / skills 模块。基于某 AI 运营平台 项目的实战目录治理沉淀。
 ---
 
 # PM Project Scaffolding · 产品项目脚手架
@@ -26,8 +26,8 @@ description: 初始化标准 PM 项目目录脚手架。当用户提到「初始
 
 向用户提问（**不要假设**，依次问清）：
 
-1. **`project_name`**：项目目录名（英文小写连字符，例：`wdyclaw` / `awesome-saas`）
-2. **`project_tagline`**：一句话定位（用于 README.md，例：「京东企微域一体化 AI 运营平台」）
+1. **`project_name`**：项目目录名（英文小写连字符，例：`my-product` / `awesome-saas`）
+2. **`project_tagline`**：一句话定位（用于 README.md，例：「企微域一体化 AI 运营平台」）
 3. **`project_type`**：四选一
    - `ai-saas`——AI/Agent 产品（含 `prototypes/` + `skills/`）
    - `generic-saas`——通用 SaaS（含 `prototypes/`，不含 `skills/`）
@@ -124,7 +124,7 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 
 ## 来源
 
-蒸馏自 2026-Q2 「微电云 Claw」AI 运营平台项目的目录治理实战——91 文件 git mv 大重构 + PM 视角 9 维度结构 + 三轮迭代（轻量版 / 中量版 / 上线 + 培训补充）。完整原始材料见 Claw 项目的 [`docs/项目目录结构说明.html`](https://github.com/songshishuang/wdyclaw/blob/main/docs/%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E.html)。
+蒸馏自 2026-Q2 某 AI 运营平台项目的目录治理实战——91 文件 git mv 大重构 + PM 视角 9 维度结构 + 三轮迭代（轻量版 / 中量版 / 上线 + 培训补充）。
 
 ## 🌐 跨平台支持
 
@@ -142,5 +142,5 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 
 ## Changelog
 
-- **2026-05-09** 初始版本（蒸馏自微电云 Claw 91 文件 git mv 大重构）
+- **2026-05-09** 初始版本（蒸馏自某 AI 运营平台 91 文件 git mv 大重构）
 - **2026-05-15** 新增跨平台支持段

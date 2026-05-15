@@ -54,7 +54,7 @@ git clone https://github.com/songshishuang/Skills.git .cursor-plugin/skills-song
 ```json
 {
   "name": "songshishuang-skills",
-  "displayName": "宋世双 Skills",
+  "displayName": "songshishuang Skills",
   "skills": "./skills-songshishuang/"
 }
 ```

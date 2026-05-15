@@ -1,4 +1,4 @@
-// JMaaS v1 · Chrome 交互（侧栏激活态 / Toast / Modal / Drawer）
+// 某 SaaS 平台 v1 · Chrome 交互（侧栏激活态 / Toast / Modal / Drawer）
 
 // ---------- 自动高亮侧栏 active item ----------
 (function highlightActive() {
