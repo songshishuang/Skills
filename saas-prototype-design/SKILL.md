@@ -163,6 +163,13 @@ prototypes/
 
 ## Changelog
 
+- **2026-05-18 · v1.8.1** — 反模式 1 子案例「v1.0 启用 / 范围 banner」强化（第 4 次踩同坑）
+  - 在 anti-patterns.md 反模式 1 加专项子案例「v0.1 仅启用 / v1.0 即将启用 / 一期范围 / 完整规范在 v1.x」
+  - 列 6 类形态 + 5 行替代方案对照表 + 「为什么 PM 总想加 + 真相」分析 + grep 排查脚本
+  - 全局清扫 6 个 v0.1 页面共 11 处违例（self-test.html 3 处 / endpoints.html 2 处 / vendor-audit.html 1 处 / index.html 1 处 + 8 处 toast / vendor/index.html 1 处 / vendor/eval-results.html 2 处 / admission-report.html 2 处 / model-management.html 1 处）
+  - 触发原因：用户第 4 次明确说「这类非面客的实际内容不要放在原型里面」
+  - 教训：以前的「banner 子案例」只举了一个例子，没明示"v1.0 启用 / `<details>` 折叠 / 字段值带版本号"等多种变体，导致下次又踩
+
 - **2026-05-18 · v1.8** — vendor 双端入驻流程沉淀
   - **§8 Drawer 新增 8a「双模式（写 vs 读）」**：审批/审核类页面 audit 模式 vs view 模式复用同一 drawer，按 mode 切换决策区显隐
     - 关键：mode 由调用方决定 · 基础信息永远展示 · `mode='audit'` 但状态非 pending 时 fail-safe 降级为 view
