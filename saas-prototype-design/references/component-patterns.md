@@ -511,3 +511,146 @@ function batchAction(action) {
 - 批量启用/停用按钮直接 `data-action="toast" data-arg="已批量启用"` —— 没真生效，用户点了之后没有任何反馈联动
 - 表格首列只有 checkbox 但不带 `data-id` —— 无法关联到数据
 - 全选 checkbox 没处理 indeterminate —— 部分选中时显示全勾，误导用户
+
+
+---
+
+## 19. 混合表单 + JSON 配置（API 接入类页面必备）
+
+> 适用：API 接入、Webhook 配置、SSO 接入、第三方支付对接、消息推送渠道、数据源连接等 **"配置异构外部服务"** 的页面。
+
+### 核心分层原则
+
+把"配置一个外部服务"拆成 **两层字段**：
+
+| 层 | 字段特征 | 形式 | 例子 |
+|---|---|---|---|
+| **强类型必填字段** | 所有同类资源都有 · 可校验格式 · 业务必须 | 表单 `<input>` / `<select>` | base_url / api_key / auth_type |
+| **协议/能力差异化字段** | 因协议、能力、推理模式不同而不同的可选字段 | JSON `<textarea>` 编辑器 | anthropic_version / project_id / reasoning_modes mapping |
+
+**为什么不全用表单？** —— 字段集会因协议爆炸（OpenAI / Anthropic / Gemini / 自定义 4 协议 × 5 认证方式 × N 个能力组合 = 几十种字段组合），用 UI 表达会变成无法维护的"条件渲染表单"。
+
+**为什么不全用 JSON？** —— 必填字段（如 base_url）失去强类型校验，运营容易拼错，且 UI 不直观。
+
+### 3 个关键交互
+
+#### 19.1 上下游联动展示（前置选择 → 自动展示元信息）
+
+用户先选「A」→ 立刻展示「A 的相关信息卡」（蓝色 info-card），避免运营再去别处查。
+
+```html
+<!-- 选模型系列 → 联动模型下拉 -->
+<select id="form-family"><option>请选择...</option>...</select>
+<select id="form-model"></select>
+
+<!-- 联动信息卡：模型选定后展示「协议 / 推理模式 / 能力」 -->
+<div id="model-info-card" class="model-info-card" style="display:none"></div>
+```
+
+```css
+.model-info-card {
+  padding: 12px 14px; background: var(--color-bg-page);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-info);
+  margin-top: 8px; font-size: 12px;
+}
+.model-info-card .row { display: flex; gap: 6px; margin-bottom: 4px; }
+.model-info-card .k { color: var(--color-text-secondary); min-width: 80px; }
+.model-info-card .v { color: var(--color-text-primary); }
+```
+
+```js
+fSel.addEventListener('change', () => { refreshChildOpts(); refreshChildInfo(); });
+```
+
+#### 19.2 按选择"生成默认 JSON 模板"按钮
+
+JSON 编辑器旁加一个 「🪄 按协议生成默认模板」按钮，点击后根据当前选择**填入合适的 JSON 骨架**，运营再按需调整。
+
+```html
+<div class="flex items-center justify-between mb-1">
+  <label class="label" style="margin:0;">高级参数（connection_config）</label>
+  <button type="button" class="btn btn-ghost btn-sm" onclick="generateConfigTemplate()" style="font-size:11px;">
+    🪄 按协议生成默认模板
+  </button>
+</div>
+<textarea class="json-editor" id="form-config" spellcheck="false"></textarea>
+```
+
+```js
+function generateTplFor(m) {
+  const tpl = {};
+  // 协议专属字段
+  if (m.protocol === 'Anthropic Messages') tpl.anthropic_version = '2023-06-01';
+  if (m.protocol === 'Google Gemini') { tpl.project_id = '...'; tpl.location = '...'; }
+  // 模式映射
+  if (m.modes.length > 1) {
+    tpl.reasoning_modes = {};
+    m.modes.forEach(mode => {
+      if (m.protocol === 'Anthropic Messages') {
+        const budget = { N1: 256, N2: 2048, N3: 8192 }[mode];
+        if (budget) tpl.reasoning_modes[mode] = { thinking: { budget_tokens: budget } };
+      } else {
+        tpl.reasoning_modes[mode] = { enable_thinking: true };
+      }
+    });
+  }
+  // 能力开关
+  if (m.capabilities.includes('JSON')) tpl.response_format_default = { type: 'text' };
+  if (m.capabilities.includes('工具')) tpl.tool_use = { parallel: true };
+  // 通用限速
+  tpl.limits = { qps: 1000, concurrent: 32 };
+  return tpl;
+}
+```
+
+#### 19.3 JSON 编辑器样式（等宽字体 + 行高 + spellcheck off）
+
+```css
+.json-editor {
+  width: 100%; min-height: 180px; padding: 10px;
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  font-size: 12px; line-height: 1.5;
+  border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  background: #FAFBFC; color: #1E293B;
+  resize: vertical;
+}
+.json-editor:focus { outline: none; border-color: var(--color-accent); }
+```
+
+```html
+<!-- spellcheck=false 关掉浏览器拼写检查（JSON 内有大量自定义 key 误报） -->
+<textarea class="json-editor" spellcheck="false">...</textarea>
+
+<!-- 详情 drawer 中只读展示：用 <pre> 代替 <textarea> -->
+<pre class="json-editor" style="margin: 0;">${JSON.stringify(config, null, 2)}</pre>
+```
+
+### 落库形态建议
+
+存储为关系型主表 + 一个 JSONB 字段（PostgreSQL）或 JSON column（MySQL 5.7+）：
+
+```sql
+CREATE TABLE endpoints (
+  endpoint_id     VARCHAR(64) PRIMARY KEY,
+  model_id        VARCHAR(64) NOT NULL REFERENCES models,
+  vendor_code     VARCHAR(64) NOT NULL REFERENCES vendors,
+  base_url        VARCHAR(512) NOT NULL,
+  auth_type       VARCHAR(32) NOT NULL,
+  api_key_kms_id  VARCHAR(128),
+  status          VARCHAR(32) NOT NULL,
+  connection_config JSONB,         -- ← 灵活配置
+  created_at      TIMESTAMPTZ,
+  updated_at      TIMESTAMPTZ
+);
+```
+
+JSONB 字段建议**仅做整体替换 + 关键路径索引**，不做字段级 UPDATE。
+
+### 反例
+
+- ❌ **全 UI 条件渲染**：协议选 Anthropic → JS 把 8 个不同字段塞进来 → 协议改 OpenAI → 又换一套 → 字段太多时表单成"巨型条件树"，维护成本爆炸
+- ❌ **全 JSON 编辑器**：base_url / api_key 也让运营手写 JSON，新手不知道哪些是必填，拼错 key 名后台才报错
+- ❌ **JSON 模板硬编码在 HTML**：把 5 种协议的默认模板写成 5 个 `<textarea>` 隐藏切换 → 维护时改一处忘改其它 4 处
+- ❌ **JSON 编辑器没 spellcheck=false**：浏览器把 `qps` / `mtls` 全标红波浪线，运营误以为是错误
+- ❌ **联动信息卡显示太迟**：选完模型才在底部出现，运营看不见 → 应紧贴选择控件下方
