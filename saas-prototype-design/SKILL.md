@@ -163,6 +163,27 @@ prototypes/
 
 ## Changelog
 
+- **2026-05-18 · v1.7.1** — 反模式 28 修正最终写法（二次踩坑）
+  - 第一次"精细化"写法 `if(!event.target.closest('[data-action]'))event.stopPropagation()` **仍有 bug**：因为 `closest` 沿祖先链一路找到 modal 外的 mask（mask 自身有 data-action），导致点击 input 等控件也触发 modal-close 闪退
+  - 最终正确写法：`var a=event.target.closest('[data-action]');if(!a||!this.contains(a))event.stopPropagation()` — 用 `this.contains(action)` 把祖先查询范围限定在 modal 自身以内
+  - 6 个文件 10 处 modal 全部重新升级
+  - 教训：任何用"祖先查询"修 bug 的写法，**都要显式限制查询的祖先范围**，不能依赖 closest 自然停止
+  - 来源：endpoint-management v2.0 用户测试发现"点击新建 modal 内控件就闪退"
+
+- **2026-05-18 · v1.7** — endpoint-management v2.0 + vendor-info v1.2 bug 沉淀
+  - **component-patterns 新增 §19「混合表单 + JSON 配置」**：
+    - 适用场景：API 接入 / Webhook / SSO / 第三方支付 / 数据源连接等"配置异构外部服务"页面
+    - 分层原则：强类型必填走表单（base_url / api_key / auth_type）· 协议/能力差异化字段走 JSON 块（connection_config）
+    - 3 个关键交互：① 上下游联动 info-card · ② 「🪄 按协议生成默认模板」按钮 · ③ JSON 编辑器样式（mono + spellcheck=false + 详情态用 `<pre>`）
+    - 落库建议：JSONB column · 整体替换不做字段级 UPDATE
+    - 反例：全 UI 条件渲染 / 全 JSON 编辑器 / 模板硬编码到 HTML / 没关 spellcheck / info-card 显示位置太远
+  - **anti-patterns 新增反模式 28「modal 容器粗放 stopPropagation」**：
+    - chrome.js document 级 listener + modal 容器 stopPropagation 的根本性冲突
+    - 修复：`onclick="if(!event.target.closest('[data-action]'))event.stopPropagation()"`
+    - 影响范围：所有用 chrome.js 委托 + modal 嵌套结构的页面（曾在 6 页 8 modal 同时复现）
+    - 含 grep 排查脚本
+  - 来源：endpoint-management v2.0（连接配置 JSON / 状态机 7 态 / 详情 3 sub-tab）+ vendor-info v1.2（修关闭按钮 bug 后批量扫描）
+
 - **2026-05-17 · v1.6** — model-management v1.1 / v1.2 字段中文化 + 状态机 + 分页 + 复选框联动蒸馏
   - **SKILL.md 不可违反原则 10 → 12**：
     - 新增 #11「字段名优先中文」（label/column/placeholder/message 一律中文，仅 ID/code/mono 保留英文）
