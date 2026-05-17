@@ -163,6 +163,18 @@ prototypes/
 
 ## Changelog
 
+- **2026-05-18 · v1.8** — vendor 双端入驻流程沉淀
+  - **§8 Drawer 新增 8a「双模式（写 vs 读）」**：审批/审核类页面 audit 模式 vs view 模式复用同一 drawer，按 mode 切换决策区显隐
+    - 关键：mode 由调用方决定 · 基础信息永远展示 · `mode='audit'` 但状态非 pending 时 fail-safe 降级为 view
+    - 反例：把审核与查看做成两个 drawer
+  - **新增 §20「申请流程页（Stepper + 状态分支 UI）」**：
+    - 适用：用户主动提交 → 平台审核 → 通过/驳回 类页面（入驻 / 订单 / 工单 / 报销 / 变更申请）
+    - 4 状态字典：draft / submitted / approved / rejected · 每态对应 stepper + banner + 表单 readonly + footer 按钮 4 维差异
+    - 关键设计：单页 + stepper + 按状态切换 UI（不做 N 个独立页面）
+    - 演示用状态切换器（右上红色虚线框 + 4 选项下拉），原型评审必备 · 生产环境删除整个元素
+    - 反例：4 个独立页面 / 没 stepper 只 banner / driven by item.status 自动切换 / stepper 都用绿色完成态 / 驳回态表单只读
+  - 来源：vendor/register.html v2.1 + vendor-audit.html drawer 双模式重构
+
 - **2026-05-18 · v1.7.1** — 反模式 28 修正最终写法（二次踩坑）
   - 第一次"精细化"写法 `if(!event.target.closest('[data-action]'))event.stopPropagation()` **仍有 bug**：因为 `closest` 沿祖先链一路找到 modal 外的 mask（mask 自身有 data-action），导致点击 input 等控件也触发 modal-close 闪退
   - 最终正确写法：`var a=event.target.closest('[data-action]');if(!a||!this.contains(a))event.stopPropagation()` — 用 `this.contains(action)` 把祖先查询范围限定在 modal 自身以内
