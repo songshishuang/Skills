@@ -703,3 +703,122 @@ JSONB 字段建议**仅做整体替换 + 关键路径索引**，不做字段级 
 - ❌ **JSON 模板硬编码在 HTML**：把 5 种协议的默认模板写成 5 个 `<textarea>` 隐藏切换 → 维护时改一处忘改其它 4 处
 - ❌ **JSON 编辑器没 spellcheck=false**：浏览器把 `qps` / `mtls` 全标红波浪线，运营误以为是错误
 - ❌ **联动信息卡显示太迟**：选完模型才在底部出现，运营看不见 → 应紧贴选择控件下方
+
+
+---
+
+## 20. 申请流程页（Stepper + 状态分支 UI）
+
+> 适用：「**用户主动提交 → 平台审核 → 通过 / 驳回**」类页面 —— 供应商入驻 / 订单 / 工单 / 报销 / 资质申请 / 变更工单 / 开户申请等。
+
+### 核心原则：单页表单 + 顶部 stepper + 按状态切换 UI（不要做 N 个独立页面）
+
+**为什么不做 N 个独立页面**：申请的"内容"在所有状态下都是同一份（用户填的字段），只是**展示形态**（可编辑 vs 只读）和**附加信息**（审核中提示 vs 通过提示 vs 驳回原因）不同。做 N 页 → 字段重复维护、修改时容易漂移。
+
+### 4 状态字典（推荐）
+
+| 状态 | stepper | 提示横幅颜色 | 表单 | 底部按钮 |
+|---|---|---|---|---|
+| **draft 草稿** | ① active | — 无横幅 | 可编辑 | 返回 + **提交申请** |
+| **submitted 已提交** | ✓ ② active | 🟡 警告色「⏳ 审核中」+ 申请号 + 预期审核时长 | 只读灰显 | 返回 + **撤回申请** |
+| **approved 审核通过** | ✓ ✓ ③ active（success 色）| 🟢 成功色「✓ 审核通过」+ 审核人 + 备注 | 只读灰显 | 返回 + **→ 进入下一阶段** |
+| **rejected 已驳回** | ✓ ✓ ✗ ③ fail（danger 色）| 🔴 危险色「✕ 已驳回」+ 驳回原因 | **可编辑**（让用户改完重交）| 返回 + **修改并重新提交** |
+
+### HTML 模板
+
+```html
+<!-- 顶部 3 步 stepper -->
+<div class="stepper-bar">
+  <div class="stp-step" id="stp-1"><span class="stp-num"><span>1</span></span><span class="stp-label">提交申请</span></div>
+  <div class="stp-line" id="stp-line-1"></div>
+  <div class="stp-step" id="stp-2"><span class="stp-num"><span>2</span></span><span class="stp-label">审核中</span></div>
+  <div class="stp-line" id="stp-line-2"></div>
+  <div class="stp-step" id="stp-3"><span class="stp-num"><span>3</span></span><span class="stp-label">审核完成</span></div>
+</div>
+
+<!-- 状态提示横幅（按状态动态填充） -->
+<div id="status-banner"></div>
+
+<!-- 申请表单 -->
+<div class="form-card">...</div>
+
+<!-- 演示用：右上角状态切换器（仅原型环境用） -->
+<select id="state-switcher" onchange="switchState(this.value)">
+  <option value="draft">① 草稿（可编辑）</option>
+  <option value="submitted">② 已提交 · 审核中</option>
+  <option value="approved">③ 审核通过</option>
+  <option value="rejected">④ 已驳回</option>
+</select>
+```
+
+### CSS 模板（stepper 4 态）
+
+```css
+.stp-step.active .stp-num { background: var(--color-primary); color: white; box-shadow: 0 0 0 4px var(--color-primary-bg); }
+.stp-step.done .stp-num { background: var(--color-success); color: white; }
+.stp-step.done .stp-num::before { content: "✓"; }
+.stp-step.done .stp-num span { display: none; }
+.stp-step.fail .stp-num { background: var(--color-danger); color: white; }
+.stp-step.fail .stp-num::before { content: "✕"; }
+.stp-step.fail .stp-num span { display: none; }
+.stp-line.done { background: var(--color-success); }
+.stp-line.fail { background: var(--color-danger); }
+```
+
+### JS 模板（switchState 集中切换）
+
+```js
+const STATES = {
+  draft:     { stepper: { '1':'active' },                          banner: null,                            readonly: false, footerBtn: 'submit' },
+  submitted: { stepper: { '1':'done', '2':'active' },              banner: { type:'warn', head:'⏳ 审核中' }, readonly: true,  footerBtn: 'withdraw' },
+  approved:  { stepper: { '1':'done', '2':'done', '3':'active' },  banner: { type:'success', head:'✓ 通过' }, readonly: true,  footerBtn: 'next' },
+  rejected:  { stepper: { '1':'done', '2':'done', '3':'fail' },    banner: { type:'danger', head:'✕ 已驳回' }, readonly: false, footerBtn: 'resubmit' }
+};
+
+function switchState(s) {
+  const cfg = STATES[s];
+  // 1. stepper 高亮
+  applyStepperState(cfg.stepper);
+  // 2. 横幅
+  renderBanner(cfg.banner);
+  // 3. 表单 readonly
+  setFormReadonly(cfg.readonly);
+  // 4. footer 按钮切换
+  renderFooterBtn(cfg.footerBtn);
+}
+```
+
+### 演示用状态切换器（原型必备）
+
+原型阶段（评审 / Demo / 客户验收）需要让评审人**一眼看完 4 个状态**，不可能真的跑后端流程。右上角加一个红色虚线框 + 下拉 `<select>`：
+
+```html
+<span class="demo-switcher">
+  演示状态：
+  <select onchange="switchState(this.value)">
+    <option value="draft">① 草稿</option>
+    <option value="submitted">② 已提交</option>
+    <option value="approved">③ 通过</option>
+    <option value="rejected">④ 驳回</option>
+  </select>
+</span>
+
+<style>
+.demo-switcher {
+  padding: 5px 10px;
+  background: #FEF2F1; border: 1px dashed var(--color-primary);
+  border-radius: var(--radius-md);
+  font-size: 11px; color: var(--color-primary);
+}
+</style>
+```
+
+颜色与正常 UI 形成视觉对比（红色虚线 + 提示文字「演示状态」），评审人一眼看到「这是原型态切换器，不是真实交互」。生产环境删除整个 `.demo-switcher` 元素即可。
+
+### 反例
+
+- ❌ **4 个独立页面**（register-draft.html / register-pending.html / register-approved.html / register-rejected.html）：字段在 4 个地方维护，改一个忘改 3 个
+- ❌ **没有 stepper · 只用 banner 提示状态**：用户不知道流程总共几步、当前在哪步、还差多少
+- ❌ **driven by item.status 自动切换 · 没有人工演示入口**：原型评审时只能看到当前 mock 状态，看不到其它 3 个状态的样子
+- ❌ **stepper 都用绿色完成态**：驳回时第 3 步应该用 fail 红 ✕，不能也用 ✓ 绿（误导用户「驳回也算流程正常完成」）
+- ❌ **驳回态表单仍只读**：用户必须重新创建一次申请才能改，体验极差。驳回应保留原表单可编辑，加「修改并重新提交」按钮
