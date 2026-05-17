@@ -330,3 +330,184 @@ templateCard.addEventListener('click', () => {
 <span class="tabular">380 ms</span>  <!-- 延迟 -->
 <span class="mono text-xs">ep_001</span>  <!-- ID -->
 ```
+
+---
+
+## 16. 资源状态机（3 态 / 4 态字典 · 重要）
+
+资源类页面（模型 / 评测集 / 工单 / 订单 / 优惠券 / 客户 ...）建议**对外只暴露 3-4 个状态**，**面向"下游可见性 / 生命周期"维度**，不混入流程性中间态。
+
+### 推荐 3 态字典（暂存 / 启用 / 停用）
+
+| 状态 | 含义 | 徽章色 | 行为约束 |
+|---|---|---|---|
+| **暂存（draft）** | 运营内部草稿，下游客户**完全不可见** | warn 黄 ● | 可编辑 · 不进路由 · 不计入计费/SLA |
+| **启用（active）** | 已生效，下游可申请/订阅/调用 | success 绿 ● | 可编辑（限非 ID 字段）· 可正常调用 |
+| **停用（disabled）** | 不再接受新申请，已挂的关联资源**触发告警但不强制下架** | neutral 灰 ● | 仅可改为启用 · 不可删除（需先迁移关联） |
+
+### 推荐 4 态字典（评测/审核流程）
+
+`pending_eval` 待评测 → `evaluating` 评测中 → `pending_approval` 待审批 → `online` 已上架 / `rejected` 已驳回
+
+### 一定不要混入这些"流程中间态"
+
+- 「评测中 / 审批中 / 待补材料 / 灰度中 / 上线申请中 ...」当作主状态
+- 这些是**流程状态**（属于某条审批/评测 run），不是**资源主状态**（属于资源本身）
+- 把流程状态当主状态会导致：
+  - 状态机指数膨胀（3 态 → 12 态）
+  - 同一资源在多条流程并发时状态冲突
+  - 下游客户看不懂"待补材料"应该自己干啥
+
+### 状态切换交互
+
+```html
+<!-- 在详情 drawer 顶部 -->
+<button onclick="toggleStatus()">⏸ 停用</button>  <!-- 当前 active -->
+<button onclick="toggleStatus()">✓ 启用</button>  <!-- 当前 disabled -->
+<!-- 暂存态没有"切换"按钮，只能通过编辑后选"启用"提交 -->
+```
+
+```js
+// 状态切换必须二次确认 + 影响范围说明
+function confirmToggle(m) {
+  if (m.status === 'active') {
+    confirm(`停用 ${m.name}？\n已挂载的 ${m.endpointCount} 个 Endpoint 将告警，下游客户不可再申请新 Endpoint`);
+  } else {
+    confirm(`启用 ${m.name}？启用后下游客户可申请 Endpoint`);
+  }
+}
+```
+
+### 反例
+
+- 模型管理列表 v1.0 用了 5 态：「已上架 / 评测中 / 草稿 / 已下架 / 待审批」—— 混入了流程状态「评测中 / 待审批」（属于某条评测 run，不属于模型本身），导致筛选器和状态机切换逻辑紊乱。
+
+---
+
+## 17. 分页器（标准样式 · 必备）
+
+列表页底部统一使用此分页器，不要写"显示 1-10 / 共 10 条 · [1]"这种简化版（信息密度不够、不支持跳转）。
+
+```html
+<div class="pager">
+  <span>共 <span class="tabular">105</span> 条</span>
+  <button class="pg-btn" title="上一页">‹</button>
+  <button class="pg-btn active">1</button>
+  <button class="pg-btn">2</button>
+  <button class="pg-btn">3</button>
+  <button class="pg-btn">4</button>
+  <button class="pg-btn">5</button>
+  <button class="pg-btn">6</button>
+  <span class="pg-ellipsis">…</span>
+  <button class="pg-btn">11</button>
+  <button class="pg-btn" title="下一页">›</button>
+  <select class="pg-select">
+    <option>10 条/页</option>
+    <option>20 条/页</option>
+    <option>50 条/页</option>
+    <option>100 条/页</option>
+  </select>
+  <span>前往</span>
+  <input class="pg-jump" type="number" value="1">
+  <span>页</span>
+</div>
+```
+
+```css
+.pager {
+  padding: 14px 18px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;  /* 右对齐 · 不左对齐 */
+  gap: 10px;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+.pg-btn {
+  min-width: 32px; height: 32px; padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: white;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.pg-btn:hover:not(:disabled):not(.active) { border-color: var(--color-primary); color: var(--color-primary); }
+.pg-btn.active { background: var(--color-primary); color: white; border-color: var(--color-primary); font-weight: 600; }
+.pg-btn:disabled { color: var(--color-text-tertiary); background: #FAFBFC; cursor: not-allowed; }
+```
+
+### 行为规范
+
+- **页码范围**：当前页周围最多 6 个数字 + `…` + 末页
+- **‹ › 按钮**在首/末页 disabled（灰显 + not-allowed）
+- **数据少于一页**时分页器**仍显示**（保持视觉一致性），但页码只显示 [1] + 上一页/下一页 disabled
+- **页码与下拉对齐**：当用户改 "20 条/页"，总页数实时更新
+
+---
+
+## 18. 批量操作（复选框 + 工具栏按钮真实联动）
+
+§6 list-toolbar 与 §7 表格首列复选框必须**真实联动**，不能只有 UI 摆设。
+
+### HTML
+
+```html
+<thead>
+  <tr>
+    <th style="width: 36px; text-align: center;">
+      <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+    </th>
+    <th>模型</th>...
+  </tr>
+</thead>
+<tbody>
+  <tr onclick="openDetail('id-1')">
+    <td style="text-align:center;" onclick="event.stopPropagation()">
+      <input type="checkbox" class="row-check" data-id="id-1" onclick="event.stopPropagation(); updateCount()">
+    </td>
+    ...
+  </tr>
+</tbody>
+```
+
+### 关键点（高频踩坑）
+
+1. **复选框 td 必须 `onclick="event.stopPropagation()"`** — 否则勾选会冒泡到 `<tr>` 的 onclick，意外触发"打开详情"
+2. **全选 checkbox 支持 indeterminate** — 部分选中时显示"−"半勾态，全选时勾上
+3. **工具栏左侧加"已选 N 项"实时计数** — 用户能直观看到当前选择数
+4. **批量按钮 onclick 必须真实联动**：
+   - 校验未选 → toast 提示「请先勾选」
+   - 二次确认（含前 3 个对象名 + 总数预览）
+   - 真实更新数据 + 同步 UI（徽章颜色 / 计数）
+   - 操作后**清空选择**
+
+### JS 模板
+
+```js
+function updateCount() {
+  const checked = document.querySelectorAll('.row-check:checked');
+  const all = document.querySelectorAll('.row-check');
+  document.getElementById('sel-count').textContent = checked.length;
+  const master = document.getElementById('select-all');
+  master.checked = checked.length === all.length && checked.length > 0;
+  master.indeterminate = checked.length > 0 && checked.length < all.length;
+}
+
+function batchAction(action) {
+  const checked = document.querySelectorAll('.row-check:checked');
+  if (!checked.length) { toast('请先勾选要操作的对象', 'warn'); return; }
+  const names = Array.from(checked).map(cb => DATA[cb.dataset.id].name);
+  const preview = names.length <= 3 ? names.join('、') : names.slice(0, 3).join('、') + ` 等 ${names.length} 个`;
+  if (!confirm(`确认对以下 ${names.length} 项批量${action}？\n\n${preview}`)) return;
+  // 更新数据 + UI
+  ...
+  toast(`已对 ${names.length} 项批量${action}`, 'success');
+}
+```
+
+### 反例
+
+- 批量启用/停用按钮直接 `data-action="toast" data-arg="已批量启用"` —— 没真生效，用户点了之后没有任何反馈联动
+- 表格首列只有 checkbox 但不带 `data-id` —— 无法关联到数据
+- 全选 checkbox 没处理 indeterminate —— 部分选中时显示全勾，误导用户
