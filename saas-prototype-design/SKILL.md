@@ -161,6 +161,12 @@ prototypes/
 
 ## Changelog
 
+- **2026-05-17 · v1.5** — endpoint-management v1.1 对齐 model-management 蒸馏
+  - 反模式 7（删功能时文案残留）：补案例 B「Tab 标签括号数字 (N) vs 内部节点数错位」子案例
+  - 新增反模式 27：segmented tab 与 filter 中 status 字段双入口（语义重复 / source of truth 冲突）
+  - 来源：endpoint-management 同时存在 seg-tab 6 态分段 + filter 中 status 下拉，状态机历史 tab 标签写「(4)」实际渲染 5 个节点
+  - 适用：所有带状态机的资源列表页（endpoint / 工单 / 订单 / 任务 / 评测 run / 审批流）
+
 - **2026-05-15 · v1.4** — eval-sets v2.1 清理蒸馏
   - 反模式 1（PM 术语）：补「列表分组顶部 N 个示例 · 点击卡片查看详情」子案例
   - 新增反模式 26：filter-form 筛选项必须对应数据模型上的实际列，派生字段不进筛选
