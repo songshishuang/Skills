@@ -159,3 +159,4 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 - **2026-05-09** 初始版本（蒸馏自某 AI 运营平台 91 文件 git mv 大重构）
 - **2026-05-15** 新增跨平台支持段
 - **2026-05-18** 集成 `docs/wiki/` LLM Wiki 骨架 —— 与 `pm-wiki-maintainer` skill 协作的 schema 接入点（基于 Karpathy LLM Wiki 模式）
+- **2026-05-19** `assets/templates/CLAUDE.md` 加 "📚 LLM Wiki · 项目知识沉淀" 段 —— 未来用本 skill 脚手架建的项目默认含 wiki 引用 + prd-writer Stage 0 集成约定（Tier 1）
