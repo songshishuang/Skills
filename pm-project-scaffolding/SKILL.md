@@ -85,14 +85,28 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 ├── README.md  CHANGELOG.md  CLAUDE.md
 ├── (firebase.json — 可选)
 ├── docs/{prd,decisions,product-planning,market-research,user-research,data-analysis,releases}/
-│   └── roadmap.md
+│   ├── roadmap.md
+│   └── wiki/                            ⭐ LLM Wiki 骨架（由 pm-wiki-maintainer skill 维护）
+│       ├── index.md  log.md  CLAUDE.md  glossary.md
+│       └── concepts/  entities/  decisions/  topics/
 ├── prototypes/{各角色}/  + assets/  + index.html  （仅 ai-saas/generic-saas/mobile-app）
 ├── skills/{plan}/        （仅 ai-saas）
 ├── training/{customer,internal}/
 ├── app/  archive/  Logs/
 ```
 
-约 30 个文件、25 个目录，全部带占位 README 说明用途与沉淀准则。
+约 35 个文件、30 个目录，全部带占位 README 说明用途与沉淀准则。
+
+### 关于 `docs/wiki/`（LLM Wiki 骨架）
+
+本 skill 一次性建好 `docs/wiki/` **空骨架**，后续由 **`pm-wiki-maintainer`** skill 持续填充与维护（按 [Karpathy LLM Wiki 模式](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)）：
+
+| Skill | 职责 |
+|---|---|
+| `pm-project-scaffolding`（本 skill） | **一次性**建 `docs/wiki/` 空骨架 |
+| `pm-wiki-maintainer` | **持续**ingest 源 / query 历史 / lint 健康度 |
+
+`docs/wiki/CLAUDE.md` 含 wiki 工作规则——任何 AI agent 进入项目看到该文件就按 Karpathy 模式工作。
 
 ## 关键约束
 
@@ -144,3 +158,4 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 
 - **2026-05-09** 初始版本（蒸馏自某 AI 运营平台 91 文件 git mv 大重构）
 - **2026-05-15** 新增跨平台支持段
+- **2026-05-18** 集成 `docs/wiki/` LLM Wiki 骨架 —— 与 `pm-wiki-maintainer` skill 协作的 schema 接入点（基于 Karpathy LLM Wiki 模式）
