@@ -14,6 +14,9 @@ docs/                  # 产品视角的所有文档（PM 入口）
   user-research/         用户研究（访谈 / 问卷 / 画像）
   data-analysis/         产品效果数据分析
   releases/              上线公告（面向客户）
+  wiki/                  ⭐ LLM Wiki · 项目知识沉淀（pm-wiki-maintainer 维护）
+    index.md / log.md / glossary.md / CLAUDE.md
+    concepts/ entities/ decisions/ topics/
 
 prototypes/            # 高保真原型（按业务角色分子目录）
 
@@ -48,6 +51,30 @@ Logs/                  # 协作日志
 ## Common pitfalls
 
 ⚠️ TODO：项目特有的"踩坑指南"——常见错误、不要做的事
+
+## 📚 LLM Wiki · 项目知识沉淀
+
+本项目集成 [`pm-wiki-maintainer`](https://github.com/songshishuang/Skills) skill（基于 [Karpathy LLM Wiki 模式](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)）。
+
+### AI Agent 约定
+
+- **写新 PRD** → `prd-writer` skill 的 Stage 0 自动读 `docs/wiki/index.md` 作为先验上下文
+- **查项目历史** → 走 `pm-wiki-maintainer` Query workflow（先 index 后 drill）
+- **写完重要文档** → 建议触发 `pm-wiki-maintainer` ingest 回填进 wiki
+
+### 三层架构
+
+| 层 | 谁拥有 | 在本项目 |
+|---|---|---|
+| Raw Sources（只读） | 你 | `docs/{prd,decisions,product-planning,user-research,market-research}/` 等 |
+| Wiki（LLM 维护） | LLM | `docs/wiki/` ← 走 pm-wiki-maintainer 管，不手工大改 |
+| Schema（共演化） | 你 + LLM | 本文件 + `docs/wiki/CLAUDE.md` |
+
+### 不要做的事（wiki 相关）
+
+- ❌ PRD 里复制 wiki 内容（wiki 是 synthesis，PRD 引用 link 即可）
+- ❌ 直接 edit `docs/wiki/`（走 pm-wiki-maintainer 的 ingest/lint workflow）
+- ❌ 跳过 prd-writer Stage 0（导致与项目历史脱节）
 
 ---
 
