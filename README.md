@@ -11,6 +11,7 @@
 | **`saas-arch-diagrams`** | 设计企业 SaaS 类产品的两类核心架构图：「产品架构图」（产品在生态中的定位 · 4 层视图）+「功能架构图」（4 层纵向 × 能力域横向 chip · 3 级嵌套） | 某 SaaS 平台（某 MaaS 模型供应链管理平台）迭代实战 |
 | **`saas-prototype-design`** | 企业 SaaS 高保真原型完整方法论：v1 设计语言（品牌红 + tokens.css + chrome 框架）+ 组件模式 + 3 级嵌套结构 + 状态机徽章 + 历史版本保护机制 | 某 SaaS 平台 项目 30+ 轮迭代 + 33+ 页原型实战 |
 | **`conversation-logging-and-insight-extraction`** | 捕获用户对话过程，强制业务价值总结与提炼，以高规范 Markdown 格式沉淀到日志库 | Claude Desktop / Claude Code 长会话归档实践 |
+| **`pm-wiki-maintainer`** ⭐ | 维护 PM 项目的 LLM Wiki（基于 Karpathy LLM Wiki 模式）—— 增量构建持久化知识库（不是临时 RAG），三类操作 ingest / query / lint，方案 ii decisions 独立综合视图 | [Karpathy LLM Wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) + 真实项目 ingest 实战 |
 
 ## 🌐 跨平台支持
 
@@ -51,7 +52,7 @@ cd Skills
 ```bash
 cd ~/.claude/skills
 git clone https://github.com/songshishuang/Skills.git temp-skills
-mv temp-skills/{prd-writer,pm-project-scaffolding,saas-arch-diagrams,saas-prototype-design,conversation-logging-and-insight-extraction} .
+mv temp-skills/{prd-writer,pm-project-scaffolding,saas-arch-diagrams,saas-prototype-design,conversation-logging-and-insight-extraction,pm-wiki-maintainer} .
 rm -rf temp-skills
 ```
 

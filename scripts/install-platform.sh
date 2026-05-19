@@ -11,7 +11,7 @@
 set -euo pipefail
 
 REPO_URL="https://github.com/songshishuang/Skills.git"
-SKILLS=(prd-writer pm-project-scaffolding conversation-logging-and-insight-extraction saas-arch-diagrams saas-prototype-design)
+SKILLS=(prd-writer pm-project-scaffolding conversation-logging-and-insight-extraction saas-arch-diagrams saas-prototype-design pm-wiki-maintainer)
 GIT=/usr/bin/git
 
 # ===== 解析参数 =====

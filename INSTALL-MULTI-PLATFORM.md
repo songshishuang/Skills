@@ -1,9 +1,9 @@
 # 🌐 跨平台安装指南
 
-5 个 skill 设计上**与模型无关**——核心知识（PRD 模板、架构图反模式、组件 patterns、日志规范）在任何 AI 代码助手中都能复用。差异在于：
+6 个 skill 设计上**与模型无关**——核心知识（PRD 模板、架构图反模式、组件 patterns、日志规范、LLM Wiki 模式）在任何 AI 代码助手中都能复用。差异在于：
 
 1. **物理安装路径**不同
-2. **Self-Evolving Protocol 执行能力**不同（仅 `prd-writer` / `saas-arch-diagrams` 有此协议）
+2. **Self-Evolving Protocol 执行能力**不同（仅 `prd-writer` / `saas-arch-diagrams` / `saas-prototype-design` / `pm-wiki-maintainer` 有此协议）
 
 ---
 
@@ -30,7 +30,7 @@
 ```bash
 cd ~/.claude/skills
 git clone https://github.com/songshishuang/Skills.git temp
-mv temp/{prd-writer,pm-project-scaffolding,saas-arch-diagrams,saas-prototype-design,conversation-logging-and-insight-extraction} .
+mv temp/{prd-writer,pm-project-scaffolding,saas-arch-diagrams,saas-prototype-design,conversation-logging-and-insight-extraction,pm-wiki-maintainer} .
 rm -rf temp
 ```
 
@@ -70,7 +70,7 @@ git clone https://github.com/songshishuang/Skills.git .cursor-plugin/skills-song
 # 本地路径方式（适合自用）
 mkdir -p ~/.codex/plugins/songshishuang-skills/skills
 git clone https://github.com/songshishuang/Skills.git ~/.codex/plugins/songshishuang-skills/repo
-ln -s ~/.codex/plugins/songshishuang-skills/repo/{prd-writer,pm-project-scaffolding,saas-arch-diagrams,saas-prototype-design,conversation-logging-and-insight-extraction} ~/.codex/plugins/songshishuang-skills/skills/
+ln -s ~/.codex/plugins/songshishuang-skills/repo/{prd-writer,pm-project-scaffolding,saas-arch-diagrams,saas-prototype-design,conversation-logging-and-insight-extraction,pm-wiki-maintainer} ~/.codex/plugins/songshishuang-skills/skills/
 ```
 
 未来若发布到 OpenAI plugin marketplace，用：
