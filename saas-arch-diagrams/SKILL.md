@@ -247,6 +247,22 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 
 任一勾选 → 显式回头更新 skill + 告知用户。
 
+### 画完架构图后：建议 ingest 到项目 wiki
+
+如果当前项目装了 `pm-wiki-maintainer` 且存在 `docs/wiki/`，画完架构图后**额外做一项**：
+
+```
+- [ ] 本轮架构图引入了几个新能力域？
+- [ ] 有没有模块边界变更（拆分 / 合并 / 移交下游）？
+- [ ] 有没有新增的下游平台 / 外部依赖？
+- [ ] 4 层结构是否发生变化（角色层 / 产品层 / 能力层 / 底座层）？
+```
+
+任一项 ≥ 1，**主动提示用户**：
+> 「本轮架构图引入 X 能力域 / Y 边界变化 / Z 新下游，建议执行 `ingest 架构图到 wiki`，这样下次写 PRD 时能自动加载架构上下文。是否现在 ingest？」
+
+用户同意后 → 调用 `pm-wiki-maintainer` 的 ingest 流程，按其 `references/ingest-workflow.md` 的「从架构图 ingest」映射表执行。
+
 ## 来源
 
 蒸馏自某 SaaS 平台项目（某 MaaS 模型供应链管理平台）的 6 轮迭代实战：
@@ -281,6 +297,7 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 
 ## Changelog
 
+- **2026-05-20** Self-Evolving Protocol 增加「画完架构图后：建议 ingest 到项目 wiki」环节，触发对 `pm-wiki-maintainer` 的协作（按新能力域 / 模块边界 / 下游平台 / 4 层结构 4 维度评估）（自比赛包回流）
 - **2026-05-14** 初始版本（蒸馏自 某 SaaS 平台 6 轮迭代，含 anti-patterns / col-span-cookbook / review-checklist）
 - **2026-05-15** 新增 Self-Evolving Protocol（触发评估时机表 + 防御性约束 + 30 秒自检清单）
 - **2026-05-15** 新增跨平台支持段（codex / cursor / antigravity / gemini / copilot 路径与 Self-Evolving 触发方式）

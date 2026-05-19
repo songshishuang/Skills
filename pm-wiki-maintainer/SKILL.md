@@ -157,19 +157,57 @@ docs/wiki/
 
 实施细节内嵌本 SKILL.md（不单独抽 reference，避免过度文档化）。
 
-## 与 pm-project-scaffolding 的协作
+## 与其他 Skill 的协作沉淀矩阵
 
-| Skill | 职责 |
-|---|---|
-| `pm-project-scaffolding` | **一次性**：建立 `docs/wiki/` 骨架（空目录 + 模板 index.md/log.md/CLAUDE.md） |
-| `pm-wiki-maintainer`（本 skill） | **持续**：按 Karpathy 模式 ingest / query / lint，填充并维护 wiki |
+PM Copilot Kit 4 个 skill 协同工作时，**wiki 是项目知识的中心枢纽**。各 skill 职责分工如下：
 
-新建项目流程：
+### 沉淀边界（什么进 wiki / 什么不进）
+
 ```
-1. pm-project-scaffolding 建项目目录（含 docs/wiki/ 空骨架）
-2. PM 在 docs/{prd,user-research,decisions...} 累积 raw sources
-3. PM 用 pm-wiki-maintainer 触发 ingest → wiki 自动增长
-4. 周期性 lint 保持 wiki 健康
+┌──────────────────────────────────────────────────┐
+│  原始产出物（留在标准目录，wiki 不重复）              │
+│   ├── docs/prd/V0.x/PRD-V0.x.md       ← prd-writer 产出 │
+│   ├── docs/product-planning/产品架构图.md  ← saas-arch-diagrams 产出 │
+│   ├── docs/product-planning/功能架构图.md  ← saas-arch-diagrams 产出 │
+│   ├── docs/user-research/访谈纪要.md      ← PM 手工产出 │
+│   └── prototypes/                         ← 高保真原型 │
+└─────────────────┬────────────────────────────────┘
+                  │  ingest（提炼综合，不复制原文）
+                  ↓
+┌──────────────────────────────────────────────────┐
+│   docs/wiki/  ── 提炼后的、综合的、跨版本可复用知识     │
+│    ├── decisions/ADR-XXX.md   从 PRD §13.4 抽出关键决策 │
+│    ├── concepts/<概念>.md      跨 PRD 反复出现的概念    │
+│    ├── entities/<实体>.md      产品角色 / 竞品 / 模型 / 客户 │
+│    └── topics/<主题>.md        综合视图（如商业化假设）  │
+└──────────────────────────────────────────────────┘
+```
+
+### 各 Skill 与 Wiki 的协作触发矩阵
+
+| 来源 Skill | 触发时机 | 沉淀到 wiki 的内容 | 触发方式 |
+|---|---|---|---|
+| `pm-project-scaffolding` | 立项当天 | `docs/wiki/` 骨架 + INDEX/LOG/CLAUDE.md 模板 | **一次性自动** |
+| `prd-writer` | PRD 评审通过后 | §13.4 ADR 中的关键决策 / §4 新增用户角色 / §5 新功能模块概念 / §6.3 AI 模块新维度 | **prd-writer Self-Evolving 时建议 → 用户触发 ingest** |
+| `saas-arch-diagrams` | 架构图定稿后 | 新引入的能力域 / 模块边界变更 / 与下游平台的关系变化 | **saas-arch-diagrams Self-Evolving 时建议 → 用户触发 ingest** |
+| 用户手动 | 会议 / 用研 / 客户反馈 / 竞品调研 | 原文进 `raw/`，提炼综合进 wiki | **用户主动调用 ingest 命令** |
+
+### 三条核心原则
+
+1. **原文不重复**：PRD、架构图原文留在标准目录（`docs/prd/`、`docs/product-planning/`），wiki 只存提炼后的 ADR / concept / entity / topic 综合页
+2. **wiki 是综合层**：跨版本可复用、需要持续演化的内容才进 wiki；单版本快照（V0.5 vs V0.6 哪个字段长度变了）留在 PRD 原文里
+3. **协作触发不强制**：其他 skill 完成工作后只**建议**用户 ingest，最终入 wiki 的内容由用户决策 —— wiki 不是自动归档器，是 PM 主动维护的项目大脑
+
+### 完整流程（新项目示例）
+
+```
+Day 0   pm-project-scaffolding     建项目目录（含 docs/wiki/ 空骨架）
+Week 1  saas-arch-diagrams         画产品架构图 → 完成后建议 ingest「能力层 / 下游平台关系」
+Week 2  prd-writer                 写 V0.5 PRD（Stage 0 自动从 wiki query 历史决策）
+                                   → 完成后建议 ingest「§13.4 ADR / §4 新角色」
+Week 3+ pm-wiki-maintainer         用户按建议 ingest，wiki 增长 8-10 页
+        周期性                      lint 体检（每月 / 每 PRD 发版前）
+V0.6 时  prd-writer Stage 0         自动加载 V0.5 ADR + 概念页 → 新 PRD 站在 V0.5 决策之上
 ```
 
 ## Self-Evolving Protocol
@@ -211,6 +249,7 @@ docs/wiki/
 
 ## Changelog
 
+- **2026-05-20 · v1.2** — 新增「与其他 Skill 的协作沉淀矩阵」：明确 prd-writer / saas-arch-diagrams 产出物如何沉淀到 wiki（原文留标准目录，wiki 只存提炼综合页）；`ingest-workflow.md` 增加「从 PRD / 架构图 ingest 的范式」章节（6 行 PRD 映射表 + 4 行架构图映射表）（自比赛包回流）
 - **2026-05-19 · v1.1** — 与 `prd-writer` skill 集成（Tier 1）
   - 写完整 `references/query-workflow.md`（4 步流程 + 回填规则 + 与 prd-writer Stage 0 集成）
   - 主 SKILL.md Query 段完善（明示集成场景）

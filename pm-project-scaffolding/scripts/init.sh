@@ -149,6 +149,104 @@ render_file "$TEMPLATES_DIR/docs/data-analysis/README.md" "docs/data-analysis/RE
 render_file "$TEMPLATES_DIR/docs/releases/README.md" "docs/releases/README.md"
 render_file "$TEMPLATES_DIR/docs/releases/TEMPLATE.md" "docs/releases/TEMPLATE.md"
 
+# --- docs/wiki/ LLM Wiki 骨架（由 pm-wiki-maintainer skill 维护） ---
+echo "📚 docs/wiki/ LLM Wiki 骨架..."
+mkdir -p docs/wiki/{concepts,entities,decisions,topics}
+
+cat > docs/wiki/index.md <<WIKI_INDEX_EOF
+# ${NAME} · Wiki Index
+
+> 由 \`pm-wiki-maintainer\` skill 维护。每次 ingest 后自动更新本索引。
+
+## Topics（综合视图）
+（暂无 — 第一次 ingest 后填充）
+
+## Concepts（核心概念）
+（暂无）
+
+## Entities（业务实体 · 角色 / 竞品 / 客户）
+（暂无）
+
+## Decisions（关键决策 · ADR 综合视图）
+（暂无）
+
+---
+
+**最后更新**：${DATE_TODAY}
+**总页数**：0
+WIKI_INDEX_EOF
+
+cat > docs/wiki/log.md <<WIKI_LOG_EOF
+# Wiki 演进日志
+
+> 每次 ingest / lint 操作的审计追踪。
+
+## ${DATE_TODAY}
+- ✅ 初始化 wiki 骨架（pm-project-scaffolding · ${TYPE}）
+- 待 ingest：roadmap.md / product-planning/ / market-research/ 中已有的原始素材
+WIKI_LOG_EOF
+
+cat > docs/wiki/glossary.md <<WIKI_GLOSSARY_EOF
+# Glossary · 术语表
+
+> 项目专属术语 + 业务对象命名约定。**保持 PRD / 架构图 / 训练材料术语一致**。
+
+| 术语 | 定义 | 首次出现 |
+|---|---|---|
+| ${NAME} | ${TAGLINE} | ${DATE_TODAY} |
+
+（后续由 pm-wiki-maintainer 增量沉淀）
+WIKI_GLOSSARY_EOF
+
+cat > docs/wiki/CLAUDE.md <<'WIKI_CLAUDE_EOF'
+# Wiki 工作规则（AI agent 必读）
+
+> 任何 AI agent 进入本 `docs/wiki/` 目录看到本文件即按 [Karpathy LLM Wiki 模式](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) 工作。
+
+## 三层架构
+
+- **raw sources** → 留在 `docs/{prd,user-research,market-research,...}` 原标准目录，wiki 不复制原文
+- **wiki/** → 提炼后的 concept / entity / decision / topic 综合页（带 frontmatter）
+- **schema** → 目录约定（见本文件）+ 命名规范 + frontmatter 字段表
+
+## 三类操作（由 pm-wiki-maintainer skill 提供）
+
+| 操作 | 何时用 |
+|---|---|
+| `ingest` | 把会议 / 用研 / ADR / 客户反馈增量沉淀进 wiki |
+| `query` | 写新 PRD 时 prd-writer Stage 0 自动调用 |
+| `lint` | 周期性检测矛盾 / 过期 / 孤儿页 / 数据缺口 |
+
+## 反模式（不要这样做）
+
+- ❌ 把 PRD / 架构图原文复制进 wiki（wiki 是 synthesis，不是 archive）
+- ❌ ingest 时默默改 wiki（要先与用户讨论 touch plan）
+- ❌ 多版本 PRD 在 wiki 里并存（V0.5 / V0.6 留在 docs/prd/，wiki 只存提炼的跨版本可复用内容）
+
+## 与其他 Skill 的协作
+
+- `prd-writer` → 写完 PRD 后建议 ingest（ADR / 新角色 / 新概念 / AI 新维度）
+- `saas-arch-diagrams` → 画完架构图后建议 ingest（新能力域 / 模块边界 / 下游平台）
+- `pm-project-scaffolding` → 一次性建好本骨架（即此次执行的结果）
+WIKI_CLAUDE_EOF
+
+for sub in concepts entities decisions topics; do
+  cat > "docs/wiki/${sub}/README.md" <<EOF
+# docs/wiki/${sub}/
+
+由 \`pm-wiki-maintainer\` skill 维护。
+
+- **${sub}** —— $(case "$sub" in
+    concepts) echo "核心概念页（跨 PRD 反复出现的业务概念）" ;;
+    entities) echo "业务实体页（用户角色 / 竞品 / 客户 / 模型 / 下游平台）" ;;
+    decisions) echo "关键决策综合页（ADR 跨版本回溯，方案 ii 独立视图）" ;;
+    topics) echo "主题综合视图（跨多页的综合分析与假设）" ;;
+  esac)
+
+第一次 ingest 后由 pm-wiki-maintainer 自动填充。
+EOF
+done
+
 # --- prototypes/（条件生成） ---
 if [[ "$HAS_PROTOTYPES" == "yes" ]]; then
   echo "🎨 prototypes/ ..."

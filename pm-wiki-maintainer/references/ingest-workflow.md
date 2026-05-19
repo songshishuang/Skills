@@ -91,6 +91,38 @@
 | Slack 讨论截图 | 1-2 | 散布 + 提示用户去落 ADR | ❌ |
 | 行业研究报告 | 8-15 | 大量新 concept/entity | ✅ 必建 topic 页 |
 
+## 从 prd-writer / saas-arch-diagrams 产出物 ingest 的范式
+
+PRD 和架构图是 PM 的两类"正式产出"。它们的原文留在标准目录（`docs/prd/`、`docs/product-planning/`），**只提炼后入 wiki**。具体策略：
+
+### 从 PRD ingest（约 6-10 页 wiki 改动）
+
+| PRD 节 | 提炼到 wiki 的什么 | 目标页 |
+|---|---|---|
+| §3.3 北极星 + KR | 项目目标演进史 | `topics/目标-演进.md`（每个 PRD 版本一条记录） |
+| §4.1 用户角色 | 新增角色 / 既有角色画像更新 | `entities/users/<role>.md` |
+| §5 需求范围 | 新增功能模块 | `concepts/<模块>.md` |
+| §6.3 AI 模块特化 | 模型选型 / 提示词版本 / 工具调用维度 | `concepts/ai-module-spec.md`（综合页） |
+| §10.4 成本预算 | token 单价 + 月度预算演进 | `topics/成本-演进.md` |
+| §13.4 ADR | **每条 ADR 一页**，标 active / superseded | `decisions/ADR-NNN-<决策>.md` |
+
+**不进 wiki 的内容**：§2 文档记录、§5 具体字段表、§7 完整埋点表、§11 验收清单 —— 这些是版本快照，留在 PRD 原文。
+
+### 从架构图 ingest（约 3-5 页 wiki 改动）
+
+| 架构图变更 | 提炼到 wiki 的什么 | 目标页 |
+|---|---|---|
+| 新增能力域 | 能力域定义 + 涵盖范围 | `concepts/<能力域>.md` |
+| 模块边界调整 | 哪些模块拆分 / 合并 / 移交下游 | `decisions/ADR-NNN-<重构>.md` |
+| 新增下游平台 | 下游平台职责 / 协同接口 | `entities/platforms/<下游>.md` |
+| 4 层结构变化 | 角色层 / 产品层 / 能力层 / 底座层的边界变化 | `topics/架构-演进.md` |
+
+### 触发方式
+
+- **prd-writer 完成 PRD** → Self-Evolving 自检时建议：「本轮 PRD 含 N 条新 ADR / M 个新概念，建议执行 `ingest PRD 到 wiki`」
+- **saas-arch-diagrams 完成架构图** → Self-Evolving 自检时建议：「本轮架构图引入 X 能力域 / Y 边界变化，建议执行 `ingest 架构图到 wiki`」
+- **用户接受建议** → 调用本 skill 的 ingest 流程，AI 按上述映射表自动 touch 对应 wiki 页
+
 ## 反模式
 
 - ❌ **默默写完整 wiki 不问用户** —— Karpathy 强调"the LLM agent on one side and Obsidian on the other"，**协作而非自动化**
