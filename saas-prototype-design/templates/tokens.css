@@ -303,3 +303,166 @@ button { font-family: inherit; cursor: pointer; }
 .font-bold { font-weight: 700; }
 .mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; }
 .mb-1 { margin-bottom: 4px; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
+
+/* ============================================================== */
+/* ============== v1.9 新增：多主题 + 密度 + 业务色 ============== */
+/* ============================================================== */
+
+/* ===== 配色方案（5 套 · 多品牌支持）===== */
+/* 切换：body.scheme-{red|blue|orange|green|purple} */
+
+body.scheme-red.light    { --primary: #E1251B; --primary-soft: #FEE2E0; --primary-hover: #B81E15; }
+body.scheme-red.dark     { --primary: #EF4444; --primary-soft: rgba(239,68,68,.20); --primary-hover: #F87171; }
+body.scheme-blue.light   { --primary: #2563EB; --primary-soft: #dbeafe; --primary-hover: #1d4ed8; }
+body.scheme-blue.dark    { --primary: #3b82f6; --primary-soft: rgba(59,130,246,.18); --primary-hover: #60a5fa; }
+body.scheme-orange.light { --primary: #F26B2B; --primary-soft: #FEE5D6; --primary-hover: #D9531C; }
+body.scheme-orange.dark  { --primary: #F97316; --primary-soft: rgba(249,115,22,.20); --primary-hover: #FB923C; }
+body.scheme-green.light  { --primary: #059669; --primary-soft: #d1fae5; --primary-hover: #047857; }
+body.scheme-green.dark   { --primary: #10b981; --primary-soft: rgba(16,185,129,.18); --primary-hover: #34d399; }
+body.scheme-purple.light { --primary: #7c3aed; --primary-soft: #ede9fe; --primary-hover: #6d28d9; }
+body.scheme-purple.dark  { --primary: #a78bfa; --primary-soft: rgba(167,139,250,.18); --primary-hover: #c4b5fd; }
+
+/* ===== 明暗双主题（完整 base 变量）===== */
+/* 切换：body.light / body.dark */
+
+body.light {
+  --bg:            #f4f6fb;
+  --surface:       #ffffff;
+  --surface-2:     #f1f5f9;
+  --surface-3:     #e2e8f0;
+  --border:        #e5e9f0;
+  --border-strong: #cbd5e1;
+  --text:          #0f172a;
+  --text-2:        #475569;
+  --text-3:        #94a3b8;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(15,23,42,.08);
+  --shadow-lg: 0 12px 32px rgba(15,23,42,.12);
+}
+
+body.dark {
+  --bg:            #0a0e1a;
+  --surface:       #131826;
+  --surface-2:     #1c2333;
+  --surface-3:     #232c42;
+  --border:        #232c42;
+  --border-strong: #344056;
+  --text:          #f1f5f9;
+  --text-2:        #94a3b8;
+  --text-3:        #64748b;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.45);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,.55);
+}
+
+/* dark 模式下的状态色（亮度增强 + 半透明背景） */
+body.dark {
+  --success-fg: #34d399; --success-bg: rgba(52,211,153,0.15);
+  --danger-fg:  #f87171; --danger-bg:  rgba(248,113,113,0.15);
+  --warning-fg: #fbbf24; --warning-bg: rgba(251,191,36,0.15);
+}
+body.light {
+  --success-fg: #059669; --success-bg: #d1fae5;
+  --danger-fg:  #dc2626; --danger-bg:  #fee2e2;
+  --warning-fg: #d97706; --warning-bg: #fef3c7;
+}
+
+/* ===== 界面密度（comfy / compact）===== */
+/* 切换：body.density-comfy / body.density-compact */
+/* 使用规则：padding 必须用变量，不可硬编码 */
+
+body.density-comfy   { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px; }
+body.density-compact { --pad-y:  8px; --card-pad: 16px; --row-pad: 10px; }
+body:not([class*="density-"]) { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px; }
+
+/* ===== 评级徽章色（A-E 5 级）===== */
+:root {
+  --rating-A: #10b981; --rating-A-bg: #d1fae5;
+  --rating-B: #2563eb; --rating-B-bg: #dbeafe;
+  --rating-C: #f59e0b; --rating-C-bg: #fef3c7;
+  --rating-D: #f97316; --rating-D-bg: #ffedd5;
+  --rating-E: #dc2626; --rating-E-bg: #fee2e2;
+}
+
+/* ===== 能力域色（A-E + X · 6 域，扩展自原 5 色）===== */
+:root {
+  --dom-A: #a855f7; --dom-A-bg: #f5e6ff;
+  --dom-B: #f59e0b; --dom-B-bg: #fef3c7;
+  --dom-C: #0ea5e9; --dom-C-bg: #dbeafe;
+  --dom-D: #f43f5e; --dom-D-bg: #ffe4e6;
+  --dom-E: #10b981; --dom-E-bg: #d1fae5;   /* 🆕 v1.9 新增 */
+  --dom-X: #64748b; --dom-X-bg: #f1f5f9;
+}
+
+/* ===== 服务健康灯色（3 态）===== */
+:root {
+  --joyagent-healthy:  #10b981;
+  --joyagent-degraded: #f59e0b;
+  --joyagent-down:     #dc2626;
+}
+
+/* ===== 等宽数字字体（表格 / 价格 / 时延 必备）===== */
+:root {
+  --font-num: 'DM Sans', 'JetBrains Mono', 'Noto Sans SC', sans-serif;
+}
+.tabular { font-variant-numeric: tabular-nums; font-family: var(--font-num); }
+
+/* ===== 评级徽章组件（配合 component-patterns.md §21）===== */
+.rating-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: var(--radius-lg);
+  color: #fff; font-family: var(--font-num);
+  font-weight: 800; font-size: 22px; line-height: 1;
+  letter-spacing: 0.02em; flex-shrink: 0;
+}
+.rating-badge.sm { width: 24px; height: 24px; font-size: 14px; }
+.rating-badge.lg { width: 64px; height: 64px; font-size: 36px; }
+.rating-A { background: var(--rating-A); }
+.rating-B { background: var(--rating-B); }
+.rating-C { background: var(--rating-C); }
+.rating-D { background: var(--rating-D); }
+.rating-E { background: var(--rating-E); }
+.rating-badge.lg.rating-A { box-shadow: 0 4px 12px var(--rating-A-bg); }
+.rating-badge.lg.rating-B { box-shadow: 0 4px 12px var(--rating-B-bg); }
+.rating-badge.lg.rating-C { box-shadow: 0 4px 12px var(--rating-C-bg); }
+.rating-badge.lg.rating-D { box-shadow: 0 4px 12px var(--rating-D-bg); }
+.rating-badge.lg.rating-E { box-shadow: 0 4px 12px var(--rating-E-bg); }
+
+/* ===== 告警卡（P0-P3）===== */
+.alarm-card {
+  position: relative; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 12px 16px 12px 20px; box-shadow: var(--shadow-sm);
+  display: flex; gap: 12px;
+}
+.alarm-stripe { position: absolute; left: 0; top: 8px; bottom: 8px; width: 4px; border-radius: 0 2px 2px 0; }
+.alarm-P0 .alarm-stripe, .alarm-P0 .alarm-sev { background: var(--danger-fg); }
+.alarm-P1 .alarm-stripe, .alarm-P1 .alarm-sev { background: #f97316; }
+.alarm-P2 .alarm-stripe, .alarm-P2 .alarm-sev { background: var(--warning-fg); }
+.alarm-P3 .alarm-stripe, .alarm-P3 .alarm-sev { background: var(--text-3); }
+.alarm-sev { padding: 2px 8px; border-radius: 4px; font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.04em; }
+.alarm-endpoint { padding: 2px 8px; border-radius: 999px; background: var(--surface-2); color: var(--text-2); font-size: 11px; font-family: var(--font-mono); }
+.alarm-detail { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+.alarm-meta   { font-size: 11px; color: var(--text-3); font-family: var(--font-mono); margin-top: 4px; }
+
+/* ===== 服务健康灯（3 态）===== */
+.health-lamp { padding: 8px; background: transparent; border: none; border-radius: 6px; cursor: pointer; }
+.lamp-dot { display: inline-block; width: 10px; height: 10px; border-radius: 999px; }
+.lamp-healthy .lamp-dot {
+  background: var(--joyagent-healthy);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--joyagent-healthy) 25%, transparent);
+  animation: lamp-pulse 2.4s ease-in-out infinite;
+}
+.lamp-degraded .lamp-dot {
+  background: var(--joyagent-degraded);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--joyagent-degraded) 35%, transparent);
+  animation: lamp-pulse 1.2s ease-in-out infinite;
+}
+.lamp-down .lamp-dot {
+  background: var(--joyagent-down);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--joyagent-down) 35%, transparent);
+}
+@keyframes lamp-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.7; transform: scale(1.15); }
+}

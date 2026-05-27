@@ -174,3 +174,154 @@ CSS：
 | 卡片网格（模型 / 评测集）| — | 16px | 仿 Together 8 字段紧凑 |
 | 仪表盘大卡（KPI）| — | 24px | 仿 OpenRouter dashboard |
 | 列内 chip / badge | 24px | 4-8px | 圆点 + 文字 + 弱色底 |
+
+---
+
+## 配色方案（5 套 · 多品牌支持 🆕 v1.9）
+
+v1 实战中支持 5 套主色方案，通过 `body.scheme-{red|blue|orange|green|purple}` 切换。每套均提供 light/dark 双主题。
+
+```css
+/* 京东红（v1 默认 · 品牌主色） */
+body.scheme-red.light    { --primary: #E1251B; --primary-soft: #FEE2E0; --primary-hover: #B81E15; }
+body.scheme-red.dark     { --primary: #EF4444; --primary-soft: rgba(239,68,68,.20); --primary-hover: #F87171; }
+
+/* 蓝色（默认模板 · 通用 SaaS） */
+body.scheme-blue.light   { --primary: #2563EB; --primary-soft: #dbeafe; --primary-hover: #1d4ed8; }
+body.scheme-blue.dark    { --primary: #3b82f6; --primary-soft: rgba(59,130,246,.18); --primary-hover: #60a5fa; }
+
+/* 橙红（v0.2 历史兼容） */
+body.scheme-orange.light { --primary: #F26B2B; --primary-soft: #FEE5D6; --primary-hover: #D9531C; }
+body.scheme-orange.dark  { --primary: #F97316; --primary-soft: rgba(249,115,22,.20); --primary-hover: #FB923C; }
+
+/* 绿色（华为云风格） */
+body.scheme-green.light  { --primary: #059669; --primary-soft: #d1fae5; --primary-hover: #047857; }
+body.scheme-green.dark   { --primary: #10b981; --primary-soft: rgba(16,185,129,.18); --primary-hover: #34d399; }
+
+/* 紫色（创意 / 内容平台） */
+body.scheme-purple.light { --primary: #7c3aed; --primary-soft: #ede9fe; --primary-hover: #6d28d9; }
+body.scheme-purple.dark  { --primary: #a78bfa; --primary-soft: rgba(167,139,250,.18); --primary-hover: #c4b5fd; }
+```
+
+**关键原则**：
+- 5 套 scheme 与 light/dark 是**正交**两维度（5 × 2 = 10 种主题组合）
+- 切换器组件见 [`component-patterns.md` §26 ThemeSwitcher](component-patterns.md)
+- 项目主色选择见 SKILL.md §0 决策方法
+- 命名约定：`--primary` / `--primary-soft` / `--primary-hover` 三件套，避免硬编码具体色值
+
+## 明暗双主题（完整 base 变量 🆕 v1.9）
+
+`body.light` / `body.dark` 切换基础变量。dark 不是简单"反色"，而是参考 GitHub / Linear 暗色调校的色阶。
+
+```css
+body.light {
+  --bg:           #f4f6fb;
+  --surface:      #ffffff;
+  --surface-2:    #f1f5f9;   /* 轻底（卡片次层）*/
+  --surface-3:    #e2e8f0;   /* 弱底（hover）*/
+  --border:       #e5e9f0;
+  --border-strong: #cbd5e1;
+  --text:         #0f172a;
+  --text-2:       #475569;   /* 次要文字 */
+  --text-3:       #94a3b8;   /* 三级文字 / placeholder */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(15,23,42,.08);
+  --shadow-lg: 0 12px 32px rgba(15,23,42,.12);
+}
+
+body.dark {
+  --bg:           #0a0e1a;
+  --surface:      #131826;
+  --surface-2:    #1c2333;
+  --surface-3:    #232c42;
+  --border:       #232c42;
+  --border-strong: #344056;
+  --text:         #f1f5f9;
+  --text-2:       #94a3b8;
+  --text-3:       #64748b;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.45);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,.55);
+}
+```
+
+**关键原则**：
+- shadow 在 dark 模式下数值显著加深（透明度 0.04 → 0.3），否则深底上看不见阴影
+- text-2 / text-3 在两个主题下保持相对对比度（约 4.5:1 / 3:1）
+- 状态色（success/danger/warning）在 dark 下用更亮的版本（如 `#34d399` 代替 `#10b981`），背景用 rgba alpha 而非纯色
+
+## 界面密度（comfy / compact 🆕 v1.9）
+
+通过 `body.density-{comfy|compact}` 切换。**新需求默认 comfy**，仅运营批量操作类页面（评测任务台 / 工单池）用 compact。
+
+```css
+body.density-comfy   { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px; }
+body.density-compact { --pad-y:  8px; --card-pad: 16px; --row-pad: 10px; }
+body:not([class*="density-"]) { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px; }
+```
+
+⚠️ **使用规则**：所有 `padding-y` / `card-padding` / `row-padding` 必须使用变量，不可硬编码数值；这样 density 切换时所有页面同步生效。
+
+**Anti-pattern**：直接 `padding: 14px 22px;` ❌ → 改为 `padding: var(--pad-y) var(--card-pad);` ✅
+
+## 评级徽章色（ABCDE 5 级 🆕 v1.9）
+
+适用于供应商评级、模型评分、SLA 评级等"5 级评分系统"。
+
+```css
+--rating-A: #10b981; --rating-A-bg: #d1fae5;   /* 绿 · 优秀 ≥ 90 */
+--rating-B: #2563eb; --rating-B-bg: #dbeafe;   /* 蓝 · 良好 80-89 */
+--rating-C: #f59e0b; --rating-C-bg: #fef3c7;   /* 黄 · 一般 70-79 */
+--rating-D: #f97316; --rating-D-bg: #ffedd5;   /* 橙 · 差 60-69 */
+--rating-E: #dc2626; --rating-E-bg: #fee2e2;   /* 红 · 不合格 < 60 */
+```
+
+**为什么不用语义色（success/warning/danger）？** 因为 A-E 是定级而非"成功/失败"语义，且 5 级需要 5 色，语义色只有 4 个不够分。完整 RatingBadge 组件见 [`component-patterns.md` §21](component-patterns.md)。
+
+## 能力域色（扩展为 A-E + X · 6 域 🆕 v1.9）
+
+原 5 色扩展为 6 色（新增 E 域）：
+
+```css
+--dom-A: #a855f7; --dom-A-bg: #f5e6ff;   /* 紫 · A 域 */
+--dom-B: #f59e0b; --dom-B-bg: #fef3c7;   /* 琥珀 · B 域 */
+--dom-C: #0ea5e9; --dom-C-bg: #dbeafe;   /* 蓝 · C 域 */
+--dom-D: #f43f5e; --dom-D-bg: #ffe4e6;   /* 玫红 · D 域 */
+--dom-E: #10b981; --dom-E-bg: #d1fae5;   /* 绿 · E 域 🆕 */
+--dom-X: #64748b; --dom-X-bg: #f1f5f9;   /* 灰 · 平台共用 */
+```
+
+用法：能力域 chip / 标签 / 分组色块。**与评级色避免在同一页面混用**（A 域紫 vs A 级绿易混淆）。
+
+## 服务健康灯色（3 态 🆕 v1.9）
+
+服务监控 / 健康指示器统一 3 态（适用 service status / pipeline health / endpoint heartbeat 等）。
+
+```css
+--joyagent-healthy:  #10b981;   /* 绿 · 全部健康 */
+--joyagent-degraded: #f59e0b;   /* 橙 · 部分降级 */
+--joyagent-down:     #dc2626;   /* 红 · 故障 */
+```
+
+**聚合规则**：任一 down → 整体 down；任一 degraded（无 down）→ 整体 degraded；全部 healthy → 整体 healthy。完整 JoyAgentLamp 组件见 [`component-patterns.md` §24](component-patterns.md)。
+
+## 告警严重度色（P0-P3 4 级 🆕 v1.9）
+
+告警 / 工单 / 事件优先级 4 级统一配色。
+
+| 级别 | 含义 | 主色 |
+|---|---|---|
+| **P0** | 紧急 · 立即处置 | `var(--danger-fg)` (#dc2626 · 红) |
+| **P1** | 严重 · 1h 内 | `#f97316` (橙红 · 介于 P0 红与 P2 黄之间) |
+| **P2** | 警告 · 24h 内 | `var(--warning-fg)` (#d97706 · 黄) |
+| **P3** | 观察 · 看板留痕 | `var(--text-3)` (#94a3b8 · 灰) |
+
+完整 AlarmCard 组件见 [`component-patterns.md` §23](component-patterns.md)。
+
+## 表格等宽数字（与价格 / 时延对齐）
+
+```css
+.tabular { font-variant-numeric: tabular-nums; font-family: var(--font-num); }
+```
+
+`--font-num` 优先 `DM Sans` / `JetBrains Mono`（自带等宽数字），fallback `Noto Sans SC`。所有金额 / token 数 / 时延 / 评分必须用 `.tabular` class，否则不同位数对齐错位。

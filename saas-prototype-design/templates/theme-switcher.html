@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>主题切换器骨架 · 4 维 / 20 组合</title>
+<!-- 引入 tokens.css 后即支持 light/dark + 5 scheme + 2 density -->
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* ===== Theme Switcher 自身样式 ===== */
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: 'PingFang SC', 'Inter', sans-serif; font-size: 14px; transition: background .25s ease, color .25s ease; }
+  .topbar { position: sticky; top: 0; background: var(--surface); border-bottom: 1px solid var(--border); padding: var(--pad-y) var(--card-pad); display: flex; align-items: center; justify-content: space-between; z-index: 10; }
+  .topbar h1 { margin: 0; font-size: 16px; font-weight: 700; color: var(--text); }
+  .topbar h1 small { color: var(--text-2); font-weight: 400; font-size: 12px; margin-left: 8px; }
+
+  .theme-switcher { position: relative; }
+  .theme-trigger { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; font-size: 18px; }
+  .theme-trigger:hover { background: var(--surface-3); }
+
+  .theme-menu {
+    position: absolute; top: 44px; right: 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; box-shadow: var(--shadow-lg);
+    padding: 12px; min-width: 280px;
+    display: none;
+  }
+  .theme-menu.open { display: block; }
+  .theme-section { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; margin: 6px 0; }
+  .theme-row { display: flex; gap: 6px; margin-bottom: 4px; }
+  .theme-row button { flex: 1; padding: 6px 10px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; color: var(--text-2); font-size: 12.5px; cursor: pointer; transition: all .15s; }
+  .theme-row button.active { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
+  .theme-swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 4px; }
+  .theme-swatches button { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: all .15s; }
+  .theme-swatches button:hover { background: var(--surface-3); }
+  .theme-swatches button.active { background: var(--primary-soft); border-color: var(--primary); }
+  .theme-swatches button span:first-child { display: inline-block; width: 18px; height: 18px; border-radius: 999px; box-shadow: 0 0 0 2px var(--surface); }
+  .theme-swatches button span:last-child { font-size: 10.5px; color: var(--text-2); }
+  .theme-swatches button.active span:last-child { color: var(--primary); font-weight: 600; }
+
+  /* ===== Demo 区域 ===== */
+  main { padding: var(--card-pad); max-width: 1280px; margin: 0 auto; }
+  .demo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .demo-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: var(--card-pad); box-shadow: var(--shadow-sm); }
+  .demo-card h3 { margin: 0 0 12px; font-size: 14px; font-weight: 600; color: var(--text); }
+  .demo-card .num { font-family: var(--font-num); font-size: 28px; font-weight: 700; color: var(--primary); margin: 4px 0; }
+  .demo-card .desc { font-size: 12px; color: var(--text-2); }
+  .demo-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .btn { padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; font-size: 12.5px; }
+  .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn.primary:hover { background: var(--primary-hover); }
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 500; }
+  .badge::before { content: '●'; font-size: 8px; }
+  .badge.success { color: var(--success-fg); background: var(--success-bg); }
+  .badge.warn    { color: var(--warning-fg); background: var(--warning-bg); }
+  .badge.danger  { color: var(--danger-fg);  background: var(--danger-bg); }
+
+  .ratings-row { display: flex; gap: 12px; align-items: center; padding: var(--pad-y) 0; }
+  .lamps-row { display: flex; gap: 18px; align-items: center; padding: var(--pad-y) 0; }
+</style>
+</head>
+<body class="light scheme-red density-comfy">
+
+<!-- ============== Topbar with Theme Switcher ============== -->
+<header class="topbar">
+  <h1>主题切换器骨架 <small>4 维 · 5×2×2 = 20 组合 · 持久化</small></h1>
+  <div class="theme-switcher">
+    <button class="theme-trigger" id="theme-trigger" title="主题偏好">🎨</button>
+    <div class="theme-menu" id="theme-menu">
+
+      <div class="theme-section">明暗模式</div>
+      <div class="theme-row">
+        <button data-theme-mode="light" class="active">☀ 浅色</button>
+        <button data-theme-mode="dark">🌙 深色</button>
+      </div>
+
+      <div class="theme-section">配色方案</div>
+      <div class="theme-swatches">
+        <button data-theme-scheme="red"    class="active"><span style="background:#E1251B"></span><span>京东红</span></button>
+        <button data-theme-scheme="blue"><span style="background:#2563EB"></span><span>蓝色</span></button>
+        <button data-theme-scheme="orange"><span style="background:#F26B2B"></span><span>橙红</span></button>
+        <button data-theme-scheme="green"><span style="background:#059669"></span><span>绿色</span></button>
+        <button data-theme-scheme="purple"><span style="background:#7c3aed"></span><span>紫色</span></button>
+      </div>
+
+      <div class="theme-section">界面密度</div>
+      <div class="theme-row">
+        <button data-theme-density="comfy" class="active">舒适</button>
+        <button data-theme-density="compact">紧凑</button>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<!-- ============== Demo 区域：让用户实时看到主题切换效果 ============== -->
+<main>
+  <div class="demo-grid">
+    <div class="demo-card">
+      <h3>KPI · 主色 + 等宽数字</h3>
+      <div class="num tabular">142,580</div>
+      <div class="desc">活跃用户 · 本月累计</div>
+      <div class="demo-row">
+        <button class="btn primary">查看详情</button>
+        <button class="btn">导出 CSV</button>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <h3>状态徽章（圆点 + 弱底）</h3>
+      <div class="demo-row">
+        <span class="badge success">已上架</span>
+        <span class="badge warn">待审批</span>
+        <span class="badge danger">已驳回</span>
+      </div>
+      <div class="ratings-row">
+        <span class="rating-badge rating-A sm">A</span>
+        <span class="rating-badge rating-B">B</span>
+        <span class="rating-badge rating-C">C</span>
+        <span class="rating-badge rating-D sm">D</span>
+        <span class="rating-badge rating-E sm">E</span>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <h3>服务健康灯（3 态）</h3>
+      <div class="lamps-row">
+        <button class="health-lamp lamp-healthy" title="全部健康"><span class="lamp-dot"></span></button>
+        <button class="health-lamp lamp-degraded" title="部分降级"><span class="lamp-dot"></span></button>
+        <button class="health-lamp lamp-down" title="故障"><span class="lamp-dot"></span></button>
+      </div>
+      <div class="desc">healthy / degraded / down · 含脉冲动画</div>
+    </div>
+  </div>
+
+  <div class="alarm-card alarm-P0" style="margin-bottom: 10px;">
+    <div class="alarm-stripe"></div>
+    <div class="alarm-body" style="flex: 1;">
+      <div>
+        <span class="alarm-sev">P0</span>
+        <span class="alarm-endpoint">claude-4-sonnet@anthropic</span>
+        <span style="font-weight: 600; margin-left: 8px;">DriftScore 突破 70 紧急阈值</span>
+      </div>
+      <div class="alarm-detail">behavior 哈希一致率从 92% 降至 68% · 持续 14 分钟</div>
+      <div class="alarm-meta">2026-05-24 14:32:08 · 触发人 自动巡检</div>
+    </div>
+    <div style="display: flex; gap: 6px; align-self: center;">
+      <button class="btn">取证</button>
+      <button class="btn primary">处置</button>
+    </div>
+  </div>
+  <div class="alarm-card alarm-P2">
+    <div class="alarm-stripe"></div>
+    <div class="alarm-body" style="flex: 1;">
+      <div>
+        <span class="alarm-sev">P2</span>
+        <span class="alarm-endpoint">gpt-5@openai</span>
+        <span style="font-weight: 600; margin-left: 8px;">TTFT P90 略高于阈值</span>
+      </div>
+      <div class="alarm-detail">P90 = 3.2s · 阈值 3.0s · 已观察 8 分钟</div>
+      <div class="alarm-meta">2026-05-24 14:24:11</div>
+    </div>
+    <div style="display: flex; gap: 6px; align-self: center;">
+      <button class="btn">取证</button>
+      <button class="btn primary">处置</button>
+    </div>
+  </div>
+</main>
+
+<!-- ============== Vanilla JS · 持久化 + 即时生效 ============== -->
+<script>
+(function() {
+  var THEME_KEY = 'themePref';
+  var SCHEMES = ['red', 'blue', 'orange', 'green', 'purple'];
+  var DENSITIES = ['comfy', 'compact'];
+
+  function loadTheme() {
+    try { return JSON.parse(localStorage.getItem(THEME_KEY)); } catch (e) { return null; }
+  }
+  function saveTheme(t) {
+    try { localStorage.setItem(THEME_KEY, JSON.stringify(t)); } catch (e) {}
+  }
+  function applyTheme(t) {
+    var b = document.body;
+    ['light', 'dark'].forEach(function(c) { b.classList.remove(c); });
+    b.classList.add(t.mode);
+    SCHEMES.forEach(function(s) { b.classList.remove('scheme-' + s); });
+    b.classList.add('scheme-' + t.scheme);
+    DENSITIES.forEach(function(d) { b.classList.remove('density-' + d); });
+    b.classList.add('density-' + t.density);
+  }
+  function refreshUI(t) {
+    document.querySelectorAll('[data-theme-mode], [data-theme-scheme], [data-theme-density]').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    var sel1 = document.querySelector('[data-theme-mode="' + t.mode + '"]');
+    var sel2 = document.querySelector('[data-theme-scheme="' + t.scheme + '"]');
+    var sel3 = document.querySelector('[data-theme-density="' + t.density + '"]');
+    if (sel1) sel1.classList.add('active');
+    if (sel2) sel2.classList.add('active');
+    if (sel3) sel3.classList.add('active');
+  }
+
+  var theme = loadTheme() || { mode: 'light', scheme: 'red', density: 'comfy' };
+  applyTheme(theme);
+  refreshUI(theme);
+
+  // 切换器按钮 → 展开/收起菜单
+  var trigger = document.getElementById('theme-trigger');
+  var menu = document.getElementById('theme-menu');
+  trigger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    menu.classList.toggle('open');
+  });
+  document.addEventListener('click', function(e) {
+    if (!menu.contains(e.target)) menu.classList.remove('open');
+  });
+
+  // 主题维度切换（事件委托）
+  document.addEventListener('click', function(e) {
+    var t = e.target.closest('[data-theme-mode], [data-theme-scheme], [data-theme-density]');
+    if (!t) return;
+    if (t.dataset.themeMode)    theme.mode    = t.dataset.themeMode;
+    if (t.dataset.themeScheme)  theme.scheme  = t.dataset.themeScheme;
+    if (t.dataset.themeDensity) theme.density = t.dataset.themeDensity;
+    applyTheme(theme);
+    saveTheme(theme);
+    refreshUI(theme);
+  });
+})();
+</script>
+</body>
+</html>

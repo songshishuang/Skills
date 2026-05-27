@@ -163,6 +163,28 @@ prototypes/
 
 ## Changelog
 
+- **2026-05-27 · v1.9** — v1 原型沉淀（55+ 页迭代 · 多主题 + 业务组件）
+  - **design-tokens.md 扩展**（+8 节）：
+    - §配色方案（5 套：红 / 蓝 / 橙 / 绿 / 紫 · light/dark 正交 = 10 组合）
+    - §明暗双主题完整 base 变量（含 dark 模式状态色 / shadow 数值调整）
+    - §界面密度（comfy / compact · `--pad-y` / `--card-pad` / `--row-pad`）
+    - §评级徽章色（A-E 5 级 · 适用 SLA / 评分 / 评级系统）
+    - §能力域色扩展为 A-E + X（6 域，新增 E 域）
+    - §服务健康灯色（healthy / degraded / down 3 态聚合）
+    - §告警严重度色（P0-P3 4 级 · 红 / 橙 / 黄 / 灰）
+    - §等宽数字字体 `--font-num` + `.tabular` class
+  - **component-patterns.md 扩展**（新增 §21-§25）：
+    - §21 RatingBadge（ABCDE · sm/md/lg · 含 box-shadow）
+    - §22 RadarChart（5 维能力雷达 · 当前 vs 基线 · React + Recharts）
+    - §23 AlarmCard（P0-P3 告警卡 · 左侧色条 + endpoint pill + 取证/处置）
+    - §24 JoyAgentLamp（服务健康灯 · 3 态脉冲动画 · 聚合规则）
+    - §25 ThemeSwitcher（4 维切换：明暗 / 配色 / 密度 / 持久化）
+  - **templates 扩展**：
+    - tokens.css +160 行（5 scheme × 2 mode + density + 评级/能力域/灯/告警/数字 token + 组件 CSS）
+    - 新增 `theme-switcher.html`（完整可用骨架 · 含 demo 区演示 KPI / 徽章 / 灯 / 告警卡）
+  - 来源：v1/operator 57 页 + vendor 17 页 · 业务组件库 components-business-a/b 共 1864 行
+  - 适用：多品牌项目、评级 / SLA / 监控告警系统的原型与产品设计
+
 - **2026-05-18 · v1.8.1** — 反模式 1 子案例「v1.0 启用 / 范围 banner」强化（第 4 次踩同坑）
   - 在 anti-patterns.md 反模式 1 加专项子案例「v0.1 仅启用 / v1.0 即将启用 / 一期范围 / 完整规范在 v1.x」
   - 列 6 类形态 + 5 行替代方案对照表 + 「为什么 PM 总想加 + 真相」分析 + grep 排查脚本
