@@ -35,7 +35,6 @@ description: 初始化标准 PM 项目目录脚手架。当用户提到「初始
    - `internal-tool`——内部工具（不含 `prototypes/` 不含 `skills/`）
 4. **`roles`**：业务角色数组（仅 `project_type` 含 `prototypes/` 时问）
    - 例：`operator,agent,admin`（SCRM 三角色）/ `customer,merchant`（双边市场）/ `user`（单端）
-5. **`enable_firebase`**：是否生成 `firebase.json` 占位（`yes` / `no`）
 
 ### 第 2 步：确认参数
 
@@ -49,7 +48,6 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
   --tagline "{project_tagline}" \
   --type "{project_type}" \
   --roles "{roles}" \
-  --firebase "{enable_firebase}" \
   --target "{absolute_target_path}"
 ```
 
@@ -83,7 +81,6 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 ```
 {project_name}/
 ├── README.md  CHANGELOG.md  CLAUDE.md
-├── (firebase.json — 可选)
 ├── docs/{prd,decisions,product-planning,market-research,user-research,data-analysis,releases}/
 │   ├── roadmap.md
 │   └── wiki/                            ⭐ LLM Wiki 骨架（由 pm-wiki-maintainer skill 维护）
@@ -156,6 +153,7 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 
 ## Changelog
 
+- **2026-06-01** 移除 `firebase.json` 占位生成能力（`enable_firebase` 参数 + `--firebase` CLI 选项 + `assets/templates/firebase.json` 模板文件 + `references/directory-conventions.md` 对应段全部删除）—— 部署配置不应由通用 PM 脚手架内置，项目需要 Firebase 时单独写一份更合适，避免「8 个项目有 8 份模板 firebase.json」的维护负担
 - **2026-05-09** 初始版本（蒸馏自某 AI 运营平台 91 文件 git mv 大重构）
 - **2026-05-15** 新增跨平台支持段
 - **2026-05-18** 集成 `docs/wiki/` LLM Wiki 骨架 —— 与 `pm-wiki-maintainer` skill 协作的 schema 接入点（基于 Karpathy LLM Wiki 模式）

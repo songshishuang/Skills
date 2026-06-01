@@ -23,11 +23,6 @@
 - **必含**：Repo layout（目录树 + 注释）/ 项目类型 / 关键架构模式 / Git 工作流
 - **维护**：随项目目录调整同步更新
 
-### `firebase.json`（可选）
-- **用途**：Firebase Hosting 部署配置
-- **关键字段**：`hosting.public` 指向部署源目录（通常是 `prototypes/`）
-- **何时生成**：项目要做 Firebase 演示部署时
-
 ### `{Project}.code-workspace`（可选）
 - **用途**：VS Code 工作区配置
 - **可换**：`.idea/` 或其他 IDE 配置

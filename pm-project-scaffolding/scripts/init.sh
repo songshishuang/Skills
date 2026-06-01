@@ -7,7 +7,6 @@
 #   bash init.sh --name "proj-name" --tagline "一句话定位" \
 #                --type "ai-saas|generic-saas|mobile-app|internal-tool" \
 #                --roles "operator,agent,admin" \
-#                --firebase "yes|no" \
 #                --target "/abs/parent/path"
 #
 # 退出码：
@@ -24,7 +23,6 @@ NAME=""
 TAGLINE=""
 TYPE=""
 ROLES=""
-FIREBASE="no"
 TARGET=""
 
 while [[ $# -gt 0 ]]; do
@@ -33,7 +31,6 @@ while [[ $# -gt 0 ]]; do
     --tagline)  TAGLINE="$2"; shift 2 ;;
     --type)     TYPE="$2"; shift 2 ;;
     --roles)    ROLES="$2"; shift 2 ;;
-    --firebase) FIREBASE="$2"; shift 2 ;;
     --target)   TARGET="$2"; shift 2 ;;
     *)
       echo "❌ 未知参数: $1" >&2
@@ -130,10 +127,6 @@ echo "📄 顶层文件..."
 render_file "$TEMPLATES_DIR/README.md" "README.md"
 render_file "$TEMPLATES_DIR/CHANGELOG.md" "CHANGELOG.md"
 render_file "$TEMPLATES_DIR/CLAUDE.md" "CLAUDE.md"
-
-if [[ "$FIREBASE" == "yes" ]]; then
-  render_file "$TEMPLATES_DIR/firebase.json" "firebase.json"
-fi
 
 # --- docs/ ---
 echo "📚 docs/ ..."
