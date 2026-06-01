@@ -4,7 +4,17 @@
 > 最后更新：{{DATE}}
 > 总页数：0
 
-## 📖 如何使用本 wiki
+## 📖 如何使用本 wiki（按角色分流）
+
+### 🤖 给 AI agent（prd-writer Stage 0 / 自动化消费）
+
+**直读本 index 顶部 + 下方 4 类清单**（concepts / entities / decisions / topics），按需 drill：
+
+1. **prd-writer Stage 0** → 读本 index 的 4 类清单 → 按 PRD 主题关键词 drill `decisions/` + `topics/` + 必读 `glossary.md` 保持术语一致
+2. **saas-arch-diagrams 画完图后建议 ingest** → 读 `decisions/` 看是否有架构相关历史决策
+3. **pm-wiki-maintainer 自检** → 读 `log.md` 看最近 ingest 节奏
+
+### 👤 给人类（PM 自查 / 新人 onboarding）
 
 - **找概念定义** → 看 [概念](#概念-concepts) 段
 - **找历史决策** → 看 [决策](#决策-decisions) 段
@@ -13,7 +23,7 @@
 - **找名词解释** → 看 [glossary.md](./glossary.md)
 - **看演进历史** → 看 [log.md](./log.md)
 
-新人入门：先读本 index → 按需 drill 进感兴趣的页。
+**新人入门路径**：先读本 index → 推荐 drill 进 1-2 个 `topics/` 综合页（覆盖最广）+ `glossary.md` → 再按需 deep dive 细节。
 
 ---
 

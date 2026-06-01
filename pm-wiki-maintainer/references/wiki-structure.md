@@ -41,7 +41,7 @@ related: [ai-fallback, gradual-rollout]
 - 终极兜底：预置话术 + 转人工
 
 ## 来源 / 演进
-- PRD-V0.5 §6.5 首次定义 → ADR-007 选 qwen-7b → ADR-012 主模型切 deepseek
+- PRD-V0.5 §4.3 首次定义（示意 · 实际节号见 prd-writer 当前版本）→ ADR-007 选 qwen-7b → ADR-012 主模型切 deepseek
 
 ## 相关
 - [decisions/llm-model.md](../decisions/llm-model.md)
@@ -119,8 +119,8 @@ sources: [PRD-V0.5, PRD-V0.7, user-interview-3, ADR-009]
 ## 演进史
 | 版本 | 灰度方式 | 来源 |
 |---|---|---|
-| V0.5 | 用户分群（10%）| PRD-V0.5 §10.1 |
-| V0.7 | 加渠道 + 设备维 | PRD-V0.7 §10.1 |
+| V0.5 | 用户分群（10%）| PRD-V0.5 §5.1（示意 · 实际节号见 prd-writer 当前版本）|
+| V0.7 | 加渠道 + 设备维 | PRD-V0.7 §5.1 |
 
 ## 关键决策
 - ADR-009 选 LaunchDarkly 不选自研 → see [decisions/feature-flag-platform.md](../decisions/feature-flag-platform.md)

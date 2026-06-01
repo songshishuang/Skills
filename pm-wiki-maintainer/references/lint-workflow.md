@@ -179,4 +179,4 @@ Lint 完后给用户一份**结构化报告**：
 |---|---|---|
 | 1（当前） | wiki ≤ 100 页 | AI Read + grep 完成 6 类检查 |
 | 2 | wiki 100-300 页 | 加 `wiki-lint.sh` 脚本（自动化 orphan / cross-ref 检测 + 报告） |
-| 3 | wiki > 300 页 | qmd MCP 提供 semantic similarity 找相关概念 |
+| 3 | wiki > 300 页 | Semantic similarity MCP（如装）提供 找相关概念 |

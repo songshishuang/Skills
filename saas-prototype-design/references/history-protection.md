@@ -49,6 +49,18 @@ bash skills/saas-prototype-design/scripts/snapshot.sh prototypes/v0.1/eval-sets.
       - 模型基线 4 档 reasoning_mode（no-think / min / high / max）
       - L2 卡片 col-span 均宽
       - 上传自定义评测集入口
+
+    # ⭐ prd-mapping · 给 prd-writer Stage 0.5 反推 PRD 用的强契约（v2.x 新增）
+    # 写完原型后填这一段，prd-writer 反推时直接读 → 不用 LLM 猜
+    prd-mapping:
+      page-role: "评测集管理 · 4 类模板列表"  # → PRD §三 需求范围 · 功能模块名
+      user-roles: ["运营", "评测工程师"]       # → PRD §二.2 用户角色
+      state-machine: []                       # → PRD §四.1.3 状态机（如有）
+      key-flows:                              # → PRD §二.5 端到端流程图
+        - "选模板 → 配置上下文 → 设置评分维度 → 试评测"
+      business-entities: ["评测集", "模板", "基线"]  # → PRD §四.1 业务对象
+      api-touch-points: []                    # → PRD §五.3 上下游依赖（如对接外部）
+
     changelog:
       - 2026-05-14 v1.4.2: 单 L2 示例 · 去性能集 / 去 L3-L5
       - 2026-05-13 v1.3.0: 基线 3 档 → 4 档
@@ -61,6 +73,20 @@ bash skills/saas-prototype-design/scripts/snapshot.sh prototypes/v0.1/eval-sets.
 - Agent 大改前必须读此注释，确认要保留的关键功能
 - 改完后必须更新 `version` + `last-modified` + 加 `changelog` 条目
 - 跨 Agent / 跨人协作时不丢迭代上下文
+- **⭐ `prd-mapping` 段是 prd-writer Stage 0.5 反推 PRD 的强契约**：prd-writer 启动反推时直接读此段，无需让 LLM 二次推断 page-role / user-roles / state-machine / key-flows / business-entities —— 这些字段直接映射到 PRD 7 节结构对应位置。**未填写 prd-mapping 时 prd-writer 仍可工作但需 LLM 多轮猜测，浪费 token**。
+
+### prd-mapping 字段语义（与 prd-writer v2.3 7 节结构对齐）
+
+| prd-mapping 字段 | 对应 PRD 章节 | 含义 |
+|---|---|---|
+| `page-role` | §三 需求范围 · 功能模块名 | 这页在产品里扮演什么角色（如"评测任务列表" / "新建评测向导"） |
+| `user-roles` | §二.2 用户角色 | 哪些角色用这页（列出 user_id 名称） |
+| `state-machine` | §四.1.3 业务对象生命周期 | 涉及状态机的对象 + 状态名清单（如 `[pending, evaluating, online]`） |
+| `key-flows` | §二.5 端到端流程图 | 用户完成核心任务的 3-5 步骤描述（如 "选模板 → 配置 → 试评测"） |
+| `business-entities` | §四.1 业务对象关系 | 这页操作的业务对象（如 `["评测集", "模板"]`） |
+| `api-touch-points` | §五.3 上下游依赖 | 对接的外部 API / 上游服务（如有） |
+
+> ⚠️ **节号兼容**：上表基于 prd-writer **v2.3+ 7 节结构**。如遇旧版 PRD（13 节 v2.2-），映射关系见 prd-writer SKILL.md 兼容表。
 
 ### 防线 3 · Agent 改原型的标准 prompt 协议
 

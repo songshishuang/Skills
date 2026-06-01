@@ -182,7 +182,7 @@ CSS：
 v1 实战中支持 5 套主色方案，通过 `body.scheme-{red|blue|orange|green|purple}` 切换。每套均提供 light/dark 双主题。
 
 ```css
-/* 京东红（v1 默认 · 品牌主色） */
+/* 品牌红（v1 默认 · 品牌主色） */
 body.scheme-red.light    { --primary: #E1251B; --primary-soft: #FEE2E0; --primary-hover: #B81E15; }
 body.scheme-red.dark     { --primary: #EF4444; --primary-soft: rgba(239,68,68,.20); --primary-hover: #F87171; }
 
@@ -298,12 +298,12 @@ body:not([class*="density-"]) { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px
 服务监控 / 健康指示器统一 3 态（适用 service status / pipeline health / endpoint heartbeat 等）。
 
 ```css
---joyagent-healthy:  #10b981;   /* 绿 · 全部健康 */
---joyagent-degraded: #f59e0b;   /* 橙 · 部分降级 */
---joyagent-down:     #dc2626;   /* 红 · 故障 */
+--svc-healthy:  #10b981;   /* 绿 · 全部健康 */
+--svc-degraded: #f59e0b;   /* 橙 · 部分降级 */
+--svc-down:     #dc2626;   /* 红 · 故障 */
 ```
 
-**聚合规则**：任一 down → 整体 down；任一 degraded（无 down）→ 整体 degraded；全部 healthy → 整体 healthy。完整 JoyAgentLamp 组件见 [`component-patterns.md` §24](component-patterns.md)。
+**聚合规则**：任一 down → 整体 down；任一 degraded（无 down）→ 整体 degraded；全部 healthy → 整体 healthy。完整 ServiceLamp 组件见 [`component-patterns.md` §24](component-patterns.md)。
 
 ## 告警严重度色（P0-P3 4 级 🆕 v1.9）
 

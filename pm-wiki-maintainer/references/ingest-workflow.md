@@ -8,6 +8,30 @@
 - 「**把这份 X 存进 wiki**」「ingest 这份 PRD」「沉淀这次客户访谈」「归档 ADR-012 进知识库」
 - 提供新源（粘贴文件路径 / drag-drop / 粘贴 URL）+ 暗示要进 wiki
 
+## 流程档位（v1.3+ 新增 · 按源大小分轻重）
+
+> 旧版「8 步必走」对会议纪要 / Slack 截图等小源过重。v1.3 分两档：
+
+| 档位 | 适用源 | 步骤数 | 总耗时 |
+|---|---|---|---|
+| 🟢 **轻 ingest** | 会议纪要 / Slack 截图 / 短客户反馈（≤ 1 屏 / ≤ 200 字） | **3 步** | 2-3 分钟 |
+| 🟡 **完整 ingest** | PRD / 研究报告 / 完整 ADR / 长用研纪要（≥ 1 屏 / ≥ 500 字） | **8 步** | 10-20 分钟 |
+
+> **默认档位**：用户指明源时，AI 按源类型对照表（文末）查表自动选择档位。
+> **降级例外**：用户明确说"快速 ingest" / "随便存一下" → 强制走轻 ingest；用户说"细致 ingest" / "完整归档" → 强制走完整 ingest。
+
+### 🟢 轻 ingest（3 步 · 小源）
+
+适合短源 —— 不值得建独立 summary 页，散布到现有 wiki 页即可。
+
+1. **读源 + 快确认**：Read 源 + 一句话跟用户确认核心信息（「这次纪要核心是 X，对吗？」），不做深度讨论
+2. **散布 + 追加 log**：把信息**散布**到 1-2 个现有 concept/entity/decision 页 + 追加 `log.md` 一条
+3. **简短报告**：「✅ 已散布到 N 页：A / B。`log.md` +1。如要建独立 topic 页告诉我」
+
+> **何时升级到完整 ingest**：发现源内含新决策（应进 decisions/）或新概念（值得独立 page）→ 中断轻 ingest，跟用户确认后升档。
+
+### 🟡 完整 ingest（8 步 · 大源）
+
 ## 8 步流程
 
 ### 1️⃣ 读源
@@ -81,32 +105,35 @@
 
 不同源类型 → 不同 ingest 策略：
 
-| 源类型 | 触达页数 | 主要影响 | 是否建独立 summary |
-|---|---|---|---|
-| 完整 PRD（新版本）| 10-20 | 大量 entity/concept/decision/topic | ✅ 必建 topic 页 |
-| ADR（架构决策）| 3-5 | decisions/ + 1-2 相关 concept | ✅ 必更新 decisions 综合页 |
-| 用户访谈纪要 | 2-5 | entities/customers + concepts + glossary | 🟡 视长度，长的建独立页 |
-| 竞品分析 | 5-10 | entities/competitors + concepts | ✅ 建独立 competitor 页 |
-| 会议纪要 | 1-3 | 散布到现有页 | ❌ 一般不建独立页 |
-| Slack 讨论截图 | 1-2 | 散布 + 提示用户去落 ADR | ❌ |
-| 行业研究报告 | 8-15 | 大量新 concept/entity | ✅ 必建 topic 页 |
+| 源类型 | 触达页数 | 主要影响 | 是否建独立 summary | **档位**（v1.3 新增） |
+|---|---|---|---|---|
+| 完整 PRD（新版本）| 10-20 | 大量 entity/concept/decision/topic | ✅ 必建 topic 页 | 🟡 完整 ingest |
+| ADR（架构决策）| 3-5 | decisions/ + 1-2 相关 concept | ✅ 必更新 decisions 综合页 | 🟡 完整 ingest |
+| 用户访谈纪要 | 2-5 | entities/customers + concepts + glossary | 🟡 视长度，长的建独立页 | 🟢 轻（短） / 🟡 完整（长） |
+| 竞品分析 | 5-10 | entities/competitors + concepts | ✅ 建独立 competitor 页 | 🟡 完整 ingest |
+| 会议纪要 | 1-3 | 散布到现有页 | ❌ 一般不建独立页 | 🟢 轻 ingest |
+| Slack 讨论截图 | 1-2 | 散布 + 提示用户去落 ADR | ❌ | 🟢 轻 ingest |
+| 行业研究报告 | 8-15 | 大量新 concept/entity | ✅ 必建 topic 页 | 🟡 完整 ingest |
+| 客户邮件 / 短反馈 | 1-2 | 散布到 entities/customers | ❌ | 🟢 轻 ingest |
 
 ## 从 prd-writer / saas-arch-diagrams 产出物 ingest 的范式
 
 PRD 和架构图是 PM 的两类"正式产出"。它们的原文留在标准目录（`docs/prd/`、`docs/product-planning/`），**只提炼后入 wiki**。具体策略：
 
-### 从 PRD ingest（约 6-10 页 wiki 改动）
+### 从 PRD ingest（约 6-10 页 wiki 改动 · 基于 prd-writer v2.3 7 节结构）
 
 | PRD 节 | 提炼到 wiki 的什么 | 目标页 |
 |---|---|---|
-| §3.3 北极星 + KR | 项目目标演进史 | `topics/目标-演进.md`（每个 PRD 版本一条记录） |
-| §4.1 用户角色 | 新增角色 / 既有角色画像更新 | `entities/users/<role>.md` |
-| §5 需求范围 | 新增功能模块 | `concepts/<模块>.md` |
-| §6.3 AI 模块特化 | 模型选型 / 提示词版本 / 工具调用维度 | `concepts/ai-module-spec.md`（综合页） |
-| §10.4 成本预算 | token 单价 + 月度预算演进 | `topics/成本-演进.md` |
-| §13.4 ADR | **每条 ADR 一页**，标 active / superseded | `decisions/ADR-NNN-<决策>.md` |
+| §2.3 北极星 + KR | 项目目标演进史 | `topics/目标-演进.md`（每个 PRD 版本一条记录） |
+| §2.2 用户角色 | 新增角色 / 既有角色画像更新 | `entities/users/<role>.md` |
+| §3.1 需求范围 | 新增功能模块 | `concepts/<模块>.md` |
+| §4.3 AI 模块特化 | 模型选型 / 提示词版本 / 工具调用维度 | `concepts/ai-module-spec.md`（综合页） |
+| §5.5 成本预算 | token 单价 + 月度预算演进 | `topics/成本-演进.md` |
+| §7.2 ADR | **每条 ADR 一页**，标 active / superseded | `decisions/ADR-NNN-<决策>.md` |
 
-**不进 wiki 的内容**：§2 文档记录、§5 具体字段表、§7 完整埋点表、§11 验收清单 —— 这些是版本快照，留在 PRD 原文。
+**不进 wiki 的内容**：frontmatter 治理元信息（revision_log / review_log）、§4.2 具体字段表 / 页面 7 段细节、§6.1 完整埋点表、§6.3 验收清单 —— 这些是版本快照，留在 PRD 原文。
+
+> ⚠️ **节号兼容**：上表基于 prd-writer **v2.3+ 7 节结构**。如遇旧版 PRD（13 节结构 v2.2-），映射关系为：§13.4→§7.2 / §4→§2.2 / §5→§3.1 / §6.3→§4.3 / §3.3→§2.3 / §10.4→§5.5。
 
 ### 从架构图 ingest（约 3-5 页 wiki 改动）
 

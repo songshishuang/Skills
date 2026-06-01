@@ -231,17 +231,18 @@ cat > docs/wiki/CLAUDE.md <<'WIKI_CLAUDE_EOF'
 WIKI_CLAUDE_EOF
 
 for sub in concepts entities decisions topics; do
+  case "$sub" in
+    concepts)  sub_desc="核心概念页（跨 PRD 反复出现的业务概念）" ;;
+    entities)  sub_desc="业务实体页（用户角色 / 竞品 / 客户 / 模型 / 下游平台）" ;;
+    decisions) sub_desc="关键决策综合页（ADR 跨版本回溯，方案 ii 独立视图）" ;;
+    topics)    sub_desc="主题综合视图（跨多页的综合分析与假设）" ;;
+  esac
   cat > "docs/wiki/${sub}/README.md" <<EOF
 # docs/wiki/${sub}/
 
 由 \`pm-wiki-maintainer\` skill 维护。
 
-- **${sub}** —— $(case "$sub" in
-    concepts) echo "核心概念页（跨 PRD 反复出现的业务概念）" ;;
-    entities) echo "业务实体页（用户角色 / 竞品 / 客户 / 模型 / 下游平台）" ;;
-    decisions) echo "关键决策综合页（ADR 跨版本回溯，方案 ii 独立视图）" ;;
-    topics) echo "主题综合视图（跨多页的综合分析与假设）" ;;
-  esac)
+- **${sub}** —— ${sub_desc}
 
 第一次 ingest 后由 pm-wiki-maintainer 自动填充。
 EOF
