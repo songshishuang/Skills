@@ -1,6 +1,6 @@
 ---
 name: pm-project-scaffolding
-description: 初始化标准 PM 项目目录脚手架。当用户提到「初始化新 PM 项目」「pm 脚手架」「pm-init」「新建产品项目」「create PM scaffold」「产品项目模板」「项目目录骨架」时使用。生成包含 docs / prototypes / skills / training / app / archive / Logs 等覆盖 PM 完整生命周期 8 阶段（研究 / 规划 / 设计 / 开发 / 发布 / 培训 / 运营 / 归档）的标准目录结构。支持 ai-saas / generic-saas / mobile-app / internal-tool 四种产品类型，可选启用 prototypes / skills 模块。基于某 AI 运营平台 项目的实战目录治理沉淀。
+description: 初始化标准 PM 项目目录脚手架。当用户提到「初始化新 PM 项目」「pm 脚手架」「pm-init」「新建产品项目」「create PM scaffold」「产品项目模板」「项目目录骨架」时使用。生成包含 docs / prototypes / skills / training / app / archive / Logs 等覆盖 PM 完整生命周期 8 阶段（研究 / 规划 / 设计 / 开发 / 发布 / 培训 / 运营 / 归档）的标准目录结构。支持 ai-saas / generic-saas / mobile-app / internal-tool 四种产品类型，可选启用 prototypes / skills 模块。基于 AI SaaS 平台 项目的实战目录治理沉淀。
 ---
 
 # PM Project Scaffolding · 产品项目脚手架
@@ -135,7 +135,7 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 
 ## 来源
 
-蒸馏自 2026-Q2 某 AI 运营平台项目的目录治理实战——91 文件 git mv 大重构 + PM 视角 9 维度结构 + 三轮迭代（轻量版 / 中量版 / 上线 + 培训补充）。
+蒸馏自 2026-Q2 AI SaaS 平台项目的目录治理实战——91 文件 git mv 大重构 + PM 视角 9 维度结构 + 三轮迭代（轻量版 / 中量版 / 上线 + 培训补充）。
 
 ## 🌐 跨平台支持
 
@@ -154,8 +154,8 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 ## Changelog
 
 - **2026-06-01** 移除 `firebase.json` 占位生成能力（`enable_firebase` 参数 + `--firebase` CLI 选项 + `assets/templates/firebase.json` 模板文件 + `references/directory-conventions.md` 对应段全部删除）—— 部署配置不应由通用 PM 脚手架内置，项目需要 Firebase 时单独写一份更合适，避免「8 个项目有 8 份模板 firebase.json」的维护负担
-- **2026-05-09** 初始版本（蒸馏自某 AI 运营平台 91 文件 git mv 大重构）
+- **2026-05-09** 初始版本（蒸馏自 AI SaaS 平台 91 文件 git mv 大重构）
 - **2026-05-15** 新增跨平台支持段
 - **2026-05-18** 集成 `docs/wiki/` LLM Wiki 骨架 —— 与 `pm-wiki-maintainer` skill 协作的 schema 接入点（基于 Karpathy LLM Wiki 模式）
 - **2026-05-19** `assets/templates/CLAUDE.md` 加 "📚 LLM Wiki · 项目知识沉淀" 段 —— 未来用本 skill 脚手架建的项目默认含 wiki 引用 + prd-writer Stage 0 集成约定（Tier 1）
-- **2026-05-20** init.sh 加入 `docs/wiki/` 骨架完整生成逻辑（修复"声明建骨架但没 mkdir"的 silent failure bug）—— mkdir 4 子目录 + inline 生成 index.md / log.md / glossary.md / CLAUDE.md + 4 子目录 README（自比赛包回流）
+- **2026-05-20** init.sh 加入 `docs/wiki/` 骨架完整生成逻辑（修复"声明建骨架但没 mkdir"的 silent failure bug）—— mkdir 4 子目录 + inline 生成 index.md / log.md / glossary.md / CLAUDE.md + 4 子目录 README（自迭代回流）

@@ -262,10 +262,10 @@ V0.6 时  prd-writer Stage 0         自动加载 V0.5 ADR + 概念页 → 新 P
 
 ## Changelog
 
-- **2026-05-20 · v1.2** — 新增「与其他 Skill 的协作沉淀矩阵」：明确 prd-writer / saas-arch-diagrams 产出物如何沉淀到 wiki（原文留标准目录，wiki 只存提炼综合页）；`ingest-workflow.md` 增加「从 PRD / 架构图 ingest 的范式」章节（6 行 PRD 映射表 + 4 行架构图映射表）（自比赛包回流）
+- **2026-05-20 · v1.2** — 新增「与其他 Skill 的协作沉淀矩阵」：明确 prd-writer / saas-arch-diagrams 产出物如何沉淀到 wiki（原文留标准目录，wiki 只存提炼综合页）；`ingest-workflow.md` 增加「从 PRD / 架构图 ingest 的范式」章节（6 行 PRD 映射表 + 4 行架构图映射表）（自迭代回流）
 - **2026-06-01 · v1.3** — **节号对齐 + Self-Evolving 反向简化（与 prd-writer v2.3 同步）**
   - **PRD 节号引用全部更新到 v2.3 7 节结构**（6 处过时引用：SKILL.md 3 处 + ingest-workflow.md 2 处 + wiki-structure.md 2 处）；旧 13 节→新 7 节兼容映射表内联到 ingest-workflow.md
-  - **脱敏**：`qmd MCP` → 通用 `Semantic similarity MCP（如装）`，确保对外可发布
+  - **通用化命名**：把项目特定的 MCP 工具名换成功能描述（如 `Semantic similarity MCP（如装）`），确保跨项目复用
   - **Self-Evolving 加反向简化驱动**：6 条反向简化清单（reference 健康度 / frontmatter 字段裁剪 / ingest 流程分轻重档 / lint 6 类裁剪 / Changelog 反向流 / 跨 skill 引用时效），防止 4 份 workflow doc 单调膨胀
 - **2026-05-19 · v1.1** — 与 `prd-writer` skill 集成（Tier 1）
   - 写完整 `references/query-workflow.md`（4 步流程 + 回填规则 + 与 prd-writer Stage 0 集成）

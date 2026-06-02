@@ -446,5 +446,5 @@ prd-writer/
   - **保留**：Stage 0 / 0.5 工作流 + page-design-template + eval-set-requirements + ai-product-checklist + tracking-events-spec 等所有 references 不变
 - **2026-05-20 · v2.2** — 工作流升级为 4 阶段：① 新增 Stage 0.5 从高保真原型反推 PRD（13 行反推映射表 + 4 步流程 + 5 条反模式） ② Self-Evolving Protocol 增加「写完 PRD 后：建议 ingest 到项目 wiki」环节 ③ 完成标准加 Stage 0.5 检查
 - **2026-05-19 · v2.1** — 与 `pm-wiki-maintainer` skill 集成（Tier 1）：新增 Stage 0 读项目 wiki + 完成标准加 Stage 0 检查 + 反模式新增"项目有 wiki 但跳过 Stage 0" + 沉淀回填
-- **2026-05-18 · v2.0** — 某 SaaS 平台 v0.1 PRD rev2 用户反馈蒸馏（6 条普适改进）：新增反模式 5 条 + 第六节增强为 6.1 业务对象 + 6.2 页面 7 段 + 6.3 AI 模块特化 + Stage 3 AI 触发条件精化 + 完成标准加 5 项 + 新增 page-design-template
+- **2026-05-18 · v2.0** — 企业 SaaS 项目 v0.1 PRD rev2 用户反馈蒸馏（6 条普适改进）：新增反模式 5 条 + 第六节增强为 6.1 业务对象 + 6.2 页面 7 段 + 6.3 AI 模块特化 + Stage 3 AI 触发条件精化 + 完成标准加 5 项 + 新增 page-design-template
 - **2026-05-15** 初始版本（V0.5 → 模板 + 反模式 + rationalization 自查 + Self-Evolving Protocol + 跨平台支持）
