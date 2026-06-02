@@ -2,7 +2,7 @@
 
 ## 来源
 
-蒸馏自竞品调研（OpenRouter / Together AI / Replicate / Artificial Analysis）+ 某 SaaS 平台 项目 30+ 轮迭代。完整 CSS 变量见 [`../templates/tokens.css`](../templates/tokens.css)。
+蒸馏自竞品调研（OpenRouter / Together AI / Replicate / Artificial Analysis）+ 实战项目 30+ 轮迭代。完整 CSS 变量见 [`../templates/tokens.css`](../templates/tokens.css)。
 
 ## 色彩
 

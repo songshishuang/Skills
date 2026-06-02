@@ -1,5 +1,5 @@
 /* ===================================================================
-   某 SaaS 平台 v1 · 设计 Token
+   v1 设计语言 · 设计 Token
    基于 docs/market-research/competitors-ui.md §7
    =================================================================== */
 
@@ -396,9 +396,9 @@ body:not([class*="density-"]) { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px
 
 /* ===== 服务健康灯色（3 态）===== */
 :root {
-  --joyagent-healthy:  #10b981;
-  --joyagent-degraded: #f59e0b;
-  --joyagent-down:     #dc2626;
+  --svc-healthy:  #10b981;
+  --svc-degraded: #f59e0b;
+  --svc-down:     #dc2626;
 }
 
 /* ===== 等宽数字字体（表格 / 价格 / 时延 必备）===== */
@@ -449,18 +449,18 @@ body:not([class*="density-"]) { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px
 .health-lamp { padding: 8px; background: transparent; border: none; border-radius: 6px; cursor: pointer; }
 .lamp-dot { display: inline-block; width: 10px; height: 10px; border-radius: 999px; }
 .lamp-healthy .lamp-dot {
-  background: var(--joyagent-healthy);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--joyagent-healthy) 25%, transparent);
+  background: var(--svc-healthy);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--svc-healthy) 25%, transparent);
   animation: lamp-pulse 2.4s ease-in-out infinite;
 }
 .lamp-degraded .lamp-dot {
-  background: var(--joyagent-degraded);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--joyagent-degraded) 35%, transparent);
+  background: var(--svc-degraded);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--svc-degraded) 35%, transparent);
   animation: lamp-pulse 1.2s ease-in-out infinite;
 }
 .lamp-down .lamp-dot {
-  background: var(--joyagent-down);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--joyagent-down) 35%, transparent);
+  background: var(--svc-down);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--svc-down) 35%, transparent);
 }
 @keyframes lamp-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
