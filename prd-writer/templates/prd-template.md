@@ -271,7 +271,7 @@ stateDiagram-v2
 | `ai_fallback_trigger` | 兜底分支命中 | trace_id / reason (timeout/low_conf/no_kb/safety/tool_error) | ✓ | 服务端 · 必采样存储 |
 | `llm_call_cost` | LLM 调用完成 | trace_id / model / token_in / token_out / cost_estimate | ✓ | 成本预算配套 |
 
-> **公共字段**（每事件必带 ✓）：`event_id` / `timestamp` / `user_id` / `user_role` / `project_id` / `session_id` / `client` / `env`。详见 `references/tracking-events-spec.md`。
+> **公共字段**（每事件必带 ✓）：`event_id` / `timestamp` / `user_id` / `user_role` / `project_id` / `session_id` / `client` / `env`。详见 prd-writer skill 的 `references/tracking-events-spec.md`（PRD 产物内不要保留此相对路径）。
 
 ### 6.2 评测指标（涉及 AI 必填 · 否则删除本子段）
 
@@ -284,7 +284,7 @@ stateDiagram-v2
 | 对抗集（合规） | 红队 + 越狱样例 · {N} 条 | 100% 通过 |
 | 性能集 | 不同长度典型 query · 50 条 | P99 ≤ {阈值} |
 
-详细字段与频次见 `eval-set-requirements.md`。
+详细字段与频次见 prd-writer skill 的 `templates/eval-set-requirements.md`（PRD 产物内不要保留此引用）。
 
 #### 6.2.2 在线指标（上线后监控）
 

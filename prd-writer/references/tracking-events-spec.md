@@ -1,16 +1,16 @@
 # 埋点规范（AI 客服产品）
 
-> 沿用作者 V0.5 PRD 的三段结构（埋点说明 → 埋点看板 → 埋点上报设置）+ AI 产品特化字段。PRD 第七章产出可直接交付 BI。
+> 沿用作者 V0.5 PRD 的三段结构（埋点说明 → 埋点看板 → 埋点上报设置）+ AI 产品特化字段。PRD §6.1 产出可直接交付 BI。
 
 ---
 
-## 一、章节结构（PRD 第七章模板）
+## 一、章节结构（PRD §6.1 模板）
 
 ```
-七、数据埋点
-  1、埋点说明              ← 描述目的与价值
-  2、埋点看板              ← 行为看板 + 数据看板
-  3、埋点上报设置          ← 事件清单（核心交付物）
+6.1 数据埋点
+  6.1.1 埋点说明           ← 描述目的与价值
+  6.1.2 埋点看板           ← 行为看板 + 数据看板
+  6.1.3 埋点上报设置       ← 事件清单（核心交付物）
 ```
 
 ---
@@ -92,28 +92,28 @@
 
 ## 五、AI 客服核心事件清单（V0.5 实际使用版）
 
-> 直接拷贝到 PRD「3、埋点上报设置」表格中，按本期需求增删。
+> 直接拷贝到 PRD「6.1.3 埋点上报设置」表格中，按本期需求增删（下表为节选教学示例，交付口径以第二节双口径为准）。
 
-| # | 事件名称 | 事件描述 | 上报时机 | 事件 ID | 扩展字段 | 页面路径 | 页面名称 |
+| # | 事件 ID | 事件描述 | 上报时机 | 扩展字段 | 公共字段 | 页面路径 | 页面名称 |
 |---|---|---|---|---|---|---|---|
-| E1 | 知识库保存 | 运营保存 KB 配置 | 点击「保存」 | `kb_config_save` | kb_id / chunk_count / changed_fields | 面客端-智能客服-知识库 | 知识库管理 |
-| E2 | KB 单条新增 | 单条 chunk 新增成功 | 保存成功 | `kb_chunk_add` | kb_id / chunk_id / source | 面客端-智能客服-知识库 | 知识库管理 |
-| E3 | 技能开关 | 运营切换技能 | 切换开关 | `skill_toggle` | skill_id / from / to | 面客端-智能客服-技能配置 | 技能配置 |
-| E4 | 技能配置保存 | 运营保存技能配置 | 点击「保存」 | `skill_config_save` | skill_id / version / enabled_tools | 面客端-智能客服-技能配置 | 技能配置 |
-| E5 | AI 推荐展示 | 客服收到 AI 推荐 | 模型输出完成 | `ai_reply_show` | trace_id + AI 必带字段 + kb_hits | 客服工作台-私聊窗口 | 工作台-Copilot |
-| E6 | AI 推荐采纳 | 客服直接发送 | 点击「发送」（未编辑） | `ai_reply_send` | trace_id / no_edit=true | 客服工作台-私聊窗口 | 工作台-Copilot |
-| E7 | AI 推荐编辑后发送 | 客服编辑后发送 | 点击「发送」（有编辑） | `ai_reply_edit_send` | trace_id / edit_distance / final_text_length | 客服工作台-私聊窗口 | 工作台-Copilot |
-| E8 | AI 推荐拒纳 | 客服不采纳重写 | 关闭推荐 + 自己输入 | `ai_reply_reject` | trace_id / reject_reason / final_text | 客服工作台-私聊窗口 | 工作台-Copilot |
-| E9 | AI 依据查看 | 客服点查看依据 | 点击「查看推荐依据」 | `ai_evidence_view` | trace_id / evidence_count / clicked_evidence_id | 客服工作台-私聊窗口 | 工作台-Copilot |
-| E10 | AI 托管开启 | 开启 AI 托管 | 切换至开 | `ai_takeover_enable` | scope / time_segment_id | 客服工作台-顶部 / 面客端 | 工作台 / AI 托管配置 |
-| E11 | AI 托管关闭 | 关闭 AI 托管 | 切换至关 | `ai_takeover_disable` | scope / reason | 客服工作台-顶部 | 工作台 |
-| E12 | AI 兜底触发 | 兜底/转人工 | 兜底分支命中 | `ai_fallback_trigger` | trace_id / reason | 服务端 | — |
-| E13 | 非工作时间自动回复 | AI 自动回应 | AI 完成回复发送 | `non_business_hour_reply` | time_strategy_id / response_time | 服务端 | — |
-| E14 | 用户点踩 | 用户点踩消息 | 企微会话点踩 | `user_downvote` | trace_id / message_id | 企微-会话 | 用户端 |
-| E15 | 转人工 | AI/用户/兜底触发转人工 | 转人工动作执行 | `transfer_to_agent` | trace_id / reason / pending_seconds | 客服工作台 / 服务端 | 工作台 |
-| E16 | 商品卡片展示 | 商品卡片在会话展示 | UI 渲染 | `goods_card_show` | sku_id / source | 客服工作台-私聊窗口 | 工作台-Copilot |
-| E17 | 转链授权失败 | 商品授权校验未通过 | 校验返回失败 | `goods_link_invalid` | sku_id / fail_reason | 客服工作台 | 商品池 |
-| E18 | 页签排序 | 客服调整工作台页签 | 应用设置 | `workbench_tabs_reorder` | tabs_order | 客服工作台-自定义工作台 | 自定义工作台 |
+| E1 | `kb_config_save` | 运营保存 KB 配置 | 点击「保存」 | kb_id / chunk_count / changed_fields | 标准 8 项 ✓ | 面客端-智能客服-知识库 | 知识库管理 |
+| E2 | `kb_chunk_add` | 单条 chunk 新增成功 | 保存成功 | kb_id / chunk_id / source | 标准 8 项 ✓ | 面客端-智能客服-知识库 | 知识库管理 |
+| E3 | `skill_toggle` | 运营切换技能 | 切换开关 | skill_id / from / to | 标准 8 项 ✓ | 面客端-智能客服-技能配置 | 技能配置 |
+| E4 | `skill_config_save` | 运营保存技能配置 | 点击「保存」 | skill_id / version / enabled_tools | 标准 8 项 ✓ | 面客端-智能客服-技能配置 | 技能配置 |
+| E5 | `ai_reply_show` | 客服收到 AI 推荐 | 模型输出完成 | trace_id + AI 必带字段 + kb_hits | 标准 8 项 ✓ | 客服工作台-私聊窗口 | 工作台-Copilot |
+| E6 | `ai_reply_send` | 客服直接发送 | 点击「发送」（未编辑） | trace_id / no_edit=true | 标准 8 项 ✓ | 客服工作台-私聊窗口 | 工作台-Copilot |
+| E7 | `ai_reply_edit_send` | 客服编辑后发送 | 点击「发送」（有编辑） | trace_id / edit_distance / final_text_length | 标准 8 项 ✓ | 客服工作台-私聊窗口 | 工作台-Copilot |
+| E8 | `ai_reply_reject` | 客服不采纳重写 | 关闭推荐 + 自己输入 | trace_id / reject_reason / final_text | 标准 8 项 ✓ | 客服工作台-私聊窗口 | 工作台-Copilot |
+| E9 | `ai_evidence_view` | 客服点查看依据 | 点击「查看推荐依据」 | trace_id / evidence_count / clicked_evidence_id | 标准 8 项 ✓ | 客服工作台-私聊窗口 | 工作台-Copilot |
+| E10 | `ai_takeover_enable` | 开启 AI 托管 | 切换至开 | scope / time_segment_id | 标准 8 项 ✓ | 客服工作台-顶部 / 面客端 | 工作台 / AI 托管配置 |
+| E11 | `ai_takeover_disable` | 关闭 AI 托管 | 切换至关 | scope / reason | 标准 8 项 ✓ | 客服工作台-顶部 | 工作台 |
+| E12 | `ai_fallback_trigger` | 兜底/转人工 | 兜底分支命中 | trace_id / reason | 标准 8 项 ✓ | 服务端 | — |
+| E13 | `non_business_hour_reply` | AI 自动回应 | AI 完成回复发送 | time_strategy_id / response_time | 标准 8 项 ✓ | 服务端 | — |
+| E14 | `user_downvote` | 用户点踩消息 | 企微会话点踩 | trace_id / message_id | 标准 8 项 ✓ | 企微-会话 | 用户端 |
+| E15 | `transfer_to_agent` | AI/用户/兜底触发转人工 | 转人工动作执行 | trace_id / reason / pending_seconds | 标准 8 项 ✓ | 客服工作台 / 服务端 | 工作台 |
+| E16 | `goods_card_show` | 商品卡片在会话展示 | UI 渲染 | sku_id / source | 标准 8 项 ✓ | 客服工作台-私聊窗口 | 工作台-Copilot |
+| E17 | `goods_link_invalid` | 商品授权校验未通过 | 校验返回失败 | sku_id / fail_reason | 标准 8 项 ✓ | 客服工作台 | 商品池 |
+| E18 | `workbench_tabs_reorder` | 客服调整工作台页签 | 应用设置 | tabs_order | 标准 8 项 ✓ | 客服工作台-自定义工作台 | 自定义工作台 |
 
 ---
 
@@ -183,4 +183,4 @@ GROUP BY dt;
 2. **SDK 接入示例**：前端 / 服务端各 1 份代码片段
 3. **验证 SOP**：QA 用于上线前后核对每个事件正确上报
 
-CSV 示例参考 `templates/tracking-table-template.csv`。
+CSV 示例参考 `../templates/tracking-table-template.csv`（本 skill 内路径）。

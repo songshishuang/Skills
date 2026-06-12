@@ -1,20 +1,20 @@
-事件名称,事件描述,上报时机,事件ID,扩展字段,页面路径,页面名称,告警阈值,备注
-规则集保存,Tech Lead 保存规则集配置,点击「保存」按钮,rule_set_save,rule_set_id / rule_count / changed_fields,仓库设置-Code Review-规则集,规则集管理,—,
-规则单条新增,单条规则新增成功,保存成功后,rule_item_add,rule_set_id / rule_id / source,仓库设置-Code Review-规则集,规则集管理,—,
-技能开关,Tech Lead 切换技能开关,切换开关至开或关,skill_toggle,skill_id / from / to,仓库设置-Code Review-技能配置,技能配置,—,
-技能配置保存,Tech Lead 保存技能配置,点击「保存」按钮,skill_config_save,skill_id / version / enabled_tools,仓库设置-Code Review-技能配置,技能配置,—,
-AI 评论展示,开发者在 IDE 内收到 AI Review 评论,模型输出完成 UI 渲染,review_comment_show,trace_id / model / skill_id / skill_version / latency_ms / token_in / token_out / confidence / rule_hits,IDE 插件-PR Files Changed,Review-Sidebar,P99 > 3s 告警 / 错误率 > 2% 告警,
-AI 评论采纳,开发者直接 Apply Patch（未编辑）,点击「Apply Patch」按钮（无编辑动作）,review_comment_apply,trace_id / no_edit=true,IDE 插件-PR Files Changed,Review-Sidebar,采纳率 < 30% 周告警,
-AI 评论编辑后采纳,开发者编辑 Patch 后采纳（部分采纳）,点击「Apply」（有编辑）,review_comment_edit_apply,trace_id / edit_distance / final_text_length,IDE 插件-PR Files Changed,Review-Sidebar,重写率 > 30% 周告警,
-AI 评论拒纳,开发者不采纳 AI 评论,关闭评论 + Resolve,review_comment_reject,trace_id / reject_reason / final_text,IDE 插件-PR Files Changed,Review-Sidebar,拒纳率 > 20% 周告警,自动入 BadCase 池
-AI 依据查看,开发者点击查看 AI Review 依据,点击「查看 Review 依据」按钮,review_evidence_view,trace_id / evidence_count / clicked_evidence_id,IDE 插件-PR Files Changed,Review-Sidebar,—,信任度信号
-夜间 Review 开启,开启夜间 Review（单 PR/全局）,切换开关至开,nightly_review_enable,scope (single/all) / time_segment_id,IDE 插件-顶部 / 仓库设置-夜间策略,IDE / 夜间策略,—,
-夜间 Review 关闭,关闭夜间 Review,切换开关至关,nightly_review_disable,scope / reason,IDE 插件-顶部,IDE,—,
-AI 兜底触发,LLM 失败/低置信/无规则命中触发兜底,兜底分支命中时服务端上报,ai_fallback_trigger,trace_id / reason (timeout/low_conf/no_rule/safety/tool_error),服务端,—,兜底率 > 10% 即时告警 / 单 reason > 5% 告警,必采样存储
-夜间自动评论,AI 在配置时段内自动评论 PR,AI 完成评论并提交时,nightly_auto_review,time_strategy_id / response_time,服务端,—,响应时长 > 5s 告警,
-开发者点踩,开发者对某条 AI 评论点踩,点踩按钮触发,user_downvote,trace_id / comment_id,IDE 插件-PR Files Changed,Review-Sidebar,日点踩量 > 历史均值 1.5x 告警,自动入 BadCase 池
-转人工复核,AI/开发者/兜底触发人工复核,标记需人工复核时,escalate_to_reviewer,trace_id / reason (user_request/ai_decision/fallback) / pending_seconds,IDE 插件 / 服务端,IDE,复核率 > 15% 告警 / 排队时长 P95 > 60s 告警,
-变更摘要卡片展示,解析 PR 后展示变更摘要卡片,UI 渲染卡片时,pr_summary_card_show,pr_id / source (web/ide),IDE 插件-PR Files Changed,Review-Sidebar,—,
-跨仓库授权失败,代码授权校验未通过,代码授权校验返回失败时,cross_repo_invalid,file_path / fail_reason,IDE 插件,Review-Sidebar,失败率 > 5% 告警,
-卡片排序,开发者调整 Review 视图卡片顺序,点击「应用设置」,review_cards_reorder,cards_order,IDE 插件-自定义视图,自定义视图,—,本地保存（localStorage）
-LLM 调用成本,记录每次 LLM 调用的 token 与估算成本,LLM 调用完成,llm_call_cost,trace_id / model / token_in / token_out / cost_estimate,服务端,—,日 token 用量 > 预算 1.5x 即时告警,**新增（成本预算章节配套）**
+事件ID,事件描述,上报时机,扩展字段,公共字段,页面路径,页面名称,告警阈值,备注
+rule_set_save,Tech Lead 保存规则集配置,点击「保存」按钮,rule_set_id / rule_count / changed_fields,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,仓库设置-Code Review-规则集,规则集管理,—,
+rule_item_add,单条规则新增成功,保存成功后,rule_set_id / rule_id / source,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,仓库设置-Code Review-规则集,规则集管理,—,
+skill_toggle,Tech Lead 切换技能开关,切换开关至开或关,skill_id / from / to,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,仓库设置-Code Review-技能配置,技能配置,—,
+skill_config_save,Tech Lead 保存技能配置,点击「保存」按钮,skill_id / version / enabled_tools,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,仓库设置-Code Review-技能配置,技能配置,—,
+review_comment_show,开发者在 IDE 内收到 AI Review 评论,模型输出完成 UI 渲染,trace_id / model / skill_id / skill_version / latency_ms / token_in / token_out / confidence / rule_hits,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-PR Files Changed,Review-Sidebar,P99 > 3s 告警 / 错误率 > 2% 告警,
+review_comment_apply,开发者直接 Apply Patch（未编辑）,点击「Apply Patch」按钮（无编辑动作）,trace_id / no_edit=true,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-PR Files Changed,Review-Sidebar,采纳率 < 30% 周告警,
+review_comment_edit_apply,开发者编辑 Patch 后采纳（部分采纳）,点击「Apply」（有编辑）,trace_id / edit_distance / final_text_length,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-PR Files Changed,Review-Sidebar,重写率 > 30% 周告警,
+review_comment_reject,开发者不采纳 AI 评论,关闭评论 + Resolve,trace_id / reject_reason / final_text,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-PR Files Changed,Review-Sidebar,拒纳率 > 20% 周告警,自动入 BadCase 池
+review_evidence_view,开发者点击查看 AI Review 依据,点击「查看 Review 依据」按钮,trace_id / evidence_count / clicked_evidence_id,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-PR Files Changed,Review-Sidebar,—,信任度信号
+nightly_review_enable,开启夜间 Review（单 PR/全局）,切换开关至开,scope (single/all) / time_segment_id,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-顶部 / 仓库设置-夜间策略,IDE / 夜间策略,—,
+nightly_review_disable,关闭夜间 Review,切换开关至关,scope / reason,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-顶部,IDE,—,
+ai_fallback_trigger,LLM 失败/低置信/无规则命中触发兜底,兜底分支命中时服务端上报,trace_id / reason (timeout/low_conf/no_rule/safety/tool_error),event_id/timestamp/user_id/user_role/project_id/session_id/client/env,服务端,—,兜底率 > 10% 即时告警 / 单 reason > 5% 告警,必采样存储
+nightly_auto_review,AI 在配置时段内自动评论 PR,AI 完成评论并提交时,time_strategy_id / response_time,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,服务端,—,响应时长 > 5s 告警,
+user_downvote,开发者对某条 AI 评论点踩,点踩按钮触发,trace_id / comment_id,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-PR Files Changed,Review-Sidebar,日点踩量 > 历史均值 1.5x 告警,自动入 BadCase 池
+escalate_to_reviewer,AI/开发者/兜底触发人工复核,标记需人工复核时,trace_id / reason (user_request/ai_decision/fallback) / pending_seconds,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件 / 服务端,IDE,复核率 > 15% 告警 / 排队时长 P95 > 60s 告警,
+pr_summary_card_show,解析 PR 后展示变更摘要卡片,UI 渲染卡片时,pr_id / source (web/ide),event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-PR Files Changed,Review-Sidebar,—,
+cross_repo_invalid,代码授权校验未通过,代码授权校验返回失败时,file_path / fail_reason,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件,Review-Sidebar,失败率 > 5% 告警,
+review_cards_reorder,开发者调整 Review 视图卡片顺序,点击「应用设置」,cards_order,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,IDE 插件-自定义视图,自定义视图,—,本地保存（localStorage）
+llm_call_cost,记录每次 LLM 调用的 token 与估算成本,LLM 调用完成,trace_id / model / token_in / token_out / cost_estimate,event_id/timestamp/user_id/user_role/project_id/session_id/client/env,服务端,—,日 token 用量 > 预算 1.5x 即时告警,**新增（成本预算章节配套）**
