@@ -8,7 +8,6 @@
 |---|---|---|
 | **`prd-writer`** | 基于 V0.5 PRD 简洁结构生成 AI 产品需求文档；含业务目标 / 用户故事 / 数据埋点 / 评测指标 / 灰度策略 / 验收清单 / 风险依赖；配套派生 stories/ 目录（AI 编码用 story 卡片）+ 3 个角色切片 | SCRM / 某 AI 运营平台 PRD 实战 |
 | **`prd-reviewer`** | 评审 story 卡片 / 全本 PRD 的 AI 可执行性——三关检查（spec 自测 / 干跑验证 / 歧义扫描），判断"这个 story 能不能直接交研发"；与 prd-writer stories/ 产出衔接（draft → ai-passed → ready） | 某 SaaS 平台 story 评审实战 |
-| **`release-note-builder`** | 把一次产品上线整理成「发版说明 / 上线公告」HTML（四段式：标题 · 上线时间 · 版本内容扫读清单 · 逐功能介绍 + 真实页面截图）；固化「真实环境截图 → 默认脱敏 → 套模板 → 本地预览 → 一键发布在线文档」流水线 | 某 SaaS 平台发版实践 |
 | **`pm-project-scaffolding`** | 初始化标准 PM 项目目录脚手架；覆盖 PM 完整生命周期 8 阶段（研究 / 规划 / 设计 / 开发 / 发布 / 培训 / 运营 / 归档）；支持 ai-saas / generic-saas / mobile-app / internal-tool 四种产品类型 | 某 AI 运营平台 项目实战目录治理 |
 | **`saas-arch-diagrams`** | 设计企业 SaaS 类产品的两类核心架构图：「产品架构图」（产品在生态中的定位 · 4 层视图）+「功能架构图」（4 层纵向 × 能力域横向 chip · 3 级嵌套） | 某 SaaS 平台（某 MaaS 模型供应链管理平台）迭代实战 |
 | **`saas-prototype-design`** | 企业 SaaS 高保真原型完整方法论：v1 设计语言（品牌红 + tokens.css + chrome 框架）+ 组件模式 + 3 级嵌套结构 + 状态机徽章 + 历史版本保护机制 | 某 SaaS 平台 项目 30+ 轮迭代 + 33+ 页原型实战 |
