@@ -136,59 +136,25 @@ bash skills/saas-prototype-design/scripts/snapshot.sh prototypes/v0.1/eval-sets.
 3. **更新 prototype-meta + changelog** — 留痕 Agent 改了什么
 4. **完成后 grep 自检** — 抓文案残留
 
-## Helper 脚本
+## Helper 脚本（真相源 = skill 的 `scripts/` 目录,本文不内嵌副本）
 
-### `scripts/snapshot.sh`
+> v2.2 起此处不再粘贴脚本源码——曾因内嵌副本与 `scripts/` 实际版本漂移,导致两边检查规则不一致(占位按钮检查一边正常一边静默)。**改脚本只改 `scripts/`,此处只记用法。**
 
-```bash
-#!/bin/bash
-# 用法：bash snapshot.sh prototypes/v0.1/eval-sets.html
+### `scripts/snapshot.sh` — 大改前备份
 
-set -euo pipefail
-FILE="$1"
-if [ ! -f "$FILE" ]; then
-  echo "❌ 文件不存在：$FILE" >&2
-  exit 1
-fi
-
-DIR=$(dirname "$FILE")
-BASE=$(basename "$FILE" .html)
-HIST_DIR="$DIR/.history"
-mkdir -p "$HIST_DIR"
-
-STAMP=$(date +%Y%m%d-%H%M)
-SNAP="$HIST_DIR/${BASE}.${STAMP}.html"
-
-cp "$FILE" "$SNAP"
-echo "✓ 已备份 → $SNAP"
-echo "  ($(wc -l < "$SNAP") 行 · $(du -h "$SNAP" | cut -f1))"
+```
+bash <skill>/scripts/snapshot.sh <file-or-dir>
 ```
 
-### `scripts/check-residual.sh`
+备份到同目录 `.history/`,文件名带 `YYYYMMDD-HHMM` 时间戳;支持单文件或整目录。
 
-```bash
-#!/bin/bash
-# 用法：bash check-residual.sh prototypes/v0.1/eval-sets.html
-# 检查文案残留 / 死链 / 占位
+### `scripts/check-residual.sh` — 改后残留自检
 
-FILE="$1"
-echo "=== $FILE 残留检查 ==="
-
-echo "[1] PM 规划性术语："
-grep -nE "主战场|v0\.x 启用|本期|远期|TODO|待补充|TBD|MVP" "$FILE" || echo "  ✓ 无"
-
-echo "[2] 过时 Step 引用："
-grep -nE "Step [0-9]+ [^·]|N/8" "$FILE" || echo "  ✓ 无"
-
-echo "[3] 死链 href=\"#\"："
-grep -cE 'href="#"' "$FILE"
-
-echo "[4] 占位按钮（无 action 且无 href）："
-grep -E '<button[^>]*>' "$FILE" | grep -vE 'data-action|onclick|type="submit"' | head -5
-
-echo "[5] data-action 处理器是否完整："
-grep -oE 'data-action="[a-z-]+"' "$FILE" | sort -u
 ```
+bash <skill>/scripts/check-residual.sh <file>
+```
+
+7 项检查:PM 规划性术语 / Step 步数残留 / 死链 `href="#"` / 占位按钮(无 data-action·onclick·submit,含明细定位)/ data-action 种类清单 / Modal·Drawer 触发与容器配对 / prototype-meta 存在性。
 
 ## 团队规范
 

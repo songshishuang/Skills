@@ -1,0 +1,142 @@
+<!--
+  prototype-meta
+  version: v0.1
+  last-modified: {YYYY-MM-DD}
+  key-features:
+    [ ] 列表页骨架(filter + toolbar + table + pager + drawer + modal)
+  notes: 从本骨架起手;复制到项目后改 sidebar 菜单与业务字段
+-->
+<!--
+  用法:本骨架的类名与 chrome.js API 同 templates/ 三件套(tokens.css / chrome.css / chrome.js)1:1 对齐,
+  假定三件套已拷入项目 assets-v1/。独立看视觉效果请打开 templates/theme-switcher.html。
+  起手三步:① 改 prototype-meta 与 <title> ② 改 sidebar 菜单组 ③ 示例行换真实业务数据(原则 12)
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{页面名} · {产品名}</title>
+<link rel="stylesheet" href="assets-v1/tokens.css">
+<link rel="stylesheet" href="assets-v1/chrome.css">
+<style>
+  /* 分页器最小样式 · 完整规范见 references/component-patterns.md §17 */
+  .pager { display:flex; align-items:center; gap:8px; padding:12px 0; font-size:13px; color:var(--text-secondary,#6b7280); }
+  .pg-btn { min-width:28px; height:28px; border:1px solid var(--border,#e5e7eb); background:var(--surface,#fff); border-radius:6px; cursor:pointer; }
+  .pg-btn.active { border-color:var(--primary); color:var(--primary); }
+  .pg-btn:disabled { opacity:.45; cursor:default; }
+</style>
+</head>
+<body class="light scheme-red density-comfy">
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span class="sidebar-brand-logo">▦</span>
+      <span class="sidebar-brand-name">{产品名}</span>
+      <span class="sidebar-brand-env">v0.1</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">基础信息</div>
+        <a class="sidebar-item active" href="javascript:void(0)"><span class="sidebar-item-icon">▤</span>{当前页}</a>
+        <a class="sidebar-item" href="javascript:void(0)" onclick="window.toast('示例导航 · 按项目改','info')"><span class="sidebar-item-icon">▦</span>{兄弟页}</a>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">{第二分组}</div>
+        <a class="sidebar-item" href="javascript:void(0)" onclick="window.toast('示例导航 · 按项目改','info')"><span class="sidebar-item-icon">◧</span>{页面}</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">{登录人} · {角色}</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="breadcrumb">{分组}<span class="breadcrumb-sep">/</span>{当前页}</div>
+      <div class="topbar-actions">
+        <div class="topbar-search">
+          <span class="topbar-search-icon">🔍</span>
+          <input class="topbar-search-input" placeholder="搜索">
+          <span class="topbar-search-kbd">⌘K</span>
+        </div>
+        <button class="topbar-icon-btn" onclick="window.toast('mock:暂无新通知','info')">🔔</button>
+        <span class="topbar-avatar">ZM</span>
+      </div>
+    </header>
+
+    <div class="main-inner">
+      <div class="page-header">
+        <div>
+          <div class="page-header-title">{页面名}</div>
+          <!-- page-header-desc 槽:只填用户视角一句话,写不出就删(反模式 1e) -->
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-primary" onclick="showModal('modal-create')">+ 新建{对象}</button>
+        </div>
+      </div>
+
+      <div class="filter-form">
+        <div class="filter-grid">
+          <div><span class="filter-label">状态</span><select class="filter-control"><option>全部</option><option>启用</option><option>停用</option></select></div>
+          <div><span class="filter-label">{业务条件}</span><input class="filter-control" placeholder="{真实示例占位}"></div>
+          <div><span class="filter-label">创建时间</span><span class="filter-daterange"><input class="filter-control" type="date"> ~ <input class="filter-control" type="date"></span></div>
+        </div>
+        <div class="filter-actions">
+          <button class="btn btn-ghost" onclick="window.toast('mock:已重置筛选','info')">重置</button>
+          <button class="btn btn-primary" onclick="window.toast('mock:按当前条件查询','info')">搜索</button>
+        </div>
+      </div>
+
+      <div class="list-toolbar">
+        <div class="list-toolbar-left"><label><input type="checkbox"> 全选</label><button class="btn btn-ghost btn-sm" disabled>批量停用</button></div>
+        <div class="list-toolbar-right"><button class="btn btn-ghost btn-sm" onclick="window.toast('mock:导出 CSV','info')">导出</button></div>
+      </div>
+
+      <table class="tbl tbl-compact">
+        <thead><tr><th></th><th>名称</th><th>状态</th><th>更新时间</th><th>操作</th></tr></thead>
+        <tbody>
+          <!-- 示例行 ×2:复制后换真实业务语料(原则 12,禁 data1/Lorem);徽章状态类用 tokens.css 5 态字典(原则 9) -->
+          <tr class="tbl-row" onclick="showDrawer('drawer-detail')">
+            <td onclick="event.stopPropagation()"><input type="checkbox"></td>
+            <td>{真实对象名 A}</td>
+            <td><span class="badge online">● 启用</span></td>
+            <td class="tabular">2026-06-10 14:32</td>
+            <td><a href="javascript:void(0)" onclick="event.stopPropagation();showDrawer('drawer-detail')">详情</a></td>
+          </tr>
+          <tr class="tbl-row" onclick="showDrawer('drawer-detail')">
+            <td onclick="event.stopPropagation()"><input type="checkbox"></td>
+            <td>{真实对象名 B}</td>
+            <td><span class="badge pending-eval">● 停用</span></td>
+            <td class="tabular">2026-06-08 09:15</td>
+            <td><a href="javascript:void(0)" onclick="event.stopPropagation();showDrawer('drawer-detail')">详情</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pager">
+        <span>共 2 条</span>
+        <button class="pg-btn" disabled>‹</button><button class="pg-btn active" disabled>1</button><button class="pg-btn" disabled>›</button>
+        <select class="filter-control"><option>20 条/页</option></select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- drawer:chrome.js 契约 = id + data-drawer-mask 配对,showDrawer('<id>') 打开;每个 tab 都要有内容(原则 10) -->
+<div class="drawer-mask" data-drawer-mask="drawer-detail" onclick="hideDrawer('drawer-detail')"></div>
+<aside class="drawer" id="drawer-detail">
+  <div class="drawer-header"><h3>{对象}详情</h3><button class="btn btn-ghost btn-sm" onclick="hideDrawer('drawer-detail')">✕</button></div>
+  <div class="drawer-body"><p>{详情内容 · 按业务填}</p></div>
+</aside>
+
+<!-- modal:容器 stopPropagation 必须用反模式 28 最终写法 -->
+<div class="modal-mask" id="modal-create" data-action="modal-close">
+  <div class="modal" onclick="var a=event.target.closest('[data-action]');if(!a||!this.contains(a))event.stopPropagation()">
+    <div class="modal-header"><h3>新建{对象}</h3></div>
+    <div class="modal-body"><span class="filter-label">名称</span><input class="filter-control" placeholder="{真实示例}"></div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="hideModal('modal-create')">取消</button><button class="btn btn-primary" onclick="window.toast('mock:已创建','success');hideModal('modal-create')">确定</button></div>
+  </div>
+</div>
+
+<script src="assets-v1/chrome.js"></script>
+</body>
+</html>

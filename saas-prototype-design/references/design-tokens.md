@@ -205,8 +205,8 @@ body.scheme-purple.dark  { --primary: #a78bfa; --primary-soft: rgba(167,139,250,
 
 **关键原则**：
 - 5 套 scheme 与 light/dark 是**正交**两维度（5 × 2 = 10 种主题组合）
-- 切换器组件见 [`component-patterns.md` §26 ThemeSwitcher](component-patterns.md)
-- 项目主色选择见 SKILL.md §0 决策方法
+- 切换器组件见 [`business-components.md` §25 ThemeSwitcher](business-components.md)
+- 项目主色选择见 SKILL.md「设计语言速查」
 - 命名约定：`--primary` / `--primary-soft` / `--primary-hover` 三件套，避免硬编码具体色值
 
 ## 明暗双主题（完整 base 变量 🆕 v1.9）
@@ -276,7 +276,7 @@ body:not([class*="density-"]) { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px
 --rating-E: #dc2626; --rating-E-bg: #fee2e2;   /* 红 · 不合格 < 60 */
 ```
 
-**为什么不用语义色（success/warning/danger）？** 因为 A-E 是定级而非"成功/失败"语义，且 5 级需要 5 色，语义色只有 4 个不够分。完整 RatingBadge 组件见 [`component-patterns.md` §21](component-patterns.md)。
+**为什么不用语义色（success/warning/danger）？** 因为 A-E 是定级而非"成功/失败"语义，且 5 级需要 5 色，语义色只有 4 个不够分。完整 RatingBadge 组件见 [`business-components.md` §21](business-components.md)。
 
 ## 能力域色（扩展为 A-E + X · 6 域 🆕 v1.9）
 
@@ -303,7 +303,7 @@ body:not([class*="density-"]) { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px
 --svc-down:     #dc2626;   /* 红 · 故障 */
 ```
 
-**聚合规则**：任一 down → 整体 down；任一 degraded（无 down）→ 整体 degraded；全部 healthy → 整体 healthy。完整 ServiceLamp 组件见 [`component-patterns.md` §24](component-patterns.md)。
+**聚合规则**：任一 down → 整体 down；任一 degraded（无 down）→ 整体 degraded；全部 healthy → 整体 healthy。完整 ServiceLamp 组件见 [`business-components.md` §24](business-components.md)。
 
 ## 告警严重度色（P0-P3 4 级 🆕 v1.9）
 
@@ -316,7 +316,7 @@ body:not([class*="density-"]) { --pad-y: 14px; --card-pad: 22px; --row-pad: 14px
 | **P2** | 警告 · 24h 内 | `var(--warning-fg)` (#d97706 · 黄) |
 | **P3** | 观察 · 看板留痕 | `var(--text-3)` (#94a3b8 · 灰) |
 
-完整 AlarmCard 组件见 [`component-patterns.md` §23](component-patterns.md)。
+完整 AlarmCard 组件见 [`business-components.md` §23](business-components.md)。
 
 ## 表格等宽数字（与价格 / 时延对齐）
 

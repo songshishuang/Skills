@@ -17,7 +17,7 @@ echo "=== 残留检查 · $FILE ==="
 echo ""
 
 echo "[1] PM 规划性术语（应为 0）："
-grep -cE "主战场|本期|远期|TBD|TODO|待补充|MVP|v0\.x 启用|v[0-9]\.0 启用" "$FILE" 2>/dev/null || echo "0"
+grep -cE "主战场|本期|远期|TBD|TODO|待补充|MVP|v0\.x 启用|v[0-9]\.0 启用" "$FILE" || true
 
 echo ""
 echo "[2] Step / 步数残留（应一致 · 不应有 N/M 混杂）："
@@ -26,11 +26,18 @@ grep -oE "[0-9] 步向导" "$FILE" | sort -u
 
 echo ""
 echo "[3] 死链 href=\"#\"（数量）："
-grep -cE 'href="#"' "$FILE" 2>/dev/null || echo "0"
+grep -cE 'href="#"' "$FILE" || true
 
 echo ""
-echo "[4] 占位按钮（无 action / 无 onclick / 无 href · 数量）："
-grep -cE '<button(?![^>]*data-action)(?![^>]*onclick)(?![^>]*type="submit")[^>]*>' "$FILE" 2>/dev/null || echo "0"
+echo "[4] 占位按钮（无 data-action / 无 onclick / 非 submit / 非 disabled · 数量）："
+# 注 1:POSIX ERE 不支持 (?!...) 负向断言(曾导致本项静默输出 0),改为提取+排除法
+# 注 2:必须 -o 逐标签提取——按行匹配时,同行多个 button 会被第一个的 onclick 掩护漏检
+# 注 3:disabled 是显式声明的非交互态,不算"忘绑动作"的占位
+PB=$(grep -oE '<button[^>]*>' "$FILE" | grep -cvE 'data-action|onclick|type="submit"|disabled' || true)
+echo "${PB:-0}"
+if [ "${PB:-0}" -gt 0 ]; then
+  grep -oE '<button[^>]*>' "$FILE" | grep -vE 'data-action|onclick|type="submit"|disabled' | head -3 | sed 's/^/  ↳ /'
+fi
 
 echo ""
 echo "[5] data-action 全部种类："
