@@ -7,7 +7,7 @@ description: 初始化标准 PM 项目目录脚手架。当用户提到「初始
 
 ## 这个 Skill 是做什么的
 
-把一个空目录或新建仓库，**3 分钟内**初始化为符合产品经理工作流的标准项目结构——12 项顶层条目覆盖 PM 项目完整生命周期，每个目录配占位 README 说明用途和沉淀准则。
+把一个空目录或新建仓库，**3 分钟内**初始化为符合产品经理工作流的标准项目结构——11 项顶层条目覆盖 PM 项目完整生命周期，每个目录配占位 README 说明用途和沉淀准则。
 
 ## 触发场景
 
@@ -22,7 +22,7 @@ description: 初始化标准 PM 项目目录脚手架。当用户提到「初始
 
 ## 执行步骤
 
-### 第 1 步：收集 5 个核心参数
+### 第 1 步：收集 5 个核心参数（含落地位置）
 
 向用户提问（**不要假设**，依次问清）：
 
@@ -35,6 +35,7 @@ description: 初始化标准 PM 项目目录脚手架。当用户提到「初始
    - `internal-tool`——内部工具（不含 `prototypes/` 不含 `skills/`）
 4. **`roles`**：业务角色数组（仅 `project_type` 含 `prototypes/` 时问）
    - 例：`operator,agent,admin`（SCRM 三角色）/ `customer,merchant`（双边市场）/ `user`（单端）
+5. **`target`**：项目落地的父目录绝对路径（例：`~/project`——脚本将在其下创建 `{project_name}/`）
 
 ### 第 2 步：确认参数
 
@@ -43,7 +44,8 @@ description: 初始化标准 PM 项目目录脚手架。当用户提到「初始
 ### 第 3 步：调用脚本生成骨架
 
 ```bash
-bash skills/pm-project-scaffolding/scripts/init.sh \
+# init.sh 位于本 skill 安装目录的 scripts/ 下（如 ~/.claude/skills/pm-project-scaffolding/scripts/，按实际安装位置取）
+bash "<skill 安装目录>/scripts/init.sh" \
   --name "{project_name}" \
   --tagline "{project_tagline}" \
   --type "{project_type}" \
@@ -116,7 +118,7 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 
 详见 `references/` 目录：
 
-- [`directory-conventions.md`](./references/directory-conventions.md) — 12 个顶层条目各自的用途、子结构、沉淀准则
+- [`directory-conventions.md`](./references/directory-conventions.md) — 11 个顶层条目各自的用途、子结构、沉淀准则
 - [`naming-rules.md`](./references/naming-rules.md) — 文件命名规范（ADR / Release Notes / 日志 / Persona 等）
 - [`lifecycle-mapping.md`](./references/lifecycle-mapping.md) — 8 阶段生命周期 → 目录映射 + 何时新建什么目录
 
@@ -152,6 +154,8 @@ bash skills/pm-project-scaffolding/scripts/init.sh \
 一键安装脚本与详细说明见仓库根 [INSTALL-MULTI-PLATFORM.md](https://github.com/songshishuang/Skills/blob/main/INSTALL-MULTI-PLATFORM.md)。
 
 ## Changelog
+
+- **2026-06-13 · v1.1** — 营造大修 Y-012（盲评 ≈55 起修）：① **wiki 骨架双真相源收敛**——init.sh 内联 heredoc（90 行副本，已漂移 4 处）删除，改为探测消费 pm-wiki-maintainer/templates 三件真相源（同仓 bundle → 各平台安装目录降级链；未装则最小占位骨架 + 重建提示），补 entities 四子目录 + .gitkeep；② **sed 注入防御**——render_file 对 NAME/TAGLINE/ROLES 转义 & | 反斜杠（"AI & Data" 实跑验证），NAME 字符集硬校验 ^[a-z0-9-]+$（非法名 exit 1 实测）；③ tests/ 四件套从零建 + 三场景实跑存档 + ROLES 路径穿越校验（复评破坏性实测发现，与 NAME 同款字符集）；④ 一致性收口——核心参数补 target 第 5 项、调用命令改安装位置无关写法、顶层文件计数 5→4、12→11 项、客户名示例代号化
 
 - **2026-06-01** 移除 `firebase.json` 占位生成能力（`enable_firebase` 参数 + `--firebase` CLI 选项 + `assets/templates/firebase.json` 模板文件 + `references/directory-conventions.md` 对应段全部删除）—— 部署配置不应由通用 PM 脚手架内置，项目需要 Firebase 时单独写一份更合适，避免「8 个项目有 8 份模板 firebase.json」的维护负担
 - **2026-05-09** 初始版本（蒸馏自 AI SaaS 平台 91 文件 git mv 大重构）

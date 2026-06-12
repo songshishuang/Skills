@@ -44,6 +44,11 @@ if [[ -z "$NAME" || -z "$TAGLINE" || -z "$TYPE" || -z "$TARGET" ]]; then
   echo "❌ 缺少必填参数。需要 --name --tagline --type --target" >&2
   exit 1
 fi
+# NAME 字符集硬校验（目录名安全：防 a/b 嵌套与 sed 注入面，与 SKILL.md 命名约定一致）
+if [[ ! "$NAME" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+  echo "❌ --name 仅允许小写字母/数字/连字符（收到: $NAME）" >&2
+  exit 1
+fi
 
 case "$TYPE" in
   ai-saas|generic-saas|mobile-app|internal-tool) ;;
@@ -102,12 +107,17 @@ render_file() {
     echo "⚠️  模板不存在，跳过: $src" >&2
     return
   fi
-  # 用 sed 替换占位符
+  # 用 sed 替换占位符——replacement 侧先转义 sed 特殊字符（& 回插原文、| 撞分隔符、\ 转义链），
+  # 否则 tagline 含 "AI & Data" 类文案会损坏渲染（Y-012 大修实测）
+  local esc_name esc_tagline esc_roles
+  esc_name=$(printf '%s' "$NAME" | sed -e 's/[&|\\]/\\&/g')
+  esc_tagline=$(printf '%s' "$TAGLINE" | sed -e 's/[&|\\]/\\&/g')
+  esc_roles=$(printf '%s' "$ROLES" | sed -e 's/[&|\\]/\\&/g')
   sed \
-    -e "s|{{PROJECT_NAME}}|$NAME|g" \
-    -e "s|{{PROJECT_TAGLINE}}|$TAGLINE|g" \
+    -e "s|{{PROJECT_NAME}}|$esc_name|g" \
+    -e "s|{{PROJECT_TAGLINE}}|$esc_tagline|g" \
     -e "s|{{PROJECT_TYPE}}|$TYPE|g" \
-    -e "s|{{ROLES}}|$ROLES|g" \
+    -e "s|{{ROLES}}|$esc_roles|g" \
     -e "s|{{DATE}}|$DATE_TODAY|g" \
     -e "s|{{YEAR_MONTH}}|$YEAR_MONTH|g" \
     "$src" > "$dst"
@@ -142,43 +152,35 @@ render_file "$TEMPLATES_DIR/docs/data-analysis/README.md" "docs/data-analysis/RE
 render_file "$TEMPLATES_DIR/docs/releases/README.md" "docs/releases/README.md"
 render_file "$TEMPLATES_DIR/docs/releases/TEMPLATE.md" "docs/releases/TEMPLATE.md"
 
-# --- docs/wiki/ LLM Wiki 骨架（由 pm-wiki-maintainer skill 维护） ---
+# --- docs/wiki/ LLM Wiki 骨架（真相源 = pm-wiki-maintainer/templates，本脚本只消费不自造） ---
 echo "📚 docs/wiki/ LLM Wiki 骨架..."
-mkdir -p docs/wiki/{concepts,entities,decisions,topics}
+mkdir -p docs/wiki/{concepts,entities/{customers,competitors,products,roles},decisions,topics}
+touch docs/wiki/{concepts,decisions,topics}/.gitkeep docs/wiki/entities/{customers,competitors,products,roles}/.gitkeep  # 防 git init 后空目录丢失
 
-cat > docs/wiki/index.md <<WIKI_INDEX_EOF
-# ${NAME} · Wiki Index
+# 探测 pm-wiki-maintainer 模板（同仓 bundle 布局 → 各平台安装目录），找到即复制（防双源漂移）
+WIKI_TPL=""
+for cand in "$SKILL_DIR/../pm-wiki-maintainer/templates" \
+            "$HOME/.claude/skills/pm-wiki-maintainer/templates" \
+            "$HOME/.codex/skills/pm-wiki-maintainer/templates"; do
+  if [[ -f "$cand/INDEX.md" && -f "$cand/LOG.md" && -f "$cand/CLAUDE-wiki.md" ]]; then
+    WIKI_TPL="$cand"; break
+  fi
+done
 
-> 由 \`pm-wiki-maintainer\` skill 维护。每次 ingest 后自动更新本索引。
+if [[ -n "$WIKI_TPL" ]]; then
+  sed -e "s|{{DATE}}|$DATE_TODAY|g" "$WIKI_TPL/INDEX.md" > docs/wiki/index.md
+  sed -e "s|{{DATE}}|$DATE_TODAY|g" "$WIKI_TPL/LOG.md"   > docs/wiki/log.md
+  cp "$WIKI_TPL/CLAUDE-wiki.md" docs/wiki/CLAUDE.md
+  echo "  ✅ wiki 三件（index/log/CLAUDE）← pm-wiki-maintainer 模板真相源"
+else
+  # 降级：未装 pm-wiki-maintainer 时给最小占位骨架，并提示装后重建（不再维护完整内联副本，防双源漂移）
+  printf '# %s · Wiki Index\n\n> 占位骨架（pm-wiki-maintainer 未安装）。安装后对 AI 说「初始化 wiki 骨架」即按其模板重建。\n\n最后更新：%s · 总页数：0\n' "$NAME" "$DATE_TODAY" > docs/wiki/index.md
+  printf '# Wiki Maintenance Log\n\n## [%s] init | 占位骨架（scaffolding 降级模式）\n' "$DATE_TODAY" > docs/wiki/log.md
+  printf '# Wiki 工作规则（占位）\n\n> 本目录按 Karpathy LLM Wiki 模式维护。完整工作规则随 pm-wiki-maintainer skill 安装后重建。\n' > docs/wiki/CLAUDE.md
+  echo "  ⚠️ pm-wiki-maintainer 模板未找到——已建占位骨架，建议安装后说「初始化 wiki 骨架」重建"
+fi
 
-## Topics（综合视图）
-（暂无 — 第一次 ingest 后填充）
-
-## Concepts（核心概念）
-（暂无）
-
-## Entities（业务实体 · 角色 / 竞品 / 客户）
-（暂无）
-
-## Decisions（关键决策 · ADR 综合视图）
-（暂无）
-
----
-
-**最后更新**：${DATE_TODAY}
-**总页数**：0
-WIKI_INDEX_EOF
-
-cat > docs/wiki/log.md <<WIKI_LOG_EOF
-# Wiki 演进日志
-
-> 每次 ingest / lint 操作的审计追踪。
-
-## ${DATE_TODAY}
-- ✅ 初始化 wiki 骨架（pm-project-scaffolding · ${TYPE}）
-- 待 ingest：roadmap.md / product-planning/ / market-research/ 中已有的原始素材
-WIKI_LOG_EOF
-
+TAGLINE_TBL="${TAGLINE//|/\\|}"  # markdown 表格单元内 | 须转义，防撑列
 cat > docs/wiki/glossary.md <<WIKI_GLOSSARY_EOF
 # Glossary · 术语表
 
@@ -186,60 +188,10 @@ cat > docs/wiki/glossary.md <<WIKI_GLOSSARY_EOF
 
 | 术语 | 定义 | 首次出现 |
 |---|---|---|
-| ${NAME} | ${TAGLINE} | ${DATE_TODAY} |
+| ${NAME} | ${TAGLINE_TBL} | ${DATE_TODAY} |
 
 （后续由 pm-wiki-maintainer 增量沉淀）
 WIKI_GLOSSARY_EOF
-
-cat > docs/wiki/CLAUDE.md <<'WIKI_CLAUDE_EOF'
-# Wiki 工作规则（AI agent 必读）
-
-> 任何 AI agent 进入本 `docs/wiki/` 目录看到本文件即按 [Karpathy LLM Wiki 模式](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) 工作。
-
-## 三层架构
-
-- **raw sources** → 留在 `docs/{prd,user-research,market-research,...}` 原标准目录，wiki 不复制原文
-- **wiki/** → 提炼后的 concept / entity / decision / topic 综合页（带 frontmatter）
-- **schema** → 目录约定（见本文件）+ 命名规范 + frontmatter 字段表
-
-## 三类操作（由 pm-wiki-maintainer skill 提供）
-
-| 操作 | 何时用 |
-|---|---|
-| `ingest` | 把会议 / 用研 / ADR / 客户反馈增量沉淀进 wiki |
-| `query` | 写新 PRD 时 prd-writer Stage 0 自动调用 |
-| `lint` | 周期性检测矛盾 / 过期 / 孤儿页 / 数据缺口 |
-
-## 反模式（不要这样做）
-
-- ❌ 把 PRD / 架构图原文复制进 wiki（wiki 是 synthesis，不是 archive）
-- ❌ ingest 时默默改 wiki（要先与用户讨论 touch plan）
-- ❌ 多版本 PRD 在 wiki 里并存（V0.5 / V0.6 留在 docs/prd/，wiki 只存提炼的跨版本可复用内容）
-
-## 与其他 Skill 的协作
-
-- `prd-writer` → 写完 PRD 后建议 ingest（ADR / 新角色 / 新概念 / AI 新维度）
-- `saas-arch-diagrams` → 画完架构图后建议 ingest（新能力域 / 模块边界 / 下游平台）
-- `pm-project-scaffolding` → 一次性建好本骨架（即此次执行的结果）
-WIKI_CLAUDE_EOF
-
-for sub in concepts entities decisions topics; do
-  case "$sub" in
-    concepts)  sub_desc="核心概念页（跨 PRD 反复出现的业务概念）" ;;
-    entities)  sub_desc="业务实体页（用户角色 / 竞品 / 客户 / 模型 / 下游平台）" ;;
-    decisions) sub_desc="关键决策综合页（ADR 跨版本回溯，方案 ii 独立视图）" ;;
-    topics)    sub_desc="主题综合视图（跨多页的综合分析与假设）" ;;
-  esac
-  cat > "docs/wiki/${sub}/README.md" <<EOF
-# docs/wiki/${sub}/
-
-由 \`pm-wiki-maintainer\` skill 维护。
-
-- **${sub}** —— ${sub_desc}
-
-第一次 ingest 后由 pm-wiki-maintainer 自动填充。
-EOF
-done
 
 # --- prototypes/（条件生成） ---
 if [[ "$HAS_PROTOTYPES" == "yes" ]]; then
@@ -251,6 +203,11 @@ if [[ "$HAS_PROTOTYPES" == "yes" ]]; then
   IFS=',' read -ra ROLE_ARRAY <<< "$ROLES"
   for role in "${ROLE_ARRAY[@]}"; do
     role_trimmed="$(echo "$role" | xargs)"
+    # 与 NAME 同款字符集硬校验——防 ../ 路径穿越在 target 外建目录（Y-012 复评破坏性实测确认的洞）
+    if [[ ! "$role_trimmed" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+      echo "  ⚠️ 跳过非法角色名: $role_trimmed（仅允许小写字母/数字/连字符）" >&2
+      continue
+    fi
     mkdir -p "prototypes/$role_trimmed"
     echo "# prototypes/$role_trimmed" > "prototypes/$role_trimmed/README.md"
     echo "" >> "prototypes/$role_trimmed/README.md"

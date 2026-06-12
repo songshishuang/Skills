@@ -11,12 +11,12 @@
 **三层架构**：
 - 上游 raw sources：`docs/prd/` / `docs/user-research/` / `docs/competitor-analysis/` / `docs/decisions/`（原始 ADR）/ `docs/market-research/` / 客户访谈纪要 / 会议纪要
 - 本目录 wiki：LLM 维护的 markdown 网
-- schema（本文件 + `~/.claude/skills/pm-wiki-maintainer/`）
+- schema（本文件 + `pm-wiki-maintainer` skill 本体——安装位置随你的 AI 工具而异，按 skill 名调用即可）
 
 ## 你（AI agent）的核心约定
 
 ### ✅ 你应该
-- 当用户说"把 X 存进 wiki / 沉淀 X / ingest X"时 → 按 `pm-wiki-maintainer` skill 的 [ingest-workflow.md](../../../../skills/pm-wiki-maintainer/references/ingest-workflow.md) 执行
+- 当用户说"把 X 存进 wiki / 沉淀 X / ingest X"时 → 按 `pm-wiki-maintainer` skill 的 **ingest 工作流**（skill 内 `references/ingest-workflow.md`）执行
 - 当用户问"项目里 Y 是什么 / 找 Z 的所有讨论 / V0.X 的 W 怎么做"时 → 先读本目录 `index.md`，再 drill 进相关页
 - 当用户说"整理沉淀 / lint wiki / 找过期决策"时 → 按 lint workflow 检查
 - 每次 ingest / query / lint 都**追加** `log.md`（强制）
@@ -43,11 +43,11 @@ docs/wiki/
 │   ├── products/
 │   └── roles/
 ├── decisions/         # LLM 综合视图（不是原始 ADR）
-└── topics/            # 跨源主题汇总
-glossary.md            # 名词表
+├── topics/            # 跨源主题汇总
+└── glossary.md        # 名词表
 ```
 
-各类页面格式见 [pm-wiki-maintainer/references/wiki-structure.md](../../../../skills/pm-wiki-maintainer/references/wiki-structure.md)。
+各类页面格式见 `pm-wiki-maintainer` skill 内 `references/wiki-structure.md`（按 skill 名调用，不依赖本地相对路径）。
 
 ## Decisions 特别说明
 
@@ -82,7 +82,7 @@ glossary.md            # 名词表
 
 ### 用户说"整理项目沉淀"
 
-按 [lint-workflow.md](../../../../skills/pm-wiki-maintainer/references/lint-workflow.md) 6 类检查：
+按 `pm-wiki-maintainer` skill 的 **lint 工作流**（skill 内 `references/lint-workflow.md`）做 6 类检查：
 1. Contradictions（跨页矛盾）
 2. Stale claims（旧声明被新源 superseded）
 3. Orphan pages（无 inbound link）

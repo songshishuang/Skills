@@ -100,7 +100,7 @@ cross_cutting:
    - `capability_domains[].name` → 写入 `docs/wiki/concepts/<能力域>.md`
    - `endpoints[]` → 写入 `docs/wiki/entities/roles/<角色>.md`
    - `ecosystem.downstream/upstream` → 写入 `docs/wiki/topics/生态关系.md`
-3. 完整 ingest 映射表见 `pm-wiki-maintainer/references/ingest-workflow.md`「从架构图 ingest」
+3. 完整 ingest 映射表见 pm-wiki-maintainer skill 的 ingest 工作流文档「从架构图 ingest」节（按其实际安装目录取 references 下 ingest-workflow）
 
 ### 场景 2 · prd-writer Stage 1 引用
 

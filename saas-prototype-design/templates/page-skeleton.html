@@ -76,9 +76,9 @@
 
       <div class="filter-form">
         <div class="filter-grid">
-          <div><span class="filter-label">状态</span><select class="filter-control"><option>全部</option><option>启用</option><option>停用</option></select></div>
-          <div><span class="filter-label">{业务条件}</span><input class="filter-control" placeholder="{真实示例占位}"></div>
-          <div><span class="filter-label">创建时间</span><span class="filter-daterange"><input class="filter-control" type="date"> ~ <input class="filter-control" type="date"></span></div>
+          <div class="filter-row"><span class="filter-label">状态</span><div class="filter-control"><select class="select"><option>全部</option><option>启用</option><option>停用</option></select></div></div>
+          <div class="filter-row"><span class="filter-label">{业务条件}</span><div class="filter-control"><input class="input" placeholder="{真实示例占位}"></div></div>
+          <div class="filter-row"><span class="filter-label">创建时间</span><div class="filter-control"><span class="filter-daterange"><input class="input" type="date"> ~ <input class="input" type="date"></span></div></div>
         </div>
         <div class="filter-actions">
           <button class="btn btn-ghost" onclick="window.toast('mock:已重置筛选','info')">重置</button>
@@ -115,7 +115,7 @@
       <div class="pager">
         <span>共 2 条</span>
         <button class="pg-btn" disabled>‹</button><button class="pg-btn active" disabled>1</button><button class="pg-btn" disabled>›</button>
-        <select class="filter-control"><option>20 条/页</option></select>
+        <select class="select"><option>20 条/页</option></select>
       </div>
     </div>
   </div>
@@ -129,10 +129,10 @@
 </aside>
 
 <!-- modal:容器 stopPropagation 必须用反模式 28 最终写法 -->
-<div class="modal-mask" id="modal-create" data-action="modal-close">
+<div class="modal-mask" id="modal-create" data-action="modal-close" data-arg="modal-create">
   <div class="modal" onclick="var a=event.target.closest('[data-action]');if(!a||!this.contains(a))event.stopPropagation()">
     <div class="modal-header"><h3>新建{对象}</h3></div>
-    <div class="modal-body"><span class="filter-label">名称</span><input class="filter-control" placeholder="{真实示例}"></div>
+    <div class="modal-body"><div class="filter-row"><span class="filter-label">名称</span><div class="filter-control"><input class="input" placeholder="{真实示例}"></div></div></div>
     <div class="modal-footer"><button class="btn btn-ghost" onclick="hideModal('modal-create')">取消</button><button class="btn btn-primary" onclick="window.toast('mock:已创建','success');hideModal('modal-create')">确定</button></div>
   </div>
 </div>

@@ -68,7 +68,7 @@
 
 `role-slug` 用业务角色 + 关键特征命名，便于团队记住。
 
-✅ `persona-resi-an-operator.md`（瑞思安运营经理）
+✅ `persona-acme-operator.md`（某客户代号 acme 的运营经理——示例用代号，真实客户名不入库）
 ✅ `persona-front-line-cs.md`（一线客服）
 ✅ `persona-brand-marketing-director.md`（品牌方市场总监）
 

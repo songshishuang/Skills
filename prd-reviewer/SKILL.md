@@ -1,6 +1,6 @@
 ---
 name: prd-reviewer
-description: Use when PM 需要评审/审核需求产出物的 AI 可执行性 —— 包括 story MD 卡片(stories/ 目录)、全本 PRD,或判断"这个 story 能不能给研发了"。触发词:「评审 story」「审 story」「story review」「跑三关」「spec 自测」「干跑验证」「检查 stories 目录」「审核 PRD」「PRD 评审」「需求评审」「AI 评审需求文档」「这份需求研发能直接用吗」「standby 评审」。也适用于研发反馈"需求有歧义/AI 编码跑偏"后回查 spec 质量。
+description: Use when PM 需要评审/审核需求产出物的 AI 可执行性 —— 包括 story MD 卡片(stories/ 目录)、全本 PRD,或判断"这个 story 能不能给研发了"。触发词:「评审 story」「审 story」「story review」「跑三关」「spec 自测」「干跑验证」「检查 stories 目录」「审核 PRD」「PRD 评审」「需求评审」「AI 评审需求文档」「这份需求研发能直接用吗」「standby 评审」。也适用于研发反馈"需求有歧义/AI 编码跑偏"后回查 spec 质量。不要用于：评业务方向对错（只评 AI 可执行性）、评代码实现、评原型视觉风格（用 saas-prototype-design）。
 ---
 
 # PRD Reviewer · 三关评审

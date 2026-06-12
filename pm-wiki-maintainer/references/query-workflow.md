@@ -19,8 +19,10 @@
 ### 1️⃣ 先读 index.md
 
 ```
-Read docs/wiki/index.md
+Read {wiki_root}/index.md
 ```
+
+> `{wiki_root}` 探测：`docs/wiki/` → `docs/pm/wiki/` 取首个存在者（规则同 SKILL.md「wiki 根探测」与 prd-writer Stage 0）。
 
 **Karpathy 关键洞察**：
 > "When answering a query, the LLM reads the index first to find relevant pages, then drills into them. This works surprisingly well at moderate scale (~100 sources, ~hundreds of pages)."
