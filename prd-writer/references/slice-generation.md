@@ -8,37 +8,39 @@
 2. **切片只读 + 标注 source** —— 每个切片 frontmatter 标注 `slice` 类型 + `source_prd` 路径 + `generated_at` 日期
 3. **切片不删项 · 切节** —— 章节整段保留或整段砍，**不要从段落中间挑句子**（避免上下文断裂）
 4. **下游引用稳定** —— 全本章节号 + slice 章节号都稳定；下游 link 不会因为重新生成而断
-5. **生成由 prd-writer 触发** —— 每次写完 / 修改全本 PRD 后，**默认同步生成 4 个切片**
+5. **生成由 prd-writer 触发** —— 每次写完 / 修改全本 PRD 后，**默认同步生成 stories/ 目录 + 3 个角色切片**
 
-## 4 个标准切片
+## stories/ 目录 + 3 个标准切片
 
-### `slices/for-coding.md` — AI 编码 agent / 研发
+### `stories/` — AI 编码 agent / 研发（⭐ v2.4 替代原 `for-coding.md` 单文件）
 
-详细模板见 [`templates/prd-template-coding-slice.md`](../templates/prd-template-coding-slice.md)。
+> 设计依据：研发 AI 一次只做一个功能,喂版本级大切片仍有噪音。stories/ 把编码切片做细一层——
+> 每次上下文 = `00-overview.md` + 单个 `ST-XXXX` 卡片。原 `for-coding.md` 模板转 legacy 保留兼容。
 
-**保留的全本章节**：
-- §1 Summary（全保留 · 3-5 bullets）
-- §2.1 业务背景（全保留 · 取业务命名 + 文案）
-- §2.2 用户角色（**提取角色名 + 权限矩阵两列** · 砍"主要诉求"散文）
-- §2.4 非目标（全保留 · 关键 · 防止过度实现）
-- §2.5 端到端流程图（全保留）
-- §3.1 需求清单（全保留）
-- §4 Design 整节（全保留 · 编码核心）
-- §3.2 + §4.3.6 提取「性能门槛 + Trace 必带字段」最小集
-- §6.1 埋点表（**3 列子集**：事件 ID / 上报时机 / 扩展字段 · 砍看板/告警/页面/备注）
-- §7.2 ADR（全保留 · 防止 second-guess）
+模板：[`story-overview-template.md`](../templates/story-overview-template.md) / [`story-template.md`](../templates/story-template.md) / [`story-template-lite.md`](../templates/story-template-lite.md)
 
-**砍掉的全本章节**：
-- frontmatter 中 review_log（治理）
-- §2.3 北极星 + KR（业务度量 · 编码不用）
-- §2.6 Open Questions（未决项 · 待评审）
-- §3.2 大部分非功能（除性能 / Trace 字段）
-- §5 Rollout & Risks 整节（运营 / SRE）
-- §6.2 评测指标（算法 / QA）
-- §6.3 验收清单（QA）
-- §7.1 术语表的非新术语（可选保留 § 7.1 的本期新术语）
-- §7.3 历史版本（治理）
-- §7.4 链接补充
+**全本章节 → stories/ 的派生映射**：
+
+| 全本章节 | 派生到 |
+|---|---|
+| §1 Summary | overview §1 版本目标（只取交付项,砍北极星/市场背景） |
+| §3.1 需求清单 | overview §2 story 索引（每行需求归入某个 story,P0/P1/P2 带入） |
+| §7.1 本期新术语 | overview §3.1 术语表 |
+| §4.1.4 业务规则清单 | overview §3.2 跨 story 规则（R 编号,story 内按编号引用） |
+| §2.2 用户角色 | overview §3.3 角色权限速览（两列,砍诉求散文） |
+| §4.2 页面 7 段 | 各 story：业务场景→背景 · 关键字段→关键字段 · 交互动作→交互动作 · 状态变化+异常处理→状态与异常 · **验收点→AC（升格为 Given-When-Then）** |
+| §2.4 非目标 | 各 story「范围-不做」+ overview |
+| §4.1.3 生命周期 | 对应 story 的状态机段 |
+| §7.2 ADR | 涉及的 story 内一行引用（防 second-guess） |
+
+**砍掉的全本章节**：§2.3 北极星/KR · §2.6 Open Questions · §3.2 大部分非功能 · §5 Rollout & Risks · §6.2 评测指标 · §6.3 验收清单（QA 切片有）· §7.3 历史版本 · frontmatter 治理字段。
+
+**story 拆分粒度**：
+- 一个 story = 一个可独立交付的功能闭环（通常对应 §4.2 一个页面或一条端到端流程）,正文 ≤100 行
+- 小改动 / 文案修正用 lite 模板,**不强拆**
+- 命名 `ST-{版本两位}{序号两位}-{标题}.md`;依赖用 frontmatter `depends_on` 显式声明,禁止成环
+
+**质量门禁与状态权属**：story 派生后默认 `status: draft`（spec 状态，PM 仓权属）；过 `prd-reviewer` 分级关卡（标准=三关，lite=两关）`spec_test: passed` → `ai-passed`；研发 48h 走查全过 → `ready` 才交研发。交付状态（`pending → in-dev → done`）记**研发仓** `specs/V{X.Y}/delivery-status.md`，研发对 PM 仓派生文件零修改，重派生不会覆盖签收记录。
 
 ### `slices/for-qa.md` — QA / 算法
 
@@ -57,7 +59,7 @@
 **保留**：
 - §1 Summary（看本期要监控什么）
 - §2.3 北极星 + KR（业务目标 · BI 核心）
-- §6.1 数据埋点（**完整 9 列**：事件 ID / 描述 / 上报时机 / 扩展字段 / 公共字段 / 页面路径 / 页面名称 / 告警阈值 / 备注）
+- §6.1 数据埋点（**BI 9 列** = 全本 5 列继承 + 4 列 BI 扩展：事件描述 / 页面路径 / 页面名称 / 告警阈值，PM 补全或标 TBD · 转换规则见 `tracking-events-spec.md` 第二节）
 - §6.2.2 在线指标（看板设计依据）
 
 **砍**：用户角色 / 业务对象 / 页面设计 / AI 模块特化 / Rollout / 评测 / 验收 / ADR
@@ -79,15 +81,16 @@
 
 | 触发 | 生成 |
 |---|---|
-| 全本 PRD 首次写完 | 4 个切片同时生成 |
-| 全本 PRD 修改任何 §1 / §2 / §3 / §4 / §5 / §6 / §7 章节 | **重新生成全部 4 个切片**（保持 frontmatter `generated_at` 更新） |
+| 全本 PRD 首次写完 | stories/ 目录 + 3 个切片同时生成 |
+| 全本 PRD 修改任何 §1-§7 章节 | 重新生成 3 个切片；stories/ 只重派生**受影响的 story**（overview 索引 + 变更记录同步更新；已 `in-dev` 的 story 需研发重新签收） |
 | 全本仅 frontmatter（revision_log / review_log）更新 | 不重新生成切片 |
 | 评审通过 status: draft → approved | 重新生成 + 写入 git tag |
 
 ## 切片之间禁止互引
 
-- ❌ `for-coding.md` 链接 `for-bi.md`（切片之间割裂消费）
-- ✅ `for-coding.md` 链接全本 `PRD-V{X.Y}.md` 的具体章节锚点
+- ❌ story 卡片链接 `for-bi.md`（切片之间割裂消费）
+- ✅ story 卡片 frontmatter `source:` 回链全本 `PRD-V{X.Y}.md` 的具体章节锚点
+- ✅ 例外：stories/ 目录**内部**允许 story → `00-overview.md` 的 R 编号引用（overview 就是为消除 story 间重复而存在）
 
 ## Anti-patterns（切片设计反模式）
 
@@ -102,6 +105,6 @@
 
 ## 协作约定
 
-- **PM**：只维护全本 PRD。切片自动派生，PM 不手工管。
+- **PM**：只维护全本 PRD。stories/ 与切片自动派生，PM 不手工管；story 过 `prd-reviewer` 分级关卡标 `ai-passed`，研发走查过才标 `ready`。
 - **研发 / QA / BI / SRE**：默认读对应切片。需要看全本上下文时通过链接跳转。
-- **AI 编码 agent**：**默认只读 `for-coding.md`**。读全本只在切片不足以决策时。
+- **AI 编码 agent**：**默认只读 `stories/00-overview.md` + 当前实现的单个 `ST-XXXX` 卡片**。读全本只在 story + overview 不足以决策时；发现需求问题回流 PM，不改 story 文件。

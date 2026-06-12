@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>【上线公告】{{PRODUCT}} {{VERSION}}</title>
+<!--
+  填充说明（生成时替换 {{...}} 占位符；样式开关见 CSS 注释与 SKILL.md）：
+  {{PRODUCT}} 产品名 · {{VERSION}} 版本号 · {{SUBTITLE}} 一句话主题
+  {{DATE}} 上线时间 · {{ANNOUNCE_DATE}} 公告发布日
+  {{TOC_ITEMS}} 目录链接 · {{CHANGES}} 版本内容编号卡 · {{GROUPS}} 功能介绍分组
+  图片相对路径建议放 assets/<version>-release/ 下，脱敏后引用。
+-->
+<style>
+  :root{
+    --ink:#1f2330; --ink-soft:#5b6070; --ink-faint:#8a90a0;
+    --line:#e8eaf0; --line-soft:#f0f1f6; --brand:#2f5bff; --brand-soft:#eef2ff;
+    --amber-soft:#fff4e2; --bg:#f6f7fb; --card:#fff;
+    --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased; scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.75;font-size:15.5px;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px 80px}
+
+  /* 头部 */
+  header.doc{padding:52px 0 8px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--brand);
+    display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
+  .kicker::before{content:"";width:24px;height:1px;background:var(--brand)}
+  /* 开关·标题尽量一行：主标题 + 副标题淡色小字同行 */
+  h1.doc{font-size:26px;line-height:1.35;margin:0 0 16px;font-weight:800;letter-spacing:-.01em}
+  h1.doc .sub2{font-size:19px;font-weight:700;color:var(--ink-soft)}
+  .meta{display:flex;flex-wrap:wrap;gap:18px 22px;align-items:center;padding:14px 0 22px;
+    border-bottom:1px solid var(--line);color:var(--ink-soft);font-size:13.5px}
+  .meta .sep{color:var(--ink-faint)} .meta b{color:var(--ink)}
+
+  /* 开关·目录索引 左侧悬浮（≥1340px；窄屏隐藏） */
+  nav.toc{display:none}
+  @media(min-width:1340px){nav.toc{display:block;position:fixed;top:104px;left:max(16px,calc(50% - 662px));
+    width:194px;max-height:80vh;overflow-y:auto;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:16px;box-shadow:0 4px 18px rgba(20,24,40,.06)}}
+  .toc-h{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--ink-faint);margin-bottom:12px}
+  .toc a{display:block;color:var(--ink-soft);text-decoration:none;padding:4px 8px;border-radius:8px;font-size:13px;line-height:1.45}
+  .toc a:hover,.toc a.on{background:var(--brand-soft);color:var(--brand);font-weight:600}
+  .toc .grp{font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--ink-faint);margin:12px 0 5px 8px;font-family:var(--mono)}
+  .toc .sub{margin-left:6px;border-left:1px solid var(--line);padding-left:8px}
+
+  /* 区块标题 【…】 */
+  h2.blk{font-size:21px;font-weight:800;margin:44px 0 6px;scroll-margin-top:18px}
+  h2.blk .br{color:var(--brand)}
+  .blk-sub{color:var(--ink-soft);font-size:13.5px;margin:0 0 18px}
+
+  /* 版本内容卡 */
+  .changes{list-style:none;margin:6px 0 0;padding:0;counter-reset:c}
+  .changes li{position:relative;padding:14px 16px 14px 56px;margin-bottom:10px;background:var(--card);
+    border:1px solid var(--line);border-radius:14px}
+  .changes li::before{counter-increment:c;content:counter(c,decimal-leading-zero);position:absolute;left:14px;top:13px;
+    width:30px;height:30px;border-radius:9px;background:var(--brand-soft);color:var(--brand);font-family:var(--mono);
+    font-size:12px;font-weight:700;display:grid;place-items:center}
+  .changes .tag{display:inline-block;font-size:11.5px;font-weight:700;color:#3856c8;background:#eef1ff;
+    border:1px solid #dfe5ff;border-radius:6px;padding:1px 8px;margin-right:8px;vertical-align:1px}
+  .changes .tag.b{color:#8a5a00;background:var(--amber-soft);border-color:#fae4bf}
+  .changes p{margin:3px 0 0;color:var(--ink-soft);font-size:13.5px}
+
+  /* 端分组 + 功能卡 */
+  .group-h{display:flex;align-items:center;gap:12px;margin:30px 0 4px}
+  .group-h .ix{font-family:var(--mono);font-size:12px;color:var(--ink-faint);letter-spacing:.1em}
+  .group-h h3{font-size:16px;font-weight:800;margin:0}
+  .group-h .bar{flex:1;height:1px;background:var(--line)}
+  .group-h .count{font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:18px 0;
+    box-shadow:0 2px 10px rgba(20,24,40,.04);scroll-margin-top:18px}
+  .feat .hd{padding:18px 20px 14px}
+  .feat .no{font-family:var(--mono);font-size:12px;color:var(--brand);font-weight:700}
+  .feat h4{font-size:17px;font-weight:800;margin:4px 0 8px}
+  .feat .desc{color:var(--ink-soft);font-size:14px;margin:0}
+  .feat ul.pts{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:7px}
+  .feat ul.pts li{font-size:12.5px;color:var(--ink-soft);background:#fbfbfe;border:1px solid var(--line);border-radius:8px;padding:5px 10px}
+  .shot{margin:4px 14px 16px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fafbff}
+  .shot img{display:block;width:100%;height:auto}
+  /* 开关·图下 caption（默认关，需要时取消注释 .shot .cap 并在卡内加 figcaption）
+  .shot .cap{font-size:12px;color:var(--ink-faint);padding:8px 12px;border-top:1px solid var(--line-soft);background:#fff;font-family:var(--mono)} */
+  @media(max-width:560px){h1.doc{font-size:22px} h1.doc .sub2{font-size:16px} .wrap{padding:0 16px 60px}}
+</style>
+</head>
+<body>
+
+  <!-- 开关·目录索引（左侧悬浮）。一级 = 上线时间/版本内容/功能介绍；二级 = 各功能 -->
+  <nav class="toc">
+    <div class="toc-h">目录 · CONTENTS</div>
+    <a href="#t-time">上线时间</a>
+    <a href="#t-content">版本内容</a>
+    <a href="#t-feat">功能介绍</a>
+    <!-- {{TOC_ITEMS}}：每个分组 <div class="grp">端名</div> + <div class="sub"><a href="#a1">功能</a>...</div> -->
+  </nav>
+
+<div class="wrap">
+
+  <header class="doc">
+    <div class="kicker">RELEASE · 上线公告</div>
+    <h1 class="doc">【上线公告】{{PRODUCT}} {{VERSION}} <span class="sub2">· {{SUBTITLE}}</span></h1>
+    <!-- 开关·署名/徽章默认关：meta 只留版本 + 公告发布日 -->
+    <div class="meta">
+      <span>版本 <b>{{VERSION}}</b></span>
+      <span class="sep">|</span>
+      <span>公告发布 {{ANNOUNCE_DATE}}</span>
+    </div>
+  </header>
+
+  <h2 class="blk" id="t-time"><span class="br">【</span>上线时间<span class="br">】</span></h2>
+  <p class="blk-sub" style="font-size:15px;color:var(--ink)">{{DATE}}</p>
+
+  <h2 class="blk" id="t-content"><span class="br">【</span>版本内容<span class="br">】</span></h2>
+  <p class="blk-sub">{{CONTENT_INTRO}}</p>
+  <ol class="changes">
+    <!-- {{CHANGES}}：每条
+    <li><span class="tag">端/模块</span><b>功能名</b>：一句话改动点。<p>可选补充说明。</p></li>
+    （tag 用 class="tag" 或 class="tag b" 区分两端配色） -->
+  </ol>
+
+  <h2 class="blk" id="t-feat"><span class="br">【</span>功能介绍<span class="br">】</span></h2>
+  <p class="blk-sub">以下为各模块线上实际页面，截图取自正式环境。</p>
+
+  <!-- {{GROUPS}}：每个端一个分组 -->
+  <div class="group">
+    <div class="group-h"><span class="ix">PART A</span><h3>分组名 · English</h3><span class="bar"></span><span class="count">N 页</span></div>
+
+    <!-- 功能卡：每个功能复制一份，id 与目录 #a1/#a2... 对应 -->
+    <div class="feat" id="a1">
+      <div class="hd"><div class="no">A1</div><h4>功能名</h4>
+        <p class="desc">1-2 句功能说明。</p>
+        <ul class="pts"><li>能力点 1</li><li>能力点 2</li><li>能力点 3</li></ul>
+      </div>
+      <figure class="shot"><img src="assets/{{VERSION}}-release/01-xxx.png" alt="功能名"/></figure>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- 开关·目录滚动高亮（左侧悬浮目录用）。无目录可删 -->
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  if(!links.length) return;
+  var map={}; links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+  var obs=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){links.forEach(function(l){l.classList.remove('on');});var a=map[e.target.id];if(a)a.classList.add('on');}
+  });},{rootMargin:'-15% 0px -75% 0px'});
+  Object.keys(map).forEach(function(id){var el=document.getElementById(id);if(el)obs.observe(el);});
+})();
+</script>
+</body>
+</html>

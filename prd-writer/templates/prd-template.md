@@ -345,4 +345,4 @@ stateDiagram-v2
 - 上线后线上地址：{URL}
 - 评测报告：{链接}
 - 接口文档：{Swagger / Apifox 链接}
-- 切片消费（自动生成）：`slices/for-coding.md` · `slices/for-qa.md` · `slices/for-bi.md` · `slices/for-ops.md`
+- 切片消费（自动生成）：`stories/00-overview.md` + `stories/ST-*.md`（研发 AI 编码 · v2.4 起替代 for-coding.md）· `slices/for-qa.md` · `slices/for-bi.md` · `slices/for-ops.md`
