@@ -137,6 +137,13 @@ L5. source 相对路径在 PM 仓内可解析
 2. 输出**版本级评审汇总报告**(见下),落盘 `stories/_review/YYYY-MM-DD-review.md`(干跑截图同目录),作为研发 48h 异步走查的附件——研发从"从零找茬"变为"确认 AI 结论"
 3. 研发走查 5 问全过 → PM 把索引改 `ready`(`ai-passed → ready` 的唯一通道);交付状态(in-dev/done)在研发仓 `delivery-status.md`,本 skill 不管辖
 
+**研发走查 5 问**(建议版——`ready` 门的判据必须在体系内可见;团队可按实际流程替换,但替换后要回写本节保持可见):
+1. AC 在当前技术栈下**可实现且可验证**?(无隐藏的技术不可行点)
+2. 依赖与数据衔接路径清楚?(上游 story / 接口 / 数据就绪方式无悬空)
+3. 「范围-不做」与研发理解一致?(无"我以为要做/以为不做"的错位)
+4. 拆分粒度可独立交付?(无隐藏巨石,工作量与 story 体量匹配)
+5. AI 评审报告中的留白授权点研发可接受?(「由实现自行决定」的点真的能自行决定)
+
 ## 处置规则
 
 | 规则 | 内容 |
@@ -208,15 +215,17 @@ PM 标 ready → kickoff 签收(研发仓 delivery-status.md 登记 in-dev)
 
 ## 回归测试 fixtures
 
-`tests/fixtures/` 含一负一正两组样例 + overview,用于 skill 修改后的回归验证:
+`tests/fixtures/` 含 standard 正负对 + lite 正负对 + overview,用于 skill 修改后的回归验证:
 
-- `bad-ST-0401-告警规则管理.md`:**负样例**(`bad-` 前缀标识),预埋 5 类缺陷;预期输出 `expected-bad-ST-0401.md`(NOT-READY + SPEC-AMBIGUOUS)
-- `golden-ST-0402-告警历史.md`:**正样例**,应过 standard lint;预期输出 `expected-golden-ST-0402.md`(READY + SPEC-CLEAR)——防门禁过严误杀
-- lint 第 7 项(路径可解析)在 fixture 环境一律豁免标 N/A
-- 回归方法:派 subagent 只读 SKILL.md + fixture 文件跑一、二关,比对 expected 的「回归通过标准」;skill 检查项每次修改后必跑
+- `bad-ST-0401-告警规则管理.md`:**standard 负样例**(`bad-` 前缀标识),预埋 6 类缺陷(含 source 结构基准违例);预期输出 `expected-bad-ST-0401.md`(NOT-READY + SPEC-AMBIGUOUS)
+- `golden-ST-0402-告警历史.md`:**standard 正样例**,应过 standard lint;预期输出 `expected-golden-ST-0402.md`(READY + SPEC-CLEAR)——防门禁过严误杀;含 1 个保留的中风险猜测探针(测第二关灵敏度)
+- `lite-ST-0403-告警时间显示修正.md` / `bad-lite-ST-0404-导出体验.md`:**lite 正负对**,覆盖 lite lint 5 项;预期输出 `expected-lite-pair.md`(READY / NOT-READY 三类雷)
+- lint 第 7 项豁免口径:fixture 环境**仅豁免文件存在性**(标 N/A);source/prototype 的**路径层级结构必须与 00-overview 基准一致,结构不符不在豁免范围,应报 blocker**
+- 回归方法:派 subagent 只读 SKILL.md + fixture 文件跑一、二关,比对 expected 的「回归通过标准」;skill 检查项每次修改后必跑;盲测实绩记入各 expected 文件(隔离实例、未见预期)
 
 ## Changelog
 
+- **2026-06-12 · v1.2** — 营造(yingzao)大修,五轮细作(双盲评 74→84):① **golden 路径修复**(source/prototype 各多一层 `../` 对齐 overview 基准——此前被第 7 项全量豁免掩盖);② **golden 正样例首次盲测实绩入档**(隔离实例:一关 READY 7/7、二关 SPEC-CLEAR,挖出 1 中风险探针保留为灵敏度活证据);③ **「研发走查 5 问」内联建议版**(ready 门判据体系内可见);④ **lite 门禁正负 fixture 对从零建**(ST-0403/ST-0404+expected,盲测实绩三类雷全命中);⑤ 一致性闭环:第 7 项豁免口径统一为「仅豁免文件存在性,结构基准违例仍 blocker」(三处同步),bad-ST-0401 的 source 缺 `../` 登记为预埋缺陷 #6,回归节登记 lite 三件套
 - **2026-06-12 · v1.1.1** — 第二轮评审修复:① dry-run 路径与分支名加 `{story_id}-{时间戳}` 后缀,防多 story / 多轮评审冲突;② fixtures 改造为一负一正(负样例 `bad-` 前缀 + expected 预期文件,新增 golden 正样例防门禁过严误杀),新增「回归测试 fixtures」节;③ self-consistency 条款精确化:正面样例必须过门禁,负样例显式标识
 - **2026-06-12 · v1.1** — 落地契约修订(研发侧 NOT-READY 评审 7 条驱动):① lint 拆 standard(7 项)/ lite(5 项)双门禁,样例必须过自己的门禁(self-consistency);② lint 第 7 项升级为路径**可解析**强校验(目标文件真实存在);③ `spec_test: passed` 语义 = 分级关卡全过(标准=三关,lite=两关);④ 关卡全过 → `ai-passed`(非 ready),研发 48h 走查过才 `ready`;⑤ 干跑隔离硬规则(一次性 worktree + throwaway 分支,代码默认销毁,只留报告/截图归档 `stories/_review/`);⑥ 交付状态(in-dev/done)归研发仓 delivery-status.md,本 skill 不管辖;反模式 +2、Red Flags +1
 - **2026-06-11 · v1.0** — 初始版本。源自 MaaS 项目研发分工讨论(2026-06-10)+ 行业调研:三关递进(lint / 对抗猜测点 / 干跑)· 处置规则(blocker 清零 / 误报沉淀 / 3 轮收敛上限)· 评审汇总报告格式 · 与 prd-writer v2.4 stories/ 机制衔接。方案全文:MaaS 仓 `docs/pm/specs/2026-06-11-story-spec-workflow.md`

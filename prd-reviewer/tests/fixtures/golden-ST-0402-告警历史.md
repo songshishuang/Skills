@@ -5,8 +5,8 @@ version: V0.4
 priority: P1
 status: draft
 depends_on: [ST-0401]
-source: ../../PRD-v0.4.md#4.2.4
-prototype: ../../../prototypes/v0.4/alert-history.html
+source: ../PRD-v0.4.md#4.2.4
+prototype: ../../prototypes/v0.4/alert-history.html
 spec_test: pending
 ---
 

@@ -21,7 +21,7 @@ meta:
   generated_at: 2026-06-01
   generated_by: saas-arch-diagrams skill v2.0
 
-# 4 层骨架（功能架构图）· 产品架构图只有 layers + ecosystem，无 capability_domains
+# 4 层骨架（功能架构图）· 产品架构图见下方独立示例
 layers:
   - id: L1
     name: 端层
@@ -80,6 +80,14 @@ cross_cutting:
   - 治理（横切 A/B/C/D）
   - 安全合规（横切 A/B/C/D）
   - 计量计费（横切 B/C/D）
+
+# ── 产品架构图的 layers 取值示例（4 层语义与功能架构图不同，二选一填写）──
+# layers:
+#   - { id: L1, name: 用户与渠道层, role: 谁在用 · 从哪些端进来 }
+#   - { id: L2, name: 产品服务层,   role: 本产品对外提供的服务面 }
+#   - { id: L3, name: 平台能力层,   role: 支撑服务的共用平台能力 }
+#   - { id: L4, name: 基础设施与生态, role: 依赖的底座 + 上下游生态位 }
+# （产品架构图填 layers + ecosystem，无 capability_domains；功能架构图反之）
 ```
 
 ## 下游消费场景
@@ -115,7 +123,7 @@ cross_cutting:
 
 `saas-arch-diagrams` skill 完成架构图后**额外做一步**：
 
-1. **解析 HTML**：读 HTML，按 class 名（`.lyr-1` / `.layer` / `.cap-domain` / `.sub-cap` / `.m-out`）提取结构
+1. **解析 HTML**：读 HTML，按 class 名提取结构——功能架构图：层 `.lyr-1`~`.lyr-4`、能力域 `.subgroup-box`、二级子能力 `.sub2-box`、三级子能力 `.sub3-block`、范围外 `.m-out`；产品架构图：层 `.layer-L1`~`.layer-L4`（两图层样式有意分立，见 styles.css 头部分工声明；模板更新后本清单同步）
 2. **填 skeleton.yaml**：按上文 schema 填字段
 3. **写入磁盘**：与 HTML 同目录同名 `.skeleton.yaml`
 4. **告知用户**：「✅ 同步生成 arch-skeleton.yaml · 下游 wiki ingest / PRD 引用 / lint 都可直接消费」
@@ -134,4 +142,4 @@ cross_cutting:
 | HTML 改了不重新生成 yaml | 加 git pre-commit hook：HTML 改 → yaml 重新生成 |
 | yaml 手工填写覆盖自动生成 | yaml frontmatter 加 `generated_by` 标记，禁止手工 |
 | 下游消费者 grep HTML 找能力域名 | 改为读 yaml，省 95% token |
-| 把 `out_of_scope: true` 写在 HTML class 上 | yaml 是 source of truth；HTML 渲染时按 yaml 决定是否加 dotted class |
+| 下游想给模块标范围外，直接去改 yaml 的 `out_of_scope` | **HTML 是唯一 source of truth（见设计原则 1）**：范围外在 HTML 上以 `m-out` class 标记，派生时自动提取为 yaml 的 `out_of_scope` 字段——改标记改 HTML 后重新派生，永远不要手改 yaml |

@@ -238,7 +238,7 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 |---|---|---|
 | 画完一张架构图（产品 / 功能） | 这轮有没有新的卡片排布模式（col-span 组合）？ | [`references/col-span-cookbook.md`](references/col-span-cookbook.md) |
 | 用户给出明确否定（"不要 X" / "去掉 Y"） | 这条否定是不是普适规则？要不要进反模式？ | [`references/anti-patterns.md`](references/anti-patterns.md) + SKILL.md「常见陷阱」段 |
-| 评审 checklist 漏检（事后才发现问题） | 是不是 12 条 checklist 该新增一条？ | [`references/review-checklist.md`](references/review-checklist.md) |
+| 评审 checklist 漏检（事后才发现问题） | 是不是 21 条四层 checklist 该新增一条？ | [`references/review-checklist.md`](references/review-checklist.md) |
 | 遇到现有 4 层架构不够用（如 L0 / L5） | 是项目特例还是通用扩展？ | SKILL.md 主文档「层定义」段（仅当跨 ≥2 项目验证过） |
 | 发现新的能力域 chip 命名冲突 | 是不是 A-E 域不够分？ | SKILL.md 主文档「能力域 chip」段 |
 
@@ -254,7 +254,7 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 **增长驱动**（有没有新东西要加）：
 - [ ] 用户在评审过程中说过"不要 X"吗？X 是不是普适反模式？
 - [ ] 有没有新 col-span 组合（如 col-span-5 + col-span-7）？要不要进 cookbook？
-- [ ] 12 条 review-checklist 有没有漏掉本次踩坑的项？
+- [ ] 21 条 review-checklist（四层）有没有漏掉本次踩坑的项？
 - [ ] 这张图涉及的端 / 服务 / 数据资产，有没有现有 4 层覆盖不到的？
 - [ ] 配色 / 状态色 / dotted 用法有没有新约定？
 
@@ -281,7 +281,7 @@ N 卡片（N>8） → col-span-12 inner-4 多行
 任一项 ≥ 1，**主动提示用户**：
 > 「本轮架构图引入 X 能力域 / Y 边界变化 / Z 新下游，建议执行 `ingest 架构图到 wiki`，这样下次写 PRD 时能自动加载架构上下文。是否现在 ingest？」
 
-用户同意后 → 调用 `pm-wiki-maintainer` 的 ingest 流程，按其 `references/ingest-workflow.md` 的「从架构图 ingest」映射表执行。
+用户同意后 → 调用 `pm-wiki-maintainer` 的 ingest 流程，按 pm-wiki-maintainer skill 内的 `references/ingest-workflow.md`（以该 skill 实际安装目录为准）的「从架构图 ingest」映射表执行；该 skill 未安装则跳过本节，不要按相对路径猜测文件位置。
 
 ## 来源
 
